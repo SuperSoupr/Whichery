@@ -12,7 +12,9 @@ public class CommonProxy {
         ModBlocks.init();
     }
 
-    public void init(FMLInitializationEvent event) {}
+    public void init(FMLInitializationEvent event) {
+        ModTileEntities.init();
+    }
 
     public void postInit(FMLPostInitializationEvent event) {}
 
