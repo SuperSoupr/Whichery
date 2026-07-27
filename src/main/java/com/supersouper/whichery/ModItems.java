@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.supersouper.whichery.common.items.ItemChalk;
+import com.supersouper.whichery.common.items.seeds.ItemSeedWitchesThimble;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -13,6 +14,8 @@ public enum ModItems {
 
     // make sure to leave a trailing comma
     CHALK(true, new ItemChalk(), "chalk"),
+    WITCHES_THIMBLE_SEED(true, new ItemSeedWitchesThimble("witches_thimble"), "seed_witches_thimble"),
+    WITCH_PETAL(true, new Item().setTextureName("whichery:witch_petal").setUnlocalizedName("witch_petal"), "witch_petal")
     ; // leave trailing semicolon
     // spotless:on
 
