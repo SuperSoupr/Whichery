@@ -1,7 +1,8 @@
 package com.supersouper.whichery;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -14,33 +15,45 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 public class Whichery {
 
     public static final String MODID = "whichery";
-    public static final Logger LOG = LogManager.getLogger(MODID);
 
-    @SidedProxy(clientSide = "com.supersouper.whichery.ClientProxy", serverSide = "com.supersouper.whichery.CommonProxy")
+    @SidedProxy(
+        clientSide = "com.supersouper.whichery.ClientProxy",
+        serverSide = "com.supersouper.whichery.CommonProxy")
     public static CommonProxy proxy;
 
     @Mod.EventHandler
-    // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the
-    // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
     }
 
     @Mod.EventHandler
-    // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
     }
 
     @Mod.EventHandler
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
     }
 
     @Mod.EventHandler
-    // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
     }
+
+    public static CreativeTabs whicheryTab = new CreativeTabs(MODID) {
+
+        @Override
+        public Item getTabIconItem() {
+            return this.getIconItemStack()
+                .getItem();
+        }
+
+        public static final ItemStack ICON_ITEM = new ItemStack(ModItems.CHALK.get());
+
+        @Override
+        public ItemStack getIconItemStack() {
+            return ICON_ITEM;
+        }
+    };
 }
