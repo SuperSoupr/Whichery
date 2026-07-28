@@ -1,9 +1,14 @@
 #### Config
 whichery.config.other=Other
 
+#### Keybind
+whichery.key.categories.whichery=Whichery Keybinds
+whichery.key.vampire_bite=Vampire - Bite
+
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds
 item.witch_petal.name=Witchpetal
+item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
