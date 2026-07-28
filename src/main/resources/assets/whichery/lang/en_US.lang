@@ -12,3 +12,13 @@ tile.crop_witches_thimble.name=Witches' Thimble
 item.seed_witches_thimble.name=Witches' Thimble Seeds
 item.witch_petal.name=Witchpetal
 item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
+
+#### Tooltip
+tooltip.family.families=Ingredient Families:
+tooltip.family.fire=§cFire§r %s
+tooltip.family.water=§9Water§r %s
+tooltip.family.air=§eAir§r %s
+tooltip.family.earth=§2Earth§r %s
+tooltip.family.life=§dLife§r %s
+tooltip.family.death=§7Death§r %s
+tooltip.family.potency=(Potency: %s)
