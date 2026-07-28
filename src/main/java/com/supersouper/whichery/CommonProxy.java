@@ -2,6 +2,7 @@ package com.supersouper.whichery;
 
 import com.supersouper.whichery.api.ingredientfamilies.FamilyRegistry;
 import com.supersouper.whichery.common.network.PacketHandler;
+import com.supersouper.whichery.common.recipe.RitualRecipeLoader;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -14,6 +15,7 @@ public class CommonProxy {
         ModItems.init();
         ModBlocks.init();
         FamilyRegistry.initFamilies();
+        RitualRecipeLoader.loadRecipes();
     }
 
     public void init(FMLInitializationEvent event) {

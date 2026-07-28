@@ -1,0 +1,56 @@
+package com.supersouper.whichery.compat.BlockRenderer6343;
+
+import java.util.function.Consumer;
+
+import net.minecraft.item.ItemStack;
+
+import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.supersouper.whichery.api.IBlockMatcher;
+import com.supersouper.whichery.api.rituals.RitualRecipe;
+import com.supersouper.whichery.api.rituals.RitualRegistry;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+
+public class RitualInfoScan implements Runnable {
+
+    private final Consumer<Int2ObjectMap<ObjectSet<IConstructable>>> resultCallback;
+    private final Consumer<Object2ObjectMap<IConstructable, ItemStack>> stackCallback;
+
+    public RitualInfoScan(Consumer<Int2ObjectMap<ObjectSet<IConstructable>>> resultCallback,
+        Consumer<Object2ObjectMap<IConstructable, ItemStack>> stackCallback) {
+        this.resultCallback = resultCallback;
+        this.stackCallback = stackCallback;
+    }
+
+    @Override
+    public void run() {
+        Int2ObjectMap<ObjectSet<IConstructable>> result = new Int2ObjectOpenHashMap<>();
+        Object2ObjectMap<IConstructable, ItemStack> stacks = new Object2ObjectOpenHashMap<>();
+
+        for (RitualRecipe recipe : RitualRegistry.recipes()) {
+            IBlockMatcher[][][] matchers = recipe.matchers();
+
+            for (int y = 0; y < matchers.length; y++) {
+                for (int x = 0; x < matchers[y].length; x++) {
+                    for (int z = 0; z < matchers[y][x].length; z++) {
+                        IBlockMatcher matcher = matchers[y][x][z];
+                        if (matcher != null) {
+                            result.computeIfAbsent(matcher.itemStackHashCode(), k -> new ObjectOpenHashSet<>())
+                                .add(recipe);
+                        }
+                    }
+                }
+            }
+
+            stacks.put(recipe, matchers[recipe.centerY()][recipe.centerX()][recipe.centerZ()].toItemStack());
+        }
+
+        resultCallback.accept(result);
+        stackCallback.accept(stacks);
+    }
+}
