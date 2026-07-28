@@ -35,11 +35,16 @@ public class BloodMeterRenderer extends Gui {
         int screenWidth = event.resolution.getScaledWidth();
         int screenHeight = event.resolution.getScaledHeight();
 
+        int offsetY = -49;
         // TODO: Configurable offset
-        renderBloodMeter((screenWidth / 2) + 10, screenHeight - 49, props.getBlood(), props.getMaxBlood());
+        if (player.getAir() < 300) offsetY -= 10;
+        renderBloodMeter((screenWidth / 2) + 10, screenHeight + offsetY, props.getBlood(), props.getMaxBlood());
     }
 
     private void renderBloodMeter(int xBase, int yBase, int blood, int maxBlood) {
+
+        int previousTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+
         mc.getTextureManager()
             .bindTexture(BLOOD_METER);
         GL11.glEnable(GL11.GL_BLEND);
@@ -63,5 +68,6 @@ public class BloodMeterRenderer extends Gui {
         }
 
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, previousTex);
     }
 }
