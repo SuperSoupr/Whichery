@@ -46,6 +46,7 @@ public class VampirismEvents {
                 .saveNBTData(compound);
             VampirismProperty.get(e.entityPlayer)
                 .loadNBTData(compound);
+            VampirismProperty.syncToClient(e.entityPlayer);
         }
     }
 
