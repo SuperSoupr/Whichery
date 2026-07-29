@@ -7,6 +7,10 @@ import net.minecraft.item.ItemStack;
 
 import com.supersouper.whichery.common.blocks.BlockChalk;
 import com.supersouper.whichery.common.blocks.crops.BlockCropWitchesThimble;
+import com.supersouper.whichery.common.blocks.trees.BlockAlderLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockHawthornLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockRowanLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockWhicheryLog;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -17,6 +21,16 @@ public enum ModBlocks {
     // make sure to leave a trailing comma
     CHALK_BLOCK(true, new BlockChalk(), "chalk_block"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
+
+    // Trees
+    ALDER_LOG(true, new BlockWhicheryLog("alder"), "alder_log"),
+    ALDER_LEAVES(true, new BlockAlderLeaves(), "alder_leaves"),
+
+    HAWTHORN_LOG(true, new BlockWhicheryLog("hawthorn"), "hawthorn_log"),
+    HAWTHORN_LEAVES(true, new BlockHawthornLeaves(), "hawthorn_leaves"),
+
+    ROWAN_LOG(true, new BlockWhicheryLog("rowan"), "rowan_log"),
+    ROWAN_LEAVES(true, new BlockRowanLeaves(), "rowan_leaves"),
 
     ; // leave trailing semicolon
     // spotless:on
