@@ -29,14 +29,16 @@ public class RitualRecipeLoader {
             new String[]{
                 "  ccc  ",
                 " c   c ",
-                "c     c",
+                "c   o c",
                 "c  c  c",
                 "c     c",
                 " c   c ",
                 "  ccc  ",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
+            new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1),
+            'o',
+            new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
         RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe(0, 4, 4,
             new String[]{
