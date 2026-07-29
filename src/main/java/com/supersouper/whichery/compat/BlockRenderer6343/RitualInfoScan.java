@@ -33,12 +33,12 @@ public class RitualInfoScan implements Runnable {
         Object2ObjectMap<IConstructable, ItemStack> stacks = new Object2ObjectOpenHashMap<>();
 
         for (RitualRecipe recipe : RitualRegistry.recipes()) {
-            IBlockMatcher[][][] matchers = recipe.matchers();
+            IBlockMatcher[][][] matchers = recipe.matcherPositions();
 
             for (int y = 0; y < matchers.length; y++) {
-                for (int x = 0; x < matchers[y].length; x++) {
-                    for (int z = 0; z < matchers[y][x].length; z++) {
-                        IBlockMatcher matcher = matchers[y][x][z];
+                for (int z = 0; z < matchers[y].length; z++) {
+                    for (int x = 0; x < matchers[y][z].length; x++) {
+                        IBlockMatcher matcher = matchers[y][z][x];
                         if (matcher != null) {
                             result.computeIfAbsent(matcher.itemStackHashCode(), k -> new ObjectOpenHashSet<>())
                                 .add(recipe);
@@ -47,7 +47,7 @@ public class RitualInfoScan implements Runnable {
                 }
             }
 
-            stacks.put(recipe, matchers[recipe.centerY()][recipe.centerX()][recipe.centerZ()].toItemStack());
+            stacks.put(recipe, matchers[recipe.centerY()][recipe.centerZ()][recipe.centerX()].getItemStack());
         }
 
         resultCallback.accept(result);

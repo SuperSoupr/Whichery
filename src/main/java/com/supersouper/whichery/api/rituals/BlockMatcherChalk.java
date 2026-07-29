@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.BlockMatcherBasic;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 
@@ -32,7 +31,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
 
     @Override
     public ItemStack toItemStack() {
-        ItemStack result = new ItemStack(ModBlocks.CHALK_BLOCK.get());
+        ItemStack result = new ItemStack(item);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("type", meta);
         result.setTagCompound(tag);
@@ -40,15 +39,9 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     }
 
     @Override
-    public int itemStackHashCode() {
-        return ModBlocks.CHALK_BLOCK.get()
-            .hashCode() + meta;
-    }
-
-    @Override
     public void place(World world, int x, int y, int z) {
         world.setBlock(x, y, z, block);
-        ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y + 1, z);
+        ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(meta);
         }
