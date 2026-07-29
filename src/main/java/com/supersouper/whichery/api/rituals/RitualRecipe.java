@@ -59,7 +59,7 @@ public class RitualRecipe {
                 for (int cx = 0; cx < matchers[cy][cz].length; cx++) {
                     IBlockMatcher matcher = matchers[cy][cz][cx];
                     if (matcher != null) {
-                        matcher.place(world, x + cx, y + cy, z + cz);
+                        matcher.place(world, x + cx - centerX(), y + cy - centerY(), z + cz - centerZ());
                     }
                 }
             }
