@@ -6,8 +6,8 @@ import com.supersouper.whichery.ModBlocks;
 
 public class ItemSeedWitchesThimble extends ItemWhicherySeed {
 
-    public ItemSeedWitchesThimble(String id) {
-        super(id);
+    public ItemSeedWitchesThimble() {
+        super("witches_thimble");
     }
 
     @Override

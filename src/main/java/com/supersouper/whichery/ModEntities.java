@@ -4,15 +4,15 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 
-import com.supersouper.whichery.client.render.entity.RenderMandrake;
-import com.supersouper.whichery.common.entity.EntityMandrake;
+import com.supersouper.whichery.client.render.entity.RenderMandrakeRoot;
+import com.supersouper.whichery.common.entity.EntityMandrakeRoot;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 public enum ModEntities {
 
-    MANDRAKE(EntityMandrake.class, new RenderMandrake(), "Mandrake", 0x724b2c, 0x0a4b2c);
+    MANDRAKE_ROOT(EntityMandrakeRoot.class, new RenderMandrakeRoot(), "MandrakeRoot", 0x724b2c, 0x0a4b2c);
 
     private final Class<? extends Entity> entityClass;
     private final RenderLiving entityRenderer;

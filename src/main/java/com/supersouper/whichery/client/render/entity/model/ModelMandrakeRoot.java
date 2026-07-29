@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
-public class ModelMandrake extends ModelBase {
+public class ModelMandrakeRoot extends ModelBase {
 
     private final ModelRenderer legLeft;
     private final ModelRenderer legRight;
@@ -15,7 +15,7 @@ public class ModelMandrake extends ModelBase {
     private final ModelRenderer armRight;
     private final ModelRenderer head;
 
-    public ModelMandrake() {
+    public ModelMandrakeRoot() {
         textureWidth = 32;
         textureHeight = 32;
 

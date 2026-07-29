@@ -4,15 +4,15 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.Vec3;
 
-import com.supersouper.whichery.common.entity.EntityMandrake;
+import com.supersouper.whichery.common.entity.EntityMandrakeRoot;
 
-public class EntityAIMandrakePanic extends EntityAIBase {
+public class EntityAIMandrakeRootPanic extends EntityAIBase {
 
-    private final EntityMandrake mandrake;
+    private final EntityMandrakeRoot mandrake;
     private final double speed;
     private double targetX, targetY, targetZ;
 
-    public EntityAIMandrakePanic(EntityMandrake entity, double speed) {
+    public EntityAIMandrakeRootPanic(EntityMandrakeRoot entity, double speed) {
         this.mandrake = entity;
         this.speed = speed;
         this.setMutexBits(1);

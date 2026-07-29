@@ -7,18 +7,22 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-import com.supersouper.whichery.common.entity.ai.EntityAIMandrakePanic;
+import com.supersouper.whichery.ModItems;
+import com.supersouper.whichery.common.entity.ai.EntityAIMandrakeRootPanic;
 
-public class EntityMandrake extends EntityCreature {
+public class EntityMandrakeRoot extends EntityCreature {
 
-    public EntityMandrake(World world) {
+    int timeSinceScream = 100;
+
+    public EntityMandrakeRoot(World world) {
         super(world);
         this.setSize(0.5F, 0.9F);
 
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIMandrakePanic(this, 0.5D));
+        this.tasks.addTask(1, new EntityAIMandrakeRootPanic(this, 2D));
         this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(3, new EntityAILookIdle(this));
     }
@@ -53,17 +57,29 @@ public class EntityMandrake extends EntityCreature {
     }
 
     @Override
-    protected float getSoundVolume() {
-        return 0.6F;
-    }
-
-    @Override
     public int getTalkInterval() {
-        return 40;
+        return Integer.MAX_VALUE;
     }
 
     @Override
     protected void func_145780_a(int x, int y, int z, Block block) {
         this.playSound("dig.grass", 0.15F, 1.0F);
+    }
+
+    public void onEntityUpdate() {
+        super.onEntityUpdate();
+
+        if (this.isEntityAlive() && timeSinceScream++ >= 100) {
+            timeSinceScream = 0;
+            playLivingSound();
+        }
+    }
+
+    @Override
+    public void onDeath(DamageSource source) {
+        super.onDeath(source);
+        if (!worldObj.isRemote) {
+            this.dropItem(ModItems.MANDRAKE_ROOT.get(), 1);
+        }
     }
 }
