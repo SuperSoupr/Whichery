@@ -11,15 +11,15 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 public class RitualRegistry {
 
-    private static final ArrayList<RitualRecipe> RECIPES = new ArrayList<>();
+    private static final ArrayList<Ritual> RITUALS = new ArrayList<>();
     private static final Object2ObjectOpenHashMap<Item, Function<ItemStack, Integer>> ITEM_HASHERS = new Object2ObjectOpenHashMap<>();
 
-    public static void registerRecipe(RitualRecipe recipe) {
-        RECIPES.add(recipe);
+    public static void registerRitual(Ritual recipe) {
+        RITUALS.add(recipe);
     }
 
-    public static ArrayList<RitualRecipe> recipes() {
-        return RECIPES;
+    public static ArrayList<Ritual> rituals() {
+        return RITUALS;
     }
 
     public static void registerItemHasher(Item item, Function<ItemStack, Integer> hasher) {

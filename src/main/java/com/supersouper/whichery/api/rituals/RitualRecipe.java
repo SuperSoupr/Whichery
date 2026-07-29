@@ -1,22 +1,12 @@
 package com.supersouper.whichery.api.rituals;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.supersouper.whichery.api.IBlockMatcher;
 
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+public class RitualRecipe {
 
-@Optional.Interface(
-    iface = "com.gtnewhorizon.structurelib.alignment.constructable.IConstructable",
-    modid = "structurelib")
-public class RitualRecipe implements IConstructable {
-
-    private final String name;
     private final IBlockMatcher[][][] matcherPositions;
     private final IBlockMatcher[] matchers;
     private final int centerX, centerZ, centerY;
@@ -25,18 +15,13 @@ public class RitualRecipe implements IConstructable {
      * IBlockMatcher 3d array formatted as: [y][z][x]
      * This is because most rituals are expected to only require one y level.
      */
-    public RitualRecipe(String name, IBlockMatcher[][][] matcherPositions, IBlockMatcher[] matchers, int centerY,
-        int centerX, int centerZ) {
-        this.name = name;
+    public RitualRecipe(IBlockMatcher[][][] matcherPositions, IBlockMatcher[] matchers, int centerY, int centerX,
+        int centerZ) {
         this.matcherPositions = matcherPositions;
         this.matchers = matchers;
         this.centerY = centerY;
         this.centerZ = centerZ;
         this.centerX = centerX;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public IBlockMatcher[][][] matcherPositions() {
@@ -79,18 +64,5 @@ public class RitualRecipe implements IConstructable {
                 }
             }
         }
-    }
-
-    @Optional.Method(modid = "structurelib")
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-
-    }
-
-    @Optional.Method(modid = "structurelib")
-    @SideOnly(Side.CLIENT)
-    @Override
-    public String[] getStructureDescription(ItemStack stackSize) {
-        return new String[0];
     }
 }
