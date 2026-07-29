@@ -51,7 +51,8 @@ public class RitualBuilder {
             }
         }
 
-        if (matcherPositions[centerY][centerZ][centerX] == null) {
+        IBlockMatcher centerMatcher = matcherPositions[centerY][centerZ][centerX];
+        if (centerMatcher == null) {
             throw new IllegalArgumentException("Center matcher cannot be null");
         }
 

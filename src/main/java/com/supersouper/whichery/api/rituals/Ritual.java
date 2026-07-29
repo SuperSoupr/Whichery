@@ -15,15 +15,17 @@ public class Ritual implements IConstructable {
 
     protected final String name;
     protected final RitualRecipe recipe;
+    protected final Class<? extends RitualAnimation> animationClass;
+    protected final Class<? extends RitualEffect> effectClass;
+    protected final int[] stages;
 
-    protected final RitualAnimation animation;
-    protected final int stageCount;
-
-    public Ritual(String name, RitualRecipe recipe, RitualAnimation animation, int stageCount) {
+    public Ritual(String name, RitualRecipe recipe, Class<? extends RitualEffect> effectClass,
+        Class<? extends RitualAnimation> animationClass, int[] stages) {
         this.name = name;
         this.recipe = recipe;
-        this.animation = animation;
-        this.stageCount = stageCount;
+        this.effectClass = effectClass;
+        this.animationClass = animationClass;
+        this.stages = stages;
     }
 
     public String getName() {
@@ -34,12 +36,16 @@ public class Ritual implements IConstructable {
         return recipe;
     }
 
-    public RitualAnimation getAnimation() {
-        return animation;
+    public Class<? extends RitualAnimation> getAnimationClass() {
+        return animationClass;
     }
 
-    public int getStageCount() {
-        return stageCount;
+    public Class<? extends RitualEffect> getEffectClass() {
+        return effectClass;
+    }
+
+    public int[] getStages() {
+        return stages;
     }
 
     @Optional.Method(modid = "structurelib")

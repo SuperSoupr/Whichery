@@ -3,7 +3,6 @@ package com.supersouper.whichery.common.blocks;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -14,12 +13,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.ModBlocks;
+import com.supersouper.whichery.api.rituals.RitualLeaderBlock;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockChalk extends Block implements ITileEntityProvider {
+public class BlockChalk extends RitualLeaderBlock {
 
     public BlockChalk() {
         super(Material.ground);
@@ -34,7 +34,7 @@ public class BlockChalk extends Block implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new ChalkTileEntity();
+        return new ChalkTileEntity(meta);
     }
 
     @Override

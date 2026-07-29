@@ -1,5 +1,7 @@
 package com.supersouper.whichery.common.recipe;
 
+import java.util.Arrays;
+
 import net.minecraft.init.Blocks;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -8,15 +10,19 @@ import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.BlockMatcherBasic;
 import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
 import com.supersouper.whichery.api.rituals.Ritual;
-import com.supersouper.whichery.api.rituals.RitualAnimation;
 import com.supersouper.whichery.api.rituals.RitualBuilder;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.common.rituals.animations.TestRitualAnimation;
+import com.supersouper.whichery.common.rituals.effects.TestRitualEffect;
 
 @ApiStatus.Internal
 public class RitualRecipeLoader {
 
     @ApiStatus.Internal
     public static void loadRecipes() {
+
+        int[] stages = new int[60];
+        Arrays.fill(stages, 10);
 
         // spotless:off
         RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 3, 3,
@@ -31,8 +37,8 @@ public class RitualRecipeLoader {
             },
             'c',
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
-        ), new RitualAnimation(), 1));
-        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 4, 4,
+        ), TestRitualEffect.class, TestRitualAnimation.class, stages));
+        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe(0, 4, 4,
             new String[]{
                 "g       g",
                 "   ccc   ",
@@ -59,8 +65,8 @@ public class RitualRecipeLoader {
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1),
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
-        ), new RitualAnimation(), 1));
-        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 4, 4,
+        ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
+        RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe(0, 4, 4,
             new String[]{
                 "   ccc   ",
                 "  c   c  ",
@@ -74,7 +80,7 @@ public class RitualRecipeLoader {
             },
             'c',
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
-        ), new RitualAnimation(), 1));
+        ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
         // spotless:on
     }
 }

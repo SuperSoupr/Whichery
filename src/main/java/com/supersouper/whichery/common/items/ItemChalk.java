@@ -59,11 +59,12 @@ public class ItemChalk extends Item {
         if (side != ForgeDirection.UP.ordinal()) return false;
         if (world.isRemote) return true;
 
-        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), getChalkType(stack), 3);
+        int type = getChalkType(stack);
+        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), type, 3);
         stack.damageItem(1, player);
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y + 1, z);
         if (te != null) {
-            te.setType(stack.getItemDamage());
+            te.setType(type);
         }
 
         return true;
