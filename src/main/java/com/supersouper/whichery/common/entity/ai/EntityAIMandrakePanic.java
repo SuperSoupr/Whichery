@@ -1,9 +1,10 @@
 package com.supersouper.whichery.common.entity.ai;
 
-import com.supersouper.whichery.common.entity.EntityMandrake;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.Vec3;
+
+import com.supersouper.whichery.common.entity.EntityMandrake;
 
 public class EntityAIMandrakePanic extends EntityAIBase {
 
@@ -19,7 +20,8 @@ public class EntityAIMandrakePanic extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (mandrake.getNavigator().noPath()) {
+        if (mandrake.getNavigator()
+            .noPath()) {
             return this.pickNewTarget();
         }
         return false;
@@ -27,12 +29,14 @@ public class EntityAIMandrakePanic extends EntityAIBase {
 
     @Override
     public boolean continueExecuting() {
-        return !mandrake.getNavigator().noPath();
+        return !mandrake.getNavigator()
+            .noPath();
     }
 
     @Override
     public void startExecuting() {
-        mandrake.getNavigator().tryMoveToXYZ(targetX, targetY, targetZ, speed);
+        mandrake.getNavigator()
+            .tryMoveToXYZ(targetX, targetY, targetZ, speed);
     }
 
     private boolean pickNewTarget() {

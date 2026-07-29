@@ -1,12 +1,14 @@
 package com.supersouper.whichery;
 
-import com.supersouper.whichery.client.render.entity.RenderMandrake;
-import com.supersouper.whichery.common.entity.EntityMandrake;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+
+import com.supersouper.whichery.client.render.entity.RenderMandrake;
+import com.supersouper.whichery.common.entity.EntityMandrake;
+
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public enum ModEntities {
 
@@ -21,15 +23,19 @@ public enum ModEntities {
     private final int backgroundEggColor;
     private final int foregroundEggColor;
 
+    private static int eggStartID = 14500;
+
     ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name) {
         this(entityClass, entityRenderer, name, 64, 3, true, -1, -1);
     }
 
-    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name, int backgroundEggColor, int foregroundEggColor) {
+    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name, int backgroundEggColor,
+        int foregroundEggColor) {
         this(entityClass, entityRenderer, name, 64, 3, true, backgroundEggColor, foregroundEggColor);
     }
 
-    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int backgroundEggColor, int foregroundEggColor) {
+    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name, int trackingRange,
+        int updateFrequency, boolean sendsVelocityUpdates, int backgroundEggColor, int foregroundEggColor) {
         this.entityClass = entityClass;
         this.entityRenderer = entityRenderer;
         this.name = name;
@@ -49,24 +55,28 @@ public enum ModEntities {
                 Whichery.INSTANCE,
                 entity.trackingRange,
                 entity.updateFrequency,
-                entity.sendsVelocityUpdates
-            );
+                entity.sendsVelocityUpdates);
 
             if (entity.backgroundEggColor != -1 && entity.foregroundEggColor != -1) {
-                int id = EntityRegistry.findGlobalUniqueEntityId();
+                int id = getUniqueEggID();
                 EntityList.IDtoClassMapping.put(id, entity.entityClass);
-                EntityRegistry.registerGlobalEntityID(entity.entityClass, entity.name, id, entity.backgroundEggColor, entity.foregroundEggColor);
+                EntityList.entityEggs
+                    .put(id, new EntityList.EntityEggInfo(id, entity.backgroundEggColor, entity.foregroundEggColor));
             }
         }
+    }
+
+    private static int getUniqueEggID() {
+        do {
+            eggStartID++;
+        } while (EntityList.getStringFromID(eggStartID) != null);
+        return eggStartID;
     }
 
     public static void initClient() {
         for (ModEntities entity : ModEntities.values()) {
             if (entity.entityRenderer != null) {
-                RenderingRegistry.registerEntityRenderingHandler(
-                    entity.entityClass,
-                    entity.entityRenderer
-                );
+                RenderingRegistry.registerEntityRenderingHandler(entity.entityClass, entity.entityRenderer);
             }
         }
     }

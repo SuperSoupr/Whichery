@@ -12,3 +12,6 @@ tile.crop_witches_thimble.name=Witches' Thimble
 item.seed_witches_thimble.name=Witches' Thimble Seeds
 item.witch_petal.name=Witchpetal
 item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
+
+### Entities
+entity.whichery.Mandrake.name=Mandrake

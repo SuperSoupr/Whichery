@@ -1,12 +1,13 @@
 package com.supersouper.whichery.common.blocks.crops;
 
-import com.supersouper.whichery.ModItems;
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
+import com.supersouper.whichery.ModItems;
 
 public class BlockCropMandrake extends BlockWhicheryCrop {
 
@@ -21,7 +22,7 @@ public class BlockCropMandrake extends BlockWhicheryCrop {
 
     @Override
     public void addDropsAlways(World world, int x, int y, int z, int metadata, int fortune,
-                               ArrayList<ItemStack> drops) {
+        ArrayList<ItemStack> drops) {
         if (world.isDaytime()) return;
         super.addDropsAlways(world, x, y, z, metadata, fortune, drops);
     }
