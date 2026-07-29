@@ -18,14 +18,16 @@ public abstract class RitualLeaderBlock extends Block implements ITileEntityProv
         float subY, float subZ) {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof IRitualLeader rlte) {
+            Ritual ritual = RitualRegistry.getRitual("banana1");
+
             if (player.isSneaking() && player.capabilities.isCreativeMode) {
                 // TODO Remove
-                RitualRegistry.getRitual("banana1")
-                    .getRecipe()
+                ritual.getRecipe()
                     .construct(world, x, y, z);
                 return true;
             }
-            return rlte.startRitual(player);
+
+            return rlte.startRitual(ritual, player);
         }
         return false;
     }
