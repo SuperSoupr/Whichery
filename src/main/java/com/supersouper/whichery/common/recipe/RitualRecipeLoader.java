@@ -7,6 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.BlockMatcherBasic;
 import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
+import com.supersouper.whichery.api.rituals.Ritual;
+import com.supersouper.whichery.api.rituals.RitualAnimation;
 import com.supersouper.whichery.api.rituals.RitualBuilder;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 
@@ -17,7 +19,7 @@ public class RitualRecipeLoader {
     public static void loadRecipes() {
 
         // spotless:off
-        RitualRegistry.registerRecipe(RitualBuilder.build("banana1", 0, 3, 3,
+        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 3, 3,
             new String[]{
                 "  ccc  ",
                 " c   c ",
@@ -29,8 +31,8 @@ public class RitualRecipeLoader {
             },
             'c',
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
-        ));
-        RitualRegistry.registerRecipe(RitualBuilder.build("banana2", 0, 4, 4,
+        ), new RitualAnimation(), 1));
+        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 4, 4,
             new String[]{
                 "g       g",
                 "   ccc   ",
@@ -57,8 +59,8 @@ public class RitualRecipeLoader {
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1),
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
-        ));
-        RitualRegistry.registerRecipe(RitualBuilder.build("banana3", 0, 4, 4,
+        ), new RitualAnimation(), 1));
+        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 4, 4,
             new String[]{
                 "   ccc   ",
                 "  c   c  ",
@@ -72,7 +74,7 @@ public class RitualRecipeLoader {
             },
             'c',
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
-        ));
+        ), new RitualAnimation(), 1));
         // spotless:on
     }
 }

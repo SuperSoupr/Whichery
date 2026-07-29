@@ -7,7 +7,7 @@ import com.supersouper.whichery.api.IBlockMatcher;
 
 public class RitualBuilder {
 
-    public static RitualRecipe build(String name, int centerY, int centerX, int centerZ, Object... o) {
+    public static RitualRecipe buildRecipe(int centerY, int centerX, int centerZ, Object... o) {
         ArrayList<String[]> levels = new ArrayList<>();
         HashMap<Character, IBlockMatcher> definitions = new HashMap<>();
         definitions.put(' ', null);
@@ -51,9 +51,13 @@ public class RitualBuilder {
             }
         }
 
+        if (matcherPositions[centerY][centerZ][centerX] == null) {
+            throw new IllegalArgumentException("Center matcher cannot be null");
+        }
+
         IBlockMatcher[] matchers = definitions.values()
             .toArray(new IBlockMatcher[0]);
 
-        return new RitualRecipe(name, matcherPositions, matchers, centerY, centerX, centerZ);
+        return new RitualRecipe(matcherPositions, matchers, centerY, centerX, centerZ);
     }
 }

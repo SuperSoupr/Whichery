@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.supersouper.whichery.api.IBlockMatcher;
+import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.RitualRecipe;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 
@@ -32,22 +33,20 @@ public class RitualInfoScan implements Runnable {
         Int2ObjectMap<ObjectSet<IConstructable>> result = new Int2ObjectOpenHashMap<>();
         Object2ObjectMap<IConstructable, ItemStack> stacks = new Object2ObjectOpenHashMap<>();
 
-        for (RitualRecipe recipe : RitualRegistry.recipes()) {
-            IBlockMatcher[][][] matchers = recipe.matcherPositions();
+        for (Ritual ritual : RitualRegistry.rituals()) {
+            RitualRecipe recipe = ritual.getRecipe();
 
-            for (int y = 0; y < matchers.length; y++) {
-                for (int z = 0; z < matchers[y].length; z++) {
-                    for (int x = 0; x < matchers[y][z].length; x++) {
-                        IBlockMatcher matcher = matchers[y][z][x];
-                        if (matcher != null) {
-                            result.computeIfAbsent(matcher.itemStackHashCode(), k -> new ObjectOpenHashSet<>())
-                                .add(recipe);
-                        }
-                    }
+            IBlockMatcher[] matchers = recipe.matchers();
+            for (IBlockMatcher matcher : matchers) {
+                if (matcher != null) {
+                    result.computeIfAbsent(matcher.itemStackHashCode(), k -> new ObjectOpenHashSet<>())
+                        .add(ritual);
                 }
             }
 
-            stacks.put(recipe, matchers[recipe.centerY()][recipe.centerZ()][recipe.centerX()].getItemStack());
+            stacks.put(
+                ritual,
+                recipe.matcherPositions()[recipe.centerY()][recipe.centerZ()][recipe.centerX()].getItemStack());
         }
 
         resultCallback.accept(result);
