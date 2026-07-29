@@ -10,7 +10,7 @@ public enum ModTileEntities {
     // spotless:off
 
     // make sure to leave a trailing comma
-    CHALK(true, ChalkTileEntity.class, "")
+    CHALK(true, ChalkTileEntity.class, "chalk")
     ;
     // spotless:on
 
