@@ -16,30 +16,43 @@ import cpw.mods.fml.relauncher.SideOnly;
     modid = "structurelib")
 public class RitualRecipe implements IConstructable {
 
-    private final IBlockMatcher[][][] matchers;
+    private final String name;
+    private final IBlockMatcher[][][] matcherPositions;
+    private final IBlockMatcher[] matchers;
     private final int centerX, centerZ, centerY;
 
     /**
-     * IBlockMatcher 3d array formatted as: [y][x][z]
+     * IBlockMatcher 3d array formatted as: [y][z][x]
      * This is because most rituals are expected to only require one y level.
      */
-    public RitualRecipe(IBlockMatcher[][][] matchers, int centerY, int centerX, int centerZ) {
+    public RitualRecipe(String name, IBlockMatcher[][][] matcherPositions, IBlockMatcher[] matchers, int centerY,
+        int centerX, int centerZ) {
+        this.name = name;
+        this.matcherPositions = matcherPositions;
         this.matchers = matchers;
         this.centerY = centerY;
-        this.centerX = centerX;
         this.centerZ = centerZ;
+        this.centerX = centerX;
     }
 
-    public IBlockMatcher[][][] matchers() {
+    public String getName() {
+        return name;
+    }
+
+    public IBlockMatcher[][][] matcherPositions() {
+        return matcherPositions;
+    }
+
+    public IBlockMatcher[] matchers() {
         return matchers;
-    }
-
-    public int centerX() {
-        return centerX;
     }
 
     public int centerZ() {
         return centerZ;
+    }
+
+    public int centerX() {
+        return centerX;
     }
 
     public int centerY() {
@@ -54,12 +67,12 @@ public class RitualRecipe implements IConstructable {
     }
 
     public void construct(World world, int x, int y, int z) {
-        IBlockMatcher[][][] matchers = matchers();
+        IBlockMatcher[][][] matchers = matcherPositions();
 
         for (int cy = 0; cy < matchers.length; cy++) {
-            for (int cx = 0; cx < matchers[cy].length; cx++) {
-                for (int cz = 0; cz < matchers[cy][cx].length; cz++) {
-                    IBlockMatcher matcher = matchers[cy][cx][cz];
+            for (int cz = 0; cz < matchers[cy].length; cz++) {
+                for (int cx = 0; cx < matchers[cy][cz].length; cx++) {
+                    IBlockMatcher matcher = matchers[cy][cz][cx];
                     if (matcher != null) {
                         matcher.place(world, x + cx, y + cy, z + cz);
                     }

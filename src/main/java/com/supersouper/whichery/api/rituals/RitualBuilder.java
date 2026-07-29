@@ -7,7 +7,7 @@ import com.supersouper.whichery.api.IBlockMatcher;
 
 public class RitualBuilder {
 
-    public static IBlockMatcher[][][] build(Object... o) {
+    public static RitualRecipe build(String name, int centerY, int centerX, int centerZ, Object... o) {
         ArrayList<String[]> levels = new ArrayList<>();
         HashMap<Character, IBlockMatcher> definitions = new HashMap<>();
         definitions.put(' ', null);
@@ -18,10 +18,10 @@ public class RitualBuilder {
             if (o[i] instanceof String[]lines) {
                 levels.add(lines);
                 for (String line : lines) {
-                    maxZ = Math.max(maxZ, line.length());
+                    maxX = Math.max(maxX, line.length());
                 }
 
-                maxX = Math.max(maxX, lines.length);
+                maxZ = Math.max(maxZ, lines.length);
             } else if (o[i] instanceof Character c) {
                 if (i + 1 < o.length && o[i + 1] instanceof IBlockMatcher matcher) {
                     i++;
@@ -35,22 +35,25 @@ public class RitualBuilder {
         }
         int maxY = levels.size();
 
-        IBlockMatcher[][][] result = new IBlockMatcher[maxY][maxX][maxZ];
+        IBlockMatcher[][][] matcherPositions = new IBlockMatcher[maxY][maxX][maxZ];
 
-        for (int y = 0; y < result.length; y++) {
-            for (int x = 0; x < result[y].length; x++) {
-                for (int z = 0; z < result[y][x].length; z++) {
+        for (int y = 0; y < matcherPositions.length; y++) {
+            for (int z = 0; z < matcherPositions[y].length; z++) {
+                for (int x = 0; x < matcherPositions[y][z].length; x++) {
                     char c = ' ';
 
                     try {
                         c = levels.get(y)[z].charAt(x);
                     } catch (Exception ignore) {}
 
-                    result[y][x][z] = definitions.get(c);
+                    matcherPositions[y][z][x] = definitions.get(c);
                 }
             }
         }
 
-        return result;
+        IBlockMatcher[] matchers = definitions.values()
+            .toArray(new IBlockMatcher[0]);
+
+        return new RitualRecipe(name, matcherPositions, matchers, centerY, centerX, centerZ);
     }
 }

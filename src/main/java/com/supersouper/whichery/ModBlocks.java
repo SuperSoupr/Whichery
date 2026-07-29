@@ -15,7 +15,7 @@ public enum ModBlocks {
     // spotless:off
 
     // make sure to leave a trailing comma
-    CHALK_BLOCK(true, new BlockChalk(), "chalk_block"),
+    CHALK_BLOCK(true, new BlockChalk(), BlockChalk.ItemBlockChalk.class, "chalk_block"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
 
     ; // leave trailing semicolon

@@ -10,6 +10,8 @@ public interface IBlockMatcher {
 
     ItemStack toItemStack();
 
+    ItemStack getItemStack();
+
     int itemStackHashCode();
 
     void place(World world, int x, int y, int z);

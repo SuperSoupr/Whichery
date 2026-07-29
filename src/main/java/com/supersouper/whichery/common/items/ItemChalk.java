@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemChalk extends Item {
 
     public ItemChalk() {
-        setUnlocalizedName("chalk");
+        setUnlocalizedName("type");
         setMaxDamage(256);
     }
 
@@ -28,7 +28,7 @@ public class ItemChalk extends Item {
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (int i = 0; i <= 16; i++) {
             NBTTagCompound tagCompound = new NBTTagCompound();
-            tagCompound.setInteger("color", i);
+            tagCompound.setInteger("type", i);
             ItemStack itemStack = new ItemStack(item);
             itemStack.setTagCompound(tagCompound);
             list.add(itemStack);
@@ -37,13 +37,17 @@ public class ItemChalk extends Item {
 
     @Override
     public String getUnlocalizedName(final ItemStack stack) {
-        return this.getUnlocalizedName() + "." + stack.getItemDamage();
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null) {
+            return this.getUnlocalizedName() + "." + tag.getInteger("type");
+        }
+        return this.getUnlocalizedName();
     }
 
-    private int getColor(ItemStack itemStack) {
-        NBTTagCompound tagCompound = itemStack.getTagCompound();
-        if (tagCompound != null) {
-            return tagCompound.getInteger("color");
+    private int getChalkType(ItemStack itemStack) {
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag != null) {
+            return tag.getInteger("type");
         }
         return 0;
     }
@@ -55,7 +59,7 @@ public class ItemChalk extends Item {
         if (side != ForgeDirection.UP.ordinal()) return false;
         if (world.isRemote) return true;
 
-        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), getColor(stack), 3);
+        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), getChalkType(stack), 3);
         stack.damageItem(1, player);
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y + 1, z);
         if (te != null) {

@@ -6,31 +6,31 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.BlockMatcherBasic;
-import com.supersouper.whichery.api.IBlockMatcher;
 import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
 import com.supersouper.whichery.api.rituals.RitualBuilder;
-import com.supersouper.whichery.api.rituals.RitualRecipe;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 
 @ApiStatus.Internal
 public class RitualRecipeLoader {
 
+    @ApiStatus.Internal
     public static void loadRecipes() {
 
         // spotless:off
-        BlockMatcherBasic g = new BlockMatcherBasic(ModBlocks.CHALK_BLOCK.get());
-        IBlockMatcher n = null;
-        RitualRegistry.registerRecipe(new RitualRecipe(new IBlockMatcher[][][]{
-            {
-                {n, n, g, g, g, n, n},
-                {n, g, n, n, n, g, n},
-                {g, n, n, n, n, n, g},
-                {g, n, n, g, n, n, g},
-                {g, n, n, n, n, n, g},
-                {n, g, n, n, n, g, n},
-                {n, n, g, g, g, n, n},
-            }}, 0, 3, 3));
-        RitualRegistry.registerRecipe(new RitualRecipe(RitualBuilder.build(
+        RitualRegistry.registerRecipe(RitualBuilder.build("banana1", 0, 3, 3,
+            new String[]{
+                "  ccc  ",
+                " c   c ",
+                "c     c",
+                "c  c  c",
+                "c     c",
+                " c   c ",
+                "  ccc  ",
+            },
+            'c',
+            new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
+        ));
+        RitualRegistry.registerRecipe(RitualBuilder.build("banana2", 0, 4, 4,
             new String[]{
                 "g       g",
                 "   ccc   ",
@@ -57,7 +57,22 @@ public class RitualRecipeLoader {
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1),
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
-        ), 0, 4, 4));
+        ));
+        RitualRegistry.registerRecipe(RitualBuilder.build("banana3", 0, 4, 4,
+            new String[]{
+                "   ccc   ",
+                "  c   c  ",
+                " c     c ",
+                "c       c",
+                "c   c   c",
+                "c       c",
+                " c     c ",
+                "  c   c  ",
+                "   ccc   ",
+            },
+            'c',
+            new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
+        ));
         // spotless:on
     }
 }
