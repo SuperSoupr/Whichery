@@ -18,6 +18,7 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
 
     @Override
     public boolean startRitual(EntityPlayer player) {
+        // TODO Remove
         currentRitual = new RunningRitual(this, RitualRegistry.getRitual("banana1"), player);
         markDirty();
         return true;

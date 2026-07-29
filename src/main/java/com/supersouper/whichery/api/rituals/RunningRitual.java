@@ -15,7 +15,8 @@ public class RunningRitual {
     private UUID starterUUID;
     private RitualEffect effect;
     private RitualAnimation animation;
-    int timePassed = 0;
+    Long startedAt = null;
+    int timePassedInPreviousSave = 0;
 
     public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter) {
         this(leader);
@@ -23,6 +24,10 @@ public class RunningRitual {
         this.starter = starter;
         this.starterUUID = starter.getUniqueID();
         constructAnimationAndEffect();
+    }
+
+    public RunningRitual(TileEntity leader) {
+        this.leader = leader;
     }
 
     private void constructAnimationAndEffect() {
@@ -42,12 +47,9 @@ public class RunningRitual {
         }
     }
 
-    public RunningRitual(TileEntity leader) {
-        this.leader = leader;
-    }
-
     private int getStage() {
-        int curStageStart = -1;
+        int timePassed = getTimePassed();
+        int curStageStart = 0;
         int stage = ritual.stages.length;
 
         for (int i = 0; i < ritual.stages.length; i++) {
@@ -62,7 +64,13 @@ public class RunningRitual {
     }
 
     public void tick() {
-        int curStageStart = -1;
+        if (startedAt == null) {
+            startedAt = leader.getWorldObj()
+                .getTotalWorldTime();
+        }
+
+        int timePassed = getTimePassed();
+        int curStageStart = 0;
         int stage = ritual.stages.length;
 
         for (int i = 0; i < ritual.stages.length; i++) {
@@ -81,8 +89,6 @@ public class RunningRitual {
         effect.onTick();
         animation.onTick();
 
-        timePassed++;
-
         if (stage >= ritual.stages.length) {
             ((IRitualLeader) leader).endRitual();
         }
@@ -91,6 +97,12 @@ public class RunningRitual {
     public void end() {
         effect.end(getStage());
         animation.end(getStage());
+    }
+
+    public int getTimePassed() {
+        return Math.toIntExact(
+            (leader.getWorldObj()
+                .getTotalWorldTime() + timePassedInPreviousSave) - startedAt);
     }
 
     public EntityPlayer getStarter() {
@@ -108,15 +120,15 @@ public class RunningRitual {
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tag.setString("ritual", ritual.getName());
         tag.setString("starterUUID", starterUUID.toString());
-        tag.setInteger("timePassed", timePassed);
-        // tag.setTag("animation", animation.writeToNBT(new NBTTagCompound()));
-        // tag.setTag("effect", effect.writeToNBT(new NBTTagCompound()));
+        tag.setInteger("timePassedInPreviousSave", getTimePassed());
+        tag.setTag("animation", animation.writeToNBT(new NBTTagCompound()));
+        tag.setTag("effect", effect.writeToNBT(new NBTTagCompound()));
         return tag;
     }
 
     public void readFromNBT(NBTTagCompound tag) {
         ritual = RitualRegistry.getRitual(tag.getString("ritual"));
-        timePassed = tag.getInteger("timePassed");
+        timePassedInPreviousSave = tag.getInteger("timePassedInPreviousSave");
         starterUUID = UUID.fromString(tag.getString("starterUUID"));
 
         constructAnimationAndEffect();
