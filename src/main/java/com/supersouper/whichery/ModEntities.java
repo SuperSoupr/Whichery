@@ -1,21 +1,17 @@
 package com.supersouper.whichery;
 
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 
-import com.supersouper.whichery.client.render.entity.RenderMandrakeRoot;
 import com.supersouper.whichery.common.entity.EntityMandrakeRoot;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 public enum ModEntities {
 
-    MANDRAKE_ROOT(EntityMandrakeRoot.class, new RenderMandrakeRoot(), "MandrakeRoot", 0x724b2c, 0x0a4b2c);
+    MANDRAKE_ROOT(EntityMandrakeRoot.class, "MandrakeRoot", 0x724b2c, 0x0a4b2c);
 
     private final Class<? extends Entity> entityClass;
-    private final RenderLiving entityRenderer;
     private final String name;
     private final int trackingRange;
     private final int updateFrequency;
@@ -25,19 +21,17 @@ public enum ModEntities {
 
     private static int eggStartID = 14500;
 
-    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name) {
-        this(entityClass, entityRenderer, name, 64, 3, true, -1, -1);
+    ModEntities(Class<? extends Entity> entityClass, String name) {
+        this(entityClass, name, 64, 3, true, -1, -1);
     }
 
-    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name, int backgroundEggColor,
-        int foregroundEggColor) {
-        this(entityClass, entityRenderer, name, 64, 3, true, backgroundEggColor, foregroundEggColor);
+    ModEntities(Class<? extends Entity> entityClass, String name, int backgroundEggColor, int foregroundEggColor) {
+        this(entityClass, name, 64, 3, true, backgroundEggColor, foregroundEggColor);
     }
 
-    ModEntities(Class<? extends Entity> entityClass, RenderLiving entityRenderer, String name, int trackingRange,
-        int updateFrequency, boolean sendsVelocityUpdates, int backgroundEggColor, int foregroundEggColor) {
+    ModEntities(Class<? extends Entity> entityClass, String name, int trackingRange, int updateFrequency,
+        boolean sendsVelocityUpdates, int backgroundEggColor, int foregroundEggColor) {
         this.entityClass = entityClass;
-        this.entityRenderer = entityRenderer;
         this.name = name;
         this.trackingRange = trackingRange;
         this.updateFrequency = updateFrequency;
@@ -71,13 +65,5 @@ public enum ModEntities {
             eggStartID++;
         } while (EntityList.getStringFromID(eggStartID) != null);
         return eggStartID;
-    }
-
-    public static void initClient() {
-        for (ModEntities entity : ModEntities.values()) {
-            if (entity.entityRenderer != null) {
-                RenderingRegistry.registerEntityRenderingHandler(entity.entityClass, entity.entityRenderer);
-            }
-        }
     }
 }
