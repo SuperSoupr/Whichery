@@ -1,5 +1,7 @@
 package com.supersouper.whichery;
 
+import com.supersouper.whichery.common.blocks.trees.BlockWhicheryPlanks;
+import com.supersouper.whichery.common.blocks.trees.BlockYewLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -24,13 +26,19 @@ public enum ModBlocks {
 
     // Trees
     ALDER_LOG(true, new BlockWhicheryLog("alder"), "alder_log"),
-    ALDER_LEAVES(true, new BlockAlderLeaves(), "alder_leaves"),
-
     HAWTHORN_LOG(true, new BlockWhicheryLog("hawthorn"), "hawthorn_log"),
-    HAWTHORN_LEAVES(true, new BlockHawthornLeaves(), "hawthorn_leaves"),
-
     ROWAN_LOG(true, new BlockWhicheryLog("rowan"), "rowan_log"),
+    YEW_LOG(true, new BlockWhicheryLog("yew"), "yew_log"),
+
+    ALDER_LEAVES(true, new BlockAlderLeaves(), "alder_leaves"),
+    HAWTHORN_LEAVES(true, new BlockHawthornLeaves(), "hawthorn_leaves"),
     ROWAN_LEAVES(true, new BlockRowanLeaves(), "rowan_leaves"),
+    YEW_LEAVES(true, new BlockYewLeaves(), "yew_leaves"),
+
+    ALDER_PLANKS(true, new BlockWhicheryPlanks("alder"), "alder_planks"),
+    HAWTHORN_PLANKS(true, new BlockWhicheryPlanks("hawthorn"), "hawthorn_planks"),
+    ROWAN_PLANKS(true, new BlockWhicheryPlanks("rowan"), "rowan_planks"),
+    YEW_PLANKS(true, new BlockWhicheryPlanks("yew"), "yew_planks"),
 
     ; // leave trailing semicolon
     // spotless:on

@@ -11,12 +11,19 @@ tile.crop_witches_thimble.name=Witches' Thimble
 tile.alder_log.name=Alder Log
 tile.hawthorn_log.name=Hawthorn Log
 tile.rowan_log.name=Rowan Log
+tile.yew_log.name=Yew Log
 tile.alder_leaves.name=Alder Leaves
 tile.hawthorn_leaves.name=Hawthorn Leaves
 tile.rowan_leaves.name=Rowan Leaves
+tile.yew_leaves.name=Yew Leaves
 tile.alder_sapling.name=Alder Sapling
 tile.hawthorn_sapling.name=Hawthorn Sapling
 tile.rowan_sapling.name=Rowan Sapling
+tile.yew_sapling.name=Yew Sapling
+tile.alder_planks.name=Alder Wood Planks
+tile.hawthorn_planks.name=Hawthorn Wood Planks
+tile.rowan_planks.name=Rowan Wood Planks
+tile.yew_planks.name=Yew Wood Planks
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds

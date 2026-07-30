@@ -48,7 +48,7 @@ public abstract class BlockWhicheryLeaves extends BlockLeaves {
 
     @Override
     public void registerBlockIcons(IIconRegister reg) {
-        fastTex = reg.registerIcon("whichery:trees/" + treeName + "_leaves");
+        fastTex = reg.registerIcon("whichery:trees/" + treeName + "_leaves_fast");
         fancyTex = reg.registerIcon("whichery:trees/" + treeName + "_leaves");
     }
 
