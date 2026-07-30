@@ -5,9 +5,14 @@ import java.util.HashMap;
 
 import com.supersouper.whichery.api.IBlockMatcher;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 public class RitualBuilder {
 
-    public static RitualRecipe buildRecipe(int centerY, int centerX, int centerZ, Object... o) {
+    public static RitualRecipe buildRecipe(byte centerX, byte centerY, byte centerZ, Object... o) {
         ArrayList<String[]> levels = new ArrayList<>();
         HashMap<Character, IBlockMatcher> definitions = new HashMap<>();
         definitions.put(' ', null);
@@ -35,23 +40,31 @@ public class RitualBuilder {
         }
         int maxY = levels.size();
 
-        IBlockMatcher[][][] matcherPositions = new IBlockMatcher[maxY][maxX][maxZ];
+        IntArrayList keys = new IntArrayList();
+        ArrayList<IBlockMatcher> vals = new ArrayList<>();
 
-        for (int y = 0; y < matcherPositions.length; y++) {
-            for (int z = 0; z < matcherPositions[y].length; z++) {
-                for (int x = 0; x < matcherPositions[y][z].length; x++) {
+        for (byte y = 0; y < maxY; y++) {
+            for (byte z = 0; z < maxZ; z++) {
+                for (byte x = 0; x < maxX; x++) {
                     char c = ' ';
 
                     try {
                         c = levels.get(y)[z].charAt(x);
                     } catch (Exception ignore) {}
 
-                    matcherPositions[y][z][x] = definitions.get(c);
+                    IBlockMatcher matcher = definitions.get(c);
+                    if (matcher != null) {
+                        keys.add(RitualUtils.packCoords(x, y, z));
+                        vals.add(matcher);
+                    }
                 }
             }
         }
 
-        IBlockMatcher centerMatcher = matcherPositions[centerY][centerZ][centerX];
+        Int2ObjectMap<IBlockMatcher> matcherPositions = Int2ObjectMaps
+            .unmodifiable(new Int2ObjectArrayMap<>(keys.toIntArray(), vals.toArray(new IBlockMatcher[0])));
+
+        IBlockMatcher centerMatcher = matcherPositions.get(RitualUtils.packCoords(centerX, centerY, centerZ));
         if (centerMatcher == null) {
             throw new IllegalArgumentException("Center matcher cannot be null");
         }
@@ -59,6 +72,6 @@ public class RitualBuilder {
         IBlockMatcher[] matchers = definitions.values()
             .toArray(new IBlockMatcher[0]);
 
-        return new RitualRecipe(matcherPositions, matchers, centerY, centerX, centerZ);
+        return new RitualRecipe(matcherPositions, matchers, centerX, centerY, centerZ);
     }
 }

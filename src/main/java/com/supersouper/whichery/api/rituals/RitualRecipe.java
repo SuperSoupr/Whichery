@@ -4,28 +4,30 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.IBlockMatcher;
-import com.supersouper.whichery.api.QuadConsumer;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 
 public class RitualRecipe {
 
-    private final IBlockMatcher[][][] matcherPositions;
+    private final Int2ObjectMap<IBlockMatcher> matcherPositions;
     private final IBlockMatcher[] matchers;
-    private final int centerX, centerZ, centerY;
+    private final byte centerX, centerZ, centerY;
 
     /**
      * IBlockMatcher 3d array formatted as: [y][z][x]
      * This is because most rituals are expected to only require one y level.
      */
-    public RitualRecipe(IBlockMatcher[][][] matcherPositions, IBlockMatcher[] matchers, int centerY, int centerX,
-        int centerZ) {
+    public RitualRecipe(Int2ObjectMap<IBlockMatcher> matcherPositions, IBlockMatcher[] matchers, byte centerX,
+        byte centerY, byte centerZ) {
         this.matcherPositions = matcherPositions;
         this.matchers = matchers;
+        this.centerX = centerX;
         this.centerY = centerY;
         this.centerZ = centerZ;
-        this.centerX = centerX;
     }
 
-    public IBlockMatcher[][][] matcherPositions() {
+    public Int2ObjectMap<IBlockMatcher> matcherPositions() {
         return matcherPositions;
     }
 
@@ -33,42 +35,42 @@ public class RitualRecipe {
         return matchers;
     }
 
-    public int centerZ() {
+    public byte centerZ() {
         return centerZ;
     }
 
-    public int centerX() {
+    public byte centerX() {
         return centerX;
     }
 
-    public int centerY() {
+    public byte centerY() {
         return centerY;
     }
 
     /**
      * Called with the coords of the "center" block to validate ritual placement
      */
-    public boolean match(IBlockAccess world, int x, int y, int z) {
-        IBlockMatcher[][][] matchers = matcherPositions();
+    public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
+        rotations: for (byte i = 0; i < 4; i++) {
+            for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
+                IBlockMatcher matcher = e.getValue();
 
-        rotations: for (int i = 0; i < 4; i++) {
-            for (int cy = 0; cy < matchers.length; cy++) {
-                for (int cz = 0; cz < matchers[cy].length; cz++) {
-                    for (int cx = 0; cx < matchers[cy][cz].length; cx++) {
-                        IBlockMatcher matcher = matchers[cy][cz][cx];
-                        if (matcher != null) {
-                            int[] pos2d = { cx, cz };
-                            for (int j = 0; j < i; j++) {
-                                pos2d = rotate(pos2d, centerX(), centerZ());
-                            }
-                            if (!matcher
-                                .match(world, x + pos2d[0] - centerX(), y + cy - centerY(), z + pos2d[1] - centerZ())) {
-                                continue rotations;
-                            }
-                        }
+                if (matcher != null) {
+                    byte[] coords = RitualUtils.unpackCoords(e.getIntKey());
+
+                    int[] pos2d = { coords[0], coords[2] };
+
+                    for (int j = 0; j < i; j++) {
+                        pos2d = rotate(pos2d, centerX(), centerZ());
+                    }
+
+                    if (!matcher
+                        .match(world, x + pos2d[0] - centerX(), y + coords[1] - centerY(), z + pos2d[1] - centerZ())) {
+                        continue rotations;
                     }
                 }
             }
+            rotationBuffer[0] = i;
             return true;
         }
 
@@ -82,21 +84,11 @@ public class RitualRecipe {
     }
 
     public void construct(World world, int x, int y, int z) {
-        forEachMatcher((matcher, cx, cy, cz) -> {
+        for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
+            IBlockMatcher matcher = e.getValue();
             if (matcher != null) {
-                matcher.place(world, x + cx - centerX(), y + cy - centerY(), z + cz - centerZ());
-            }
-        });
-    }
-
-    public void forEachMatcher(QuadConsumer<IBlockMatcher, Integer, Integer, Integer> consumer) {
-        IBlockMatcher[][][] matcherPositions = matcherPositions();
-
-        for (int y = 0; y < matcherPositions.length; y++) {
-            for (int z = 0; z < matcherPositions[y].length; z++) {
-                for (int x = 0; x < matcherPositions[y][z].length; x++) {
-                    consumer.accept(matcherPositions[y][z][x], x, y, z);
-                }
+                byte[] coords = RitualUtils.unpackCoords(e.getIntKey());
+                matcher.place(world, x + coords[0] - centerX(), y + coords[1] - centerY(), z + coords[2] - centerZ());
             }
         }
     }
