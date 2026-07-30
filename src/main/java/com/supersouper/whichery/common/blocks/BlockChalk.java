@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -28,13 +29,26 @@ public class BlockChalk extends RitualLeaderBlock {
     }
 
     @Override
-    public boolean hasTileEntity(int metadata) {
-        return true;
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
+        float subY, float subZ) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (te instanceof ChalkTileEntity cte) {
+            ItemStack stack = player.getHeldItem();
+            if (stack != null) {
+                if (cte.isItemValidForSlot(0, stack)) {
+                    cte.setInventorySlotContents(0, stack);
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        return super.onBlockActivated(world, x, y, z, player, side, subX, subY, subZ);
     }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new ChalkTileEntity(meta);
+        return new ChalkTileEntity(world);
     }
 
     @Override

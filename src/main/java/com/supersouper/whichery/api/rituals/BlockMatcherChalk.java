@@ -10,8 +10,11 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.BlockMatcherBasic;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class BlockMatcherChalk extends BlockMatcherBasic {
+
+    private ItemStack stack = null;
 
     public BlockMatcherChalk(Block block) {
         super(block);
@@ -21,12 +24,18 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         super(block, type);
     }
 
+    public BlockMatcherChalk(Block block, int type, ItemStack stack) {
+        super(block, type);
+        this.stack = stack;
+    }
+
     @Override
     public boolean match(IBlockAccess world, int x, int y, int z) {
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
         if (te == null) return false;
 
-        return te.getType() == meta;
+        return te.getType() == meta
+            && (getStack() == null || WhicheryUtils.matchIngredient(getStack(), te.getStackInSlot(0), true));
     }
 
     @Override
@@ -44,6 +53,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(meta);
+            te.markDirty();
         }
     }
 
@@ -58,5 +68,9 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         }
         return stack.getItem()
             .hashCode() + type;
+    }
+
+    public ItemStack getStack() {
+        return stack;
     }
 }

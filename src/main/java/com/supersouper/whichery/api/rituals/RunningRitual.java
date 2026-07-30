@@ -15,19 +15,23 @@ public class RunningRitual {
     private UUID starterUUID;
     private RitualEffect effect;
     private RitualAnimation animation;
-    Long startedAt = null;
-    int timePassedInPreviousSave = 0;
+    private Long startedAt = null;
+    private int timePassedInPreviousSave = 0;
+    private byte rotation;
 
-    public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter) {
+    public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter, byte rotation) {
         this(leader);
         this.ritual = ritual;
         this.starter = starter;
         this.starterUUID = starter.getUniqueID();
+        this.rotation = rotation;
         constructAnimationAndEffect();
     }
 
     public RunningRitual(TileEntity leader) {
         this.leader = leader;
+        startedAt = leader.getWorldObj()
+            .getTotalWorldTime();
     }
 
     private void constructAnimationAndEffect() {
@@ -64,11 +68,6 @@ public class RunningRitual {
     }
 
     public void tick() {
-        if (startedAt == null) {
-            startedAt = leader.getWorldObj()
-                .getTotalWorldTime();
-        }
-
         int timePassed = getTimePassed();
         int curStageStart = 0;
         int stage = ritual.stages.length;
@@ -123,6 +122,7 @@ public class RunningRitual {
         tag.setInteger("timePassedInPreviousSave", getTimePassed());
         tag.setTag("animation", animation.writeToNBT(new NBTTagCompound()));
         tag.setTag("effect", effect.writeToNBT(new NBTTagCompound()));
+        tag.setByte("rotation", rotation);
         return tag;
     }
 
@@ -135,5 +135,6 @@ public class RunningRitual {
 
         animation.readFromNBT(tag.getCompoundTag("animation"));
         effect.readFromNBT(tag.getCompoundTag("effect"));
+        rotation = tag.getByte("rotation");
     }
 }
