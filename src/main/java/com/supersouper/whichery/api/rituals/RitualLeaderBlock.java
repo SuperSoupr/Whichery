@@ -27,12 +27,10 @@ public abstract class RitualLeaderBlock extends Block implements ITileEntityProv
                 return true;
             }
 
-            for (int i = 0; i < 10000; i++) {
-                byte[] rotationBuffer = new byte[] { 0 };
-                Ritual ritual = RitualUtils.findRitualAt(world, x, y, z, rotationBuffer);
-                if (ritual != null) {
-                    return rlte.startRitual(ritual, rotationBuffer[0], player);
-                }
+            byte[] rotationBuffer = new byte[] { 0 };
+            Ritual ritual = RitualUtils.findRitualAt(world, x, y, z, rotationBuffer);
+            if (ritual != null) {
+                return rlte.startRitual(ritual, rotationBuffer[0], player);
             }
         }
         return false;
