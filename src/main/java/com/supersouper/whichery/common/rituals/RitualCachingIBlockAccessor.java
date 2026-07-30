@@ -28,6 +28,8 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;
+
+        getTileEntityCache.defaultReturnValue(new TileEntity());
     }
 
     Int2ObjectArrayMap<Block> getBlockCache = new Int2ObjectArrayMap<>();
@@ -49,7 +51,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
     public TileEntity getTileEntity(int x, int y, int z) {
         int packed = RitualUtils.packCoords(x, y, z);
         TileEntity result = getTileEntityCache.get(packed);
-        if (result == null) {
+        if (result == getTileEntityCache.defaultReturnValue()) {
             result = base.getTileEntity(x + centerX, y + centerY, z + centerZ);
             getTileEntityCache.put(packed, result);
         }
