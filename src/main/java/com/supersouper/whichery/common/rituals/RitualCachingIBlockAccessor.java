@@ -21,9 +21,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 public class RitualCachingIBlockAccessor implements IBlockAccess {
 
     private final IBlockAccess base;
+    private final int centerX, centerY, centerZ;
 
-    public RitualCachingIBlockAccessor(IBlockAccess base) {
+    public RitualCachingIBlockAccessor(IBlockAccess base, int x, int y, int z) {
         this.base = base;
+        this.centerX = x;
+        this.centerY = y;
+        this.centerZ = z;
     }
 
     Int2ObjectArrayMap<Block> getBlockCache = new Int2ObjectArrayMap<>();
@@ -33,7 +37,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
         int packed = RitualUtils.packCoords(x, y, z);
         Block result = getBlockCache.get(packed);
         if (result == null) {
-            result = base.getBlock(x, y, z);
+            result = base.getBlock(x + centerX, y + centerY, z + centerZ);
             getBlockCache.put(packed, result);
         }
         return result;
@@ -46,7 +50,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
         int packed = RitualUtils.packCoords(x, y, z);
         TileEntity result = getTileEntityCache.get(packed);
         if (result == null) {
-            result = base.getTileEntity(x, y, z);
+            result = base.getTileEntity(x + centerX, y + centerY, z + centerZ);
             getTileEntityCache.put(packed, result);
         }
         return result;
@@ -56,7 +60,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
     @Override
     public int getLightBrightnessForSkyBlocks(int x, int y, int z, int min) {
         Whichery.LOG.log(Level.DEBUG, "getLightBrightnessForSkyBlocks unimplemented in RitualCachingIBlockAccessor");
-        return base.getLightBrightnessForSkyBlocks(x, y, z, min);
+        return base.getLightBrightnessForSkyBlocks(x + centerX, y + centerY, z + centerZ, min);
     }
 
     Int2IntArrayMap getBlockMetadataCache = new Int2IntArrayMap();
@@ -66,7 +70,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
         int packed = RitualUtils.packCoords(x, y, z);
         int result = getBlockMetadataCache.get(packed);
         if (result == getBlockMetadataCache.defaultReturnValue()) {
-            result = base.getBlockMetadata(x, y, z);
+            result = base.getBlockMetadata(x + centerX, y + centerY, z + centerZ);
             getBlockMetadataCache.put(packed, result);
         }
         return result;
@@ -75,7 +79,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
     @Override
     public int isBlockProvidingPowerTo(int x, int y, int z, int directionIn) {
         Whichery.LOG.log(Level.DEBUG, "isBlockProvidingPowerTo unimplemented in RitualCachingIBlockAccessor");
-        return base.isBlockProvidingPowerTo(x, y, z, directionIn);
+        return base.isBlockProvidingPowerTo(x + centerX, y + centerY, z + centerZ, directionIn);
     }
 
     Int2ObjectArrayMap<Boolean> isAirBlockCache;
@@ -88,7 +92,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
         int packed = RitualUtils.packCoords(x, y, z);
         Boolean result = isAirBlockCache.get(packed);
         if (result == null) {
-            result = base.isAirBlock(x, y, z);
+            result = base.isAirBlock(x + centerX, y + centerY, z + centerZ);
             isAirBlockCache.put(packed, result);
         }
         return result;
@@ -104,7 +108,7 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
         int packed = RitualUtils.packCoords(x, 0, z);
         BiomeGenBase result = getBiomeGenForCoordsCache.get(packed);
         if (result == null) {
-            result = base.getBiomeGenForCoords(x, z);
+            result = base.getBiomeGenForCoords(x + centerX, z + centerZ);
             getBiomeGenForCoordsCache.put(packed, result);
         }
         return result;
@@ -125,6 +129,6 @@ public class RitualCachingIBlockAccessor implements IBlockAccess {
     @Override
     public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
         Whichery.LOG.log(Level.DEBUG, "isSideSolid unimplemented in RitualCachingIBlockAccessor");
-        return base.isSideSolid(x, y, z, side, _default);
+        return base.isSideSolid(x + centerX, y + centerY, z + centerZ, side, _default);
     }
 }

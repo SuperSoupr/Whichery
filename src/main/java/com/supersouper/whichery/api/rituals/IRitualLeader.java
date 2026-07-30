@@ -6,7 +6,7 @@ public interface IRitualLeader {
 
     RunningRitual getCurrentRitual();
 
-    boolean startRitual(Ritual ritual, EntityPlayer player);
+    boolean startRitual(Ritual ritual, byte rotation, EntityPlayer starter);
 
     void endRitual();
 }

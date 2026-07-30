@@ -10,7 +10,7 @@ import com.supersouper.whichery.common.rituals.RitualCachingIBlockAccessor;
 public class RitualUtils {
 
     public static Ritual findRitualAt(IBlockAccess _world, int x, int y, int z, byte[] rotationBuffer) {
-        RitualCachingIBlockAccessor world = new RitualCachingIBlockAccessor(_world);
+        RitualCachingIBlockAccessor world = new RitualCachingIBlockAccessor(_world, x, y, z);
         for (Ritual ritual : RitualRegistry.rituals()) {
             if (ritual.getRecipe()
                 .match(world, x, y, z, rotationBuffer)) {

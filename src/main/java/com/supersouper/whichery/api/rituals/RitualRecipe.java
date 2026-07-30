@@ -4,6 +4,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.IBlockMatcher;
+import com.supersouper.whichery.common.rituals.RitualCachingIBlockAccessor;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -64,8 +65,17 @@ public class RitualRecipe {
                         pos2d = rotate(pos2d, centerX(), centerZ());
                     }
 
-                    if (!matcher
-                        .match(world, x + pos2d[0] - centerX(), y + coords[1] - centerY(), z + pos2d[1] - centerZ())) {
+                    int cx, cy, cz;
+                    if (world instanceof RitualCachingIBlockAccessor) {
+                        cx = pos2d[0] - centerX();
+                        cy = coords[1] - centerY();
+                        cz = pos2d[1] - centerZ();
+                    } else {
+                        cx = x + pos2d[0] - centerX();
+                        cy = y + coords[1] - centerY();
+                        cz = z + pos2d[1] - centerZ();
+                    }
+                    if (!matcher.match(world, cx, cy, cz)) {
                         continue rotations;
                     }
                 }
