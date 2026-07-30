@@ -42,6 +42,11 @@ public class EntityMandrakeRoot extends EntityCreature {
     }
 
     @Override
+    protected float getSoundVolume() {
+        return 4.0f;
+    }
+
+    @Override
     protected String getLivingSound() {
         return "whichery:mandrake.idle";
     }
