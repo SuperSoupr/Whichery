@@ -7,7 +7,9 @@ public enum IngredientFamily {
     AIR("air"),
     EARTH("earth"),
     LIFE("life"),
-    DEATH("death");
+    DEATH("death"),
+    SPIRIT("spirit"),
+    HELL("hell");
 
     public final String id;
 

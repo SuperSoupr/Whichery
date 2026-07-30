@@ -44,7 +44,9 @@ public class FamilyRegistry {
             new IngredientFamilyStack(IngredientFamily.EARTH, 2),
             new IngredientFamilyStack(IngredientFamily.AIR, 2),
             new IngredientFamilyStack(IngredientFamily.LIFE, 2),
-            new IngredientFamilyStack(IngredientFamily.DEATH, 2));
+            new IngredientFamilyStack(IngredientFamily.DEATH, 2),
+            new IngredientFamilyStack(IngredientFamily.SPIRIT, 2),
+            new IngredientFamilyStack(IngredientFamily.HELL, 2));
         registerIngredient(ModItems.WITCH_PETAL.newItemStack(), new IngredientFamilyStack(IngredientFamily.DEATH, 2));
     }
 }
