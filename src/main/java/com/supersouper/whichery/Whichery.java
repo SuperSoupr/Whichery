@@ -4,6 +4,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -16,6 +19,7 @@ public class Whichery {
 
     public static final String MODID = "whichery";
     public static final String MODNAME = "Whichery";
+    public static final Logger LOG = LogManager.getLogger(MODID);
 
     @SidedProxy(
         clientSide = "com.supersouper.whichery.ClientProxy",

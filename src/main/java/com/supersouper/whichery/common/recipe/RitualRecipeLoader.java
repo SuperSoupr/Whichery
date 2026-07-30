@@ -25,7 +25,7 @@ public class RitualRecipeLoader {
         Arrays.fill(stages, 10);
 
         // spotless:off
-        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe(0, 3, 3,
+        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe((byte) 3, (byte) 0, (byte) 3,
             new String[]{
                 "  ccc  ",
                 " c   c ",
@@ -40,7 +40,7 @@ public class RitualRecipeLoader {
             'o',
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
-        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe(0, 4, 4,
+        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4,
             new String[]{
                 "g       g",
                 "   ccc   ",
@@ -68,7 +68,7 @@ public class RitualRecipeLoader {
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
-        RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe(0, 4, 4,
+        RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4,
             new String[]{
                 "   ccc   ",
                 "  c   c  ",

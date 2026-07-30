@@ -9,6 +9,7 @@ import com.supersouper.whichery.api.IBlockMatcher;
 import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.RitualRecipe;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.api.rituals.RitualUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -46,7 +47,10 @@ public class RitualInfoScan implements Runnable {
 
             stacks.put(
                 ritual,
-                recipe.matcherPositions()[recipe.centerY()][recipe.centerZ()][recipe.centerX()].getItemStack());
+                recipe.matcherPositions()
+                    .get(RitualUtils.packCoords(recipe.centerX(), recipe.centerY(), recipe.centerZ()))
+                    .getItemStack());
+
         }
 
         resultCallback.accept(result);

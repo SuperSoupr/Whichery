@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.api.rituals.RitualUtils;
 
 import blockrenderer6343.integration.nei.MultiblockHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -42,6 +42,6 @@ public class RitualMultiblockHandler extends MultiblockHandler {
     protected @NotNull ObjectSet<IConstructable> tryLoadingMultiblocks(ItemStack candidate) {
         if (multiBlockComponents == null) return ObjectSets.emptySet();
 
-        return multiBlockComponents.getOrDefault(RitualRegistry.hashItemStack(candidate), ObjectSets.emptySet());
+        return multiBlockComponents.getOrDefault(RitualUtils.hashItemStack(candidate), ObjectSets.emptySet());
     }
 }
