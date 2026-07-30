@@ -1,21 +1,32 @@
 package com.supersouper.whichery.common.tileentities;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.IRitualParticipator;
 import com.supersouper.whichery.api.rituals.RitualLeaderTileEntity;
+import com.supersouper.whichery.common.entity.PlacedEntityItem;
 
-public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualParticipator {
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualParticipator, IInventory {
 
     private int type = 0;
+    @SideOnly(Side.CLIENT)
+    private PlacedEntityItem placedEntityItem;
+    private ItemStack stack;
 
     public ChalkTileEntity() {
 
     }
 
-    public ChalkTileEntity(int type) {
-        this.type = type;
+    public ChalkTileEntity(World world) {
+        setWorldObj(world);
     }
 
     public void setType(int type) {
@@ -26,16 +37,50 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
         return type;
     }
 
+    @SideOnly(Side.CLIENT)
+    public void updateDisplayItem() {
+        if (placedEntityItem != null) {
+            if (stack == null) {
+                placedEntityItem.setDead();
+                placedEntityItem = null;
+            } else {
+                placedEntityItem.setEntityItemStack(stack);
+            }
+        } else {
+            if (stack != null) {
+                placedEntityItem = new PlacedEntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
+                worldObj.spawnEntityInWorld(placedEntityItem);
+            }
+        }
+    }
+
+    public void invalidate() {
+        if (worldObj.isRemote && placedEntityItem != null) {
+            placedEntityItem.setDead();
+            placedEntityItem = null;
+        }
+        this.tileEntityInvalid = true;
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         type = compound.getInteger("type");
+        if (compound.hasKey("stack")) {
+            stack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"));
+        } else {
+            stack = null;
+        }
+        updateDisplayItem();
     }
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setInteger("type", type);
+        if (stack != null) {
+            compound.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
+        }
     }
 
     @Override
@@ -48,5 +93,88 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
     @Override
     public void transitionToStage(int stage) {
 
+    }
+
+    @Override
+    public void markDirty() {
+        if (!worldObj.isRemote) {
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        } else {
+            updateDisplayItem();
+        }
+        super.markDirty();
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return 1;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slotIn) {
+        return stack;
+    }
+
+    @Override
+    public ItemStack decrStackSize(int index, int count) {
+        ItemStack tmp;
+        if (stack.stackSize <= count) {
+            tmp = stack;
+            stack = null;
+        } else {
+            tmp = stack.splitStack(count);
+
+            if (stack.stackSize == 0) {
+                stack = null;
+            }
+        }
+        markDirty();
+        return tmp;
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int index) {
+        return stack;
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        this.stack = stack;
+        markDirty();
+    }
+
+    @Override
+    public String getInventoryName() {
+        return "container.whichery.chalk";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName() {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return true;
+    }
+
+    @Override
+    public void openInventory() {
+
+    }
+
+    @Override
+    public void closeInventory() {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return true;
     }
 }

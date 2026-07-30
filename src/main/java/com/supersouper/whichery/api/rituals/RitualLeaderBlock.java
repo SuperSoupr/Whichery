@@ -18,18 +18,29 @@ public abstract class RitualLeaderBlock extends Block implements ITileEntityProv
         float subY, float subZ) {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof IRitualLeader rlte) {
-            Ritual ritual = RitualRegistry.getRitual("banana1");
 
             if (player.isSneaking() && player.capabilities.isCreativeMode) {
                 // TODO Remove
-                ritual.getRecipe()
+                RitualRegistry.getRitual("banana2")
+                    .getRecipe()
                     .construct(world, x, y, z);
                 return true;
             }
 
-            return rlte.startRitual(ritual, player);
+            for (int i = 0; i < 10000; i++) {
+                byte[] rotationBuffer = new byte[] { 0 };
+                Ritual ritual = RitualUtils.findRitualAt(world, x, y, z, rotationBuffer);
+                if (ritual != null) {
+                    return rlte.startRitual(ritual, rotationBuffer[0], player);
+                }
+            }
         }
         return false;
+    }
+
+    @Override
+    public boolean hasTileEntity(int metadata) {
+        return true;
     }
 
 }

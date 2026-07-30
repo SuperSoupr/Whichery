@@ -57,14 +57,16 @@ public class ItemChalk extends Item {
         float clickX, float clickY, float clickZ) {
         if (!world.isAirBlock(x, y + 1, z)) return false;
         if (side != ForgeDirection.UP.ordinal()) return false;
-        if (world.isRemote) return true;
 
         int type = getChalkType(stack);
-        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), type, 3);
-        stack.damageItem(1, player);
+        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), 0, 3);
+        if (!world.isRemote) {
+            stack.damageItem(1, player);
+        }
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y + 1, z);
         if (te != null) {
             te.setType(type);
+            te.markDirty();
         }
 
         return true;

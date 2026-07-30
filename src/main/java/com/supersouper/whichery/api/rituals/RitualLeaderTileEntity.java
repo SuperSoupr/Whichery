@@ -17,14 +17,11 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
     }
 
     @Override
-    public boolean startRitual(Ritual ritual, EntityPlayer player) {
-        if (ritual.getRecipe()
-            .match(worldObj, xCoord, yCoord, zCoord)) {
-            currentRitual = new RunningRitual(this, ritual, player);
-            markDirty();
-            return true;
-        }
-        return false;
+    public boolean startRitual(Ritual ritual, byte rotation, EntityPlayer starter) {
+        currentRitual = new RunningRitual(this, ritual, starter, rotation);
+        markDirty();
+
+        return true;
     }
 
     @Override
