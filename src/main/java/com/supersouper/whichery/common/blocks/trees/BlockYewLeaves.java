@@ -1,8 +1,8 @@
 package com.supersouper.whichery.common.blocks.trees;
 
-import net.minecraft.item.Item;
-
 import java.util.Random;
+
+import net.minecraft.item.Item;
 
 public class BlockYewLeaves extends BlockWhicheryLeaves {
 

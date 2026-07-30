@@ -1,7 +1,5 @@
 package com.supersouper.whichery;
 
-import com.supersouper.whichery.common.blocks.trees.BlockWhicheryPlanks;
-import com.supersouper.whichery.common.blocks.trees.BlockYewLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -10,9 +8,15 @@ import net.minecraft.item.ItemStack;
 import com.supersouper.whichery.common.blocks.BlockChalk;
 import com.supersouper.whichery.common.blocks.crops.BlockCropWitchesThimble;
 import com.supersouper.whichery.common.blocks.trees.BlockAlderLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockAlderSapling;
 import com.supersouper.whichery.common.blocks.trees.BlockHawthornLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockHawthornSapling;
 import com.supersouper.whichery.common.blocks.trees.BlockRowanLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockRowanSapling;
 import com.supersouper.whichery.common.blocks.trees.BlockWhicheryLog;
+import com.supersouper.whichery.common.blocks.trees.BlockWhicheryPlanks;
+import com.supersouper.whichery.common.blocks.trees.BlockYewLeaves;
+import com.supersouper.whichery.common.blocks.trees.BlockYewSapling;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -25,6 +29,11 @@ public enum ModBlocks {
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
 
     // Trees
+    ALDER_SAPLING(true, new BlockAlderSapling(), "alder_sapling"),
+    HAWTHORN_SAPLING(true, new BlockHawthornSapling(), "hawthorn_sapling"),
+    ROWAN_SAPLING(true, new BlockRowanSapling(), "rowan_sapling"),
+    YEW_SAPLING(true, new BlockYewSapling(), "yew_sapling"),
+
     ALDER_LOG(true, new BlockWhicheryLog("alder"), "alder_log"),
     HAWTHORN_LOG(true, new BlockWhicheryLog("hawthorn"), "hawthorn_log"),
     ROWAN_LOG(true, new BlockWhicheryLog("rowan"), "rowan_log"),

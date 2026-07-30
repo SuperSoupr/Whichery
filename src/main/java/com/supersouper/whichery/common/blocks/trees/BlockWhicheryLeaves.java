@@ -2,6 +2,7 @@ package com.supersouper.whichery.common.blocks.trees;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
@@ -60,6 +61,17 @@ public abstract class BlockWhicheryLeaves extends BlockLeaves {
     @Override
     public boolean isOpaqueCube() {
         return Blocks.leaves.isOpaqueCube();
+    }
+
+    // Have to basically reimplement super from both BlockLeaves and Block without calling super due to how the
+    // stupid fast/fancy boolean field works
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, int x, int y, int z, int side) {
+        Block block = worldIn.getBlock(x, y, z);
+        return (!isOpaqueCube() || block instanceof BlockLeaves) && (side == 0 && this.minY > 0.0D
+            || (side == 1 && this.maxY < 1.0D || (side == 2 && this.minZ > 0.0D || (side == 3 && this.maxZ < 1.0D
+                || (side == 4 && this.minX > 0.0D || (side == 5 && this.maxX < 1.0D || !worldIn.getBlock(x, y, z)
+                    .isOpaqueCube()))))));
     }
 
     // Disable biome blend
