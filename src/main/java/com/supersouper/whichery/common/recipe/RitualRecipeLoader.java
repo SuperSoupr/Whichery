@@ -1,12 +1,8 @@
 package com.supersouper.whichery.common.recipe;
 
 import java.util.Arrays;
-import java.util.Random;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import org.jetbrains.annotations.ApiStatus;
 
@@ -87,50 +83,6 @@ public class RitualRecipeLoader {
             'c',
             new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1)
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
-
-        ItemStack stack = new ItemStack(Items.diamond_axe, 1, 1);
-        NBTTagCompound tag = new NBTTagCompound();
-        Random rand = new Random();
-        for (int i = 0; i < 10; i++) {
-            tag.setString("testbttag" + rand.nextInt(696969), "testbtvalue" + rand.nextInt(696969));
-        }
-        stack.setTagCompound(tag);
-
-        String s = "";
-        for (int i = 0; i < 20; i++) {
-            s = s + "c";
-        }
-        String[] sarr = new String[20];
-        for (int i = 0; i < 20; i++) {
-            sarr[i] = s;
-        }
-
-        for (int i = 0; i < 10000; i++) {
-            RitualRegistry.registerRitual(new Ritual("testritual" + i, RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                sarr,
-                'c',
-                new BlockMatcherChalk(ModBlocks.CHALK_BLOCK.get(), 1, stack)
-            ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
-        }
         // spotless:on
     }
 }

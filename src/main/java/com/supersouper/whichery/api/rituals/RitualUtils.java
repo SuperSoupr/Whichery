@@ -5,12 +5,9 @@ import java.util.Objects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 
-import com.supersouper.whichery.common.rituals.RitualCachingIBlockAccessor;
-
 public class RitualUtils {
 
-    public static Ritual findRitualAt(IBlockAccess _world, int x, int y, int z, byte[] rotationBuffer) {
-        RitualCachingIBlockAccessor world = new RitualCachingIBlockAccessor(_world, x, y, z);
+    public static Ritual findRitualAt(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
         for (Ritual ritual : RitualRegistry.rituals()) {
             if (ritual.getRecipe()
                 .match(world, x, y, z, rotationBuffer)) {
