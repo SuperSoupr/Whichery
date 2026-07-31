@@ -1,6 +1,7 @@
 package com.supersouper.whichery.common.tileentities;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,35 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
         return type;
     }
 
+    public boolean onRightClicked(EntityPlayer player) {
+        if (stack == null) {
+            ItemStack held = player.getHeldItem();
+            if (held != null) {
+                if (isItemValidForSlot(0, held)) {
+                    setInventorySlotContents(0, held);
+                    player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                    return true;
+                }
+            }
+        } else {
+            dropHeldItem();
+            return true;
+        }
+        return false;
+    }
+
+    private void dropHeldItem() {
+        if (stack != null) {
+            if (!worldObj.isRemote) {
+                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.6, zCoord + 0.5, stack);
+                worldObj.spawnEntityInWorld(entityItem);
+                entityItem.delayBeforeCanPickup = 5;
+            }
+            stack = null;
+            updateDisplayItem();
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     public void updateDisplayItem() {
         if (placedEntityItem != null) {
@@ -59,6 +89,7 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
             placedEntityItem.setDead();
             placedEntityItem = null;
         }
+        dropHeldItem();
         this.tileEntityInvalid = true;
     }
 

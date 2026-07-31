@@ -20,9 +20,9 @@ import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockChalk extends RitualLeaderBlock {
+public class BlockChalkRune extends RitualLeaderBlock {
 
-    public BlockChalk() {
+    public BlockChalkRune() {
         super(Material.ground);
         setBlockName("chalk_block");
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
@@ -33,14 +33,7 @@ public class BlockChalk extends RitualLeaderBlock {
         float subY, float subZ) {
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof ChalkTileEntity cte) {
-            ItemStack stack = player.getHeldItem();
-            if (stack != null) {
-                if (cte.isItemValidForSlot(0, stack)) {
-                    cte.setInventorySlotContents(0, stack);
-                    return true;
-                }
-                return false;
-            }
+            if (cte.onRightClicked(player)) return true;
         }
 
         return super.onBlockActivated(world, x, y, z, player, side, subX, subY, subZ);
@@ -70,7 +63,7 @@ public class BlockChalk extends RitualLeaderBlock {
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
         for (int i = 0; i < 16; i++) {
-            ItemStack result = new ItemStack(ModBlocks.CHALK_BLOCK.get());
+            ItemStack result = new ItemStack(ModBlocks.CHALK_RUNE_BLOCK.get());
             NBTTagCompound tag = new NBTTagCompound();
             tag.setInteger("type", i);
             result.setTagCompound(tag);
