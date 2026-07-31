@@ -36,7 +36,7 @@ public class RitualRecipeLoader {
                 "  ccc  ",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), 1),
+            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual"),
             'o',
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
@@ -64,7 +64,7 @@ public class RitualRecipeLoader {
                 "g       g",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), 1),
+            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual"),
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
@@ -81,7 +81,7 @@ public class RitualRecipeLoader {
                 "   ccc   ",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), 1)
+            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual")
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
         // spotless:on
     }

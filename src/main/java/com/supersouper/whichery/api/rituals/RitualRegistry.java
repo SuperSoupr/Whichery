@@ -12,6 +12,9 @@ public class RitualRegistry {
     private static final HashMap<String, Ritual> RITUALS = new HashMap<>();
     static final HashMap<Item, Function<ItemStack, Integer>> ITEM_HASHERS = new HashMap<>();
 
+    public static final HashMap<String, Integer> CHALK_TYPES = new HashMap<>();
+    public static final String DEFAULT_CHALK_TYPE_NAME = "basic";
+
     public static void registerRitual(Ritual ritual) {
         RITUALS.put(ritual.getName(), ritual);
     }
@@ -26,5 +29,9 @@ public class RitualRegistry {
 
     public static void registerItemHasher(Item item, Function<ItemStack, Integer> hasher) {
         ITEM_HASHERS.put(item, hasher);
+    }
+
+    public static void registerChalkType(String name, int color) {
+        CHALK_TYPES.put(name, color);
     }
 }

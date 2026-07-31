@@ -1,6 +1,5 @@
 package com.supersouper.whichery;
 
-import com.supersouper.whichery.client.render.ChalkRuneTESR;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
@@ -10,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.client.gui.BloodMeterRenderer;
+import com.supersouper.whichery.client.render.ChalkRuneTESR;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -27,7 +27,8 @@ public class ClientProxy extends CommonProxy {
             ClientRegistry.bindTileEntitySpecialRenderer(ModTileEntities.CHALK.getTileEntityClass(), renderer);
             MinecraftForgeClient.registerItemRenderer(ModBlocks.CHALK_RUNE_BLOCK.getItem(), renderer);
 
-            RitualRegistry.registerItemHasher(ModBlocks.CHALK_RUNE_BLOCK.getItem(), BlockMatcherChalk::itemStackToHashCode);
+            RitualRegistry
+                .registerItemHasher(ModBlocks.CHALK_RUNE_BLOCK.getItem(), BlockMatcherChalk::itemStackToHashCode);
 
             RenderingRegistry.registerEntityRenderingHandler(
                 PlacedEntityItem.class,

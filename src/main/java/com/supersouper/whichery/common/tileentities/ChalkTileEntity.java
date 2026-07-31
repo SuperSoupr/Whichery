@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.IRitualParticipator;
 import com.supersouper.whichery.api.rituals.RitualLeaderTileEntity;
+import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
 
 import cpw.mods.fml.relauncher.Side;
@@ -17,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualParticipator, IInventory {
 
-    private int type = 0;
+    private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
     @SideOnly(Side.CLIENT)
     private PlacedEntityItem placedEntityItem;
     private ItemStack stack;
@@ -30,11 +31,11 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
         setWorldObj(world);
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
@@ -96,7 +97,7 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        type = compound.getInteger("type");
+        type = compound.getString("type");
         if (compound.hasKey("stack")) {
             stack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"));
         } else {
@@ -108,7 +109,7 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
     @Override
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setInteger("type", type);
+        compound.setString("type", type);
         if (stack != null) {
             compound.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
         }
