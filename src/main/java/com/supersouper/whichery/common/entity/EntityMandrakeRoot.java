@@ -1,6 +1,5 @@
 package com.supersouper.whichery.common.entity;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -20,6 +19,8 @@ public class EntityMandrakeRoot extends EntityCreature {
     public EntityMandrakeRoot(World world) {
         super(world);
         this.setSize(0.5F, 0.9F);
+
+        livingSoundTime = 0;
 
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIMandrakeRootPanic(this, 2D));
@@ -47,11 +48,6 @@ public class EntityMandrakeRoot extends EntityCreature {
     }
 
     @Override
-    protected String getLivingSound() {
-        return "whichery:mandrake.idle";
-    }
-
-    @Override
     protected String getHurtSound() {
         return "whichery:mandrake.hurt";
     }
@@ -62,21 +58,16 @@ public class EntityMandrakeRoot extends EntityCreature {
     }
 
     @Override
-    public int getTalkInterval() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    protected void func_145780_a(int x, int y, int z, Block block) {
-        this.playSound("dig.grass", 0.15F, 1.0F);
+    protected float getSoundPitch() {
+        return 1;
     }
 
     public void onEntityUpdate() {
         super.onEntityUpdate();
 
-        if (this.isEntityAlive() && timeSinceScream++ >= 100) {
+        if (this.isEntityAlive() && timeSinceScream++ >= 99) {
             timeSinceScream = 0;
-            playLivingSound();
+            playSound("whichery:mandrake.idle", this.getSoundVolume(), this.getSoundPitch());
         }
     }
 
