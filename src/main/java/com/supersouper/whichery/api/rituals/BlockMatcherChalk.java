@@ -15,17 +15,16 @@ import com.supersouper.whichery.utils.WhicheryUtils;
 public class BlockMatcherChalk extends BlockMatcherBasic {
 
     private ItemStack stack = null;
+    private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
 
-    public BlockMatcherChalk(Block block) {
+    public BlockMatcherChalk(Block block, String type) {
         super(block);
+        this.type = type;
     }
 
-    public BlockMatcherChalk(Block block, int type) {
-        super(block, type);
-    }
-
-    public BlockMatcherChalk(Block block, int type, ItemStack stack) {
-        super(block, type);
+    public BlockMatcherChalk(Block block, String type, ItemStack stack) {
+        super(block);
+        this.type = type;
         this.stack = stack;
     }
 
@@ -34,7 +33,8 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
         if (te == null) return false;
 
-        return te.getType() == meta
+        return te.getType()
+            .equals(type)
             && (getStack() == null || WhicheryUtils.matchIngredient(getStack(), te.getStackInSlot(0), true));
     }
 
@@ -42,7 +42,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     public ItemStack toItemStack() {
         ItemStack result = new ItemStack(item);
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setInteger("type", meta);
+        tag.setString("type", type);
         result.setTagCompound(tag);
         return result;
     }
@@ -52,7 +52,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         world.setBlock(x, y, z, block);
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
-            te.setType(meta);
+            te.setType(type);
             te.markDirty();
         }
     }
@@ -61,13 +61,13 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         Objects.requireNonNull(stack);
         Objects.requireNonNull(stack.getItem());
 
-        int type = 0;
+        String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
         NBTTagCompound tag = stack.getTagCompound();
         if (tag != null) {
-            type = tag.getInteger("type");
+            type = tag.getString("type");
         }
         return stack.getItem()
-            .hashCode() + type;
+            .hashCode() + type.hashCode();
     }
 
     public ItemStack getStack() {

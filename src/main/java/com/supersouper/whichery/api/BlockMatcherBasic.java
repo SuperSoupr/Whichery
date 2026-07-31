@@ -21,7 +21,6 @@ public class BlockMatcherBasic implements IBlockMatcher {
         this.block = block;
         this.meta = meta;
         this.item = Item.getItemFromBlock(block);
-        this.asItemStack = toItemStack();
     }
 
     @Override
@@ -36,6 +35,9 @@ public class BlockMatcherBasic implements IBlockMatcher {
 
     @Override
     public ItemStack getItemStack() {
+        if (asItemStack == null) {
+            asItemStack = toItemStack();
+        }
         return asItemStack;
     }
 

@@ -13,6 +13,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 
@@ -46,13 +47,20 @@ public class ChalkRuneTESR extends TileEntitySpecialRenderer implements IItemRen
         GL11.glPopMatrix();
     }
 
-    private static void render(ChalkTileEntity tileEntity, int type, double x, double y, double z, float partialTicks) {
+    private static void render(ChalkTileEntity tileEntity, String type, double x, double y, double z,
+        float partialTicks) {
         Tessellator t = Tessellator.instance;
         Minecraft mc = Minecraft.getMinecraft();
         int previousTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
-        IIcon icon = Blocks.stained_hardened_clay.getIcon(0, type);
+        IIcon icon = Blocks.stained_hardened_clay.getIcon(0, 0);
+        // TODO custom chalk textures for each type
+        int color = RitualRegistry.CHALK_TYPES.get(type);
+        int r = (color >> 16) & 255;
+        int g = (color >> 8) & 255;
+        int b = color & 255;
+        GL11.glColor3f(r / 255f, g / 255f, b / 255f);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         GL11.glRotatef(90, 1, 0, 0);
@@ -66,6 +74,7 @@ public class ChalkRuneTESR extends TileEntitySpecialRenderer implements IItemRen
             icon.getIconHeight(),
             1f / 16f);
         GL11.glPopMatrix();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, previousTex);
     }

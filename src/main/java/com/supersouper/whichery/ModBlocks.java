@@ -16,6 +16,7 @@ public enum ModBlocks {
 
     // make sure to leave a trailing comma
     CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalk.class, "chalk_block"),
+    CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalkRune.class, "chalk_block"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
 
     ; // leave trailing semicolon
