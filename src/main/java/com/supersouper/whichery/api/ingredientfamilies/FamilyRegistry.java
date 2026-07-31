@@ -1,4 +1,4 @@
-package com.supersouper.whichery.common.logic;
+package com.supersouper.whichery.api.ingredientfamilies;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import com.gtnewhorizon.gtnhlib.util.data.ItemId;
 import com.supersouper.whichery.ModItems;
-import com.supersouper.whichery.common.logic.IngredientFamily.IngredientFamilyStack;
+import com.supersouper.whichery.api.ingredientfamilies.IngredientFamily.IngredientFamilyStack;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 

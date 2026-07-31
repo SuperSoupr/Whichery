@@ -1,4 +1,4 @@
-package com.supersouper.whichery.common.logic;
+package com.supersouper.whichery.api.ingredientfamilies;
 
 public enum IngredientFamily {
 

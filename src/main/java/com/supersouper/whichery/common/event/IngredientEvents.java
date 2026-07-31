@@ -9,8 +9,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
-import com.supersouper.whichery.common.logic.FamilyRegistry;
-import com.supersouper.whichery.common.logic.IngredientFamily;
+import com.supersouper.whichery.api.ingredientfamilies.FamilyRegistry;
+import com.supersouper.whichery.api.ingredientfamilies.IngredientFamily;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

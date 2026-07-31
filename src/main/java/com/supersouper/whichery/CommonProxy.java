@@ -1,6 +1,6 @@
 package com.supersouper.whichery;
 
-import com.supersouper.whichery.common.logic.FamilyRegistry;
+import com.supersouper.whichery.api.ingredientfamilies.FamilyRegistry;
 import com.supersouper.whichery.common.network.PacketHandler;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
