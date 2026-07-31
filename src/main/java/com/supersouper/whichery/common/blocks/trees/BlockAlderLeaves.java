@@ -4,6 +4,8 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 
+import com.supersouper.whichery.ModBlocks;
+
 public class BlockAlderLeaves extends BlockWhicheryLeaves {
 
     public BlockAlderLeaves() {
@@ -12,6 +14,6 @@ public class BlockAlderLeaves extends BlockWhicheryLeaves {
 
     @Override
     public Item getItemDropped(int meta, Random rand, int fortune) {
-        return null;
+        return ModBlocks.ALDER_SAPLING.getItem();
     }
 }
