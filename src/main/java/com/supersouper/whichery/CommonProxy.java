@@ -13,13 +13,14 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         ModItems.init();
         ModBlocks.init();
+        FamilyRegistry.initFamilies();
     }
 
     public void init(FMLInitializationEvent event) {
         PacketHandler.init();
         ModTileEntities.init();
         ModKeybindings.init();
-        FamilyRegistry.initRegistry();
+        FamilyRegistry.initIngredients();
     }
 
     public void postInit(FMLPostInitializationEvent event) {}

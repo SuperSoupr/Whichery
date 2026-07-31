@@ -17,23 +17,21 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 @EventBusSubscriber
 public class IngredientEvents {
 
-    // TODO: consider whether we want to move this off tooltips
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
-        Set<IngredientFamily.IngredientFamilyStack> families = FamilyRegistry.getIngredientFamilies(event.itemStack);
+        Set<IngredientFamily.FamilyStack> families = FamilyRegistry.getIngredientFamilies(event.itemStack);
 
         if (families != null) {
-
-            List<IngredientFamily.IngredientFamilyStack> sorted = families.stream()
-                .sorted(Comparator.comparing(f -> f.family.ordinal()))
+            List<IngredientFamily.FamilyStack> sorted = families.stream()
+                .sorted(Comparator.comparing(f -> f.family.getOrder()))
                 .collect(Collectors.toList());
 
             event.toolTip.add("");
             event.toolTip.add(StatCollector.translateToLocal("tooltip.family.families"));
-            for (IngredientFamily.IngredientFamilyStack stack : sorted) {
+            for (IngredientFamily.FamilyStack stack : sorted) {
                 event.toolTip.add(
                     StatCollector.translateToLocalFormatted(
-                        "tooltip.family." + stack.family.id,
+                        "tooltip.family." + stack.family.getId(),
                         StatCollector.translateToLocalFormatted("tooltip.family.potency", stack.amount)));
             }
         }
