@@ -44,7 +44,7 @@ public class ItemChalk extends Item {
         return this.getUnlocalizedName();
     }
 
-    private int getChalkType(ItemStack itemStack) {
+    public static int getChalkType(ItemStack itemStack) {
         NBTTagCompound tag = itemStack.getTagCompound();
         if (tag != null) {
             return tag.getInteger("type");
@@ -59,7 +59,7 @@ public class ItemChalk extends Item {
         if (side != ForgeDirection.UP.ordinal()) return false;
 
         int type = getChalkType(stack);
-        world.setBlock(x, y + 1, z, ModBlocks.CHALK_BLOCK.get(), 0, 3);
+        world.setBlock(x, y + 1, z, ModBlocks.CHALK_RUNE_BLOCK.get(), 0, 3);
         if (!world.isRemote) {
             stack.damageItem(1, player);
         }

@@ -27,7 +27,7 @@ public class NEIConfig implements IConfigureNEI {
         if (Mods.BlockRenderer6343.isLoaded()) {
             event.registerHandlerInfo(
                 new HandlerInfo.Builder(RitualMultiblockHandler.class, Whichery.MODNAME, Whichery.MODID)
-                    .setDisplayStack(new ItemStack(ModBlocks.CHALK_BLOCK.getItem()))
+                    .setDisplayStack(new ItemStack(ModBlocks.CHALK_RUNE_BLOCK.getItem()))
                     .setHeight(168)
                     .setUseCustomScroll(true)
                     .setMultipleWidgetsAllowed(false)

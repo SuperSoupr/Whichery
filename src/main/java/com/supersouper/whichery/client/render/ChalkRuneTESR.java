@@ -13,13 +13,15 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 
-public class ChalkTESR extends TileEntitySpecialRenderer implements IItemRenderer {
+public class ChalkRuneTESR extends TileEntitySpecialRenderer implements IItemRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks) {
-        render((ChalkTileEntity) tileEntity, x, y, z, partialTicks);
+        ChalkTileEntity cte = (ChalkTileEntity) tileEntity;
+        render(cte, cte.getType(), x, y, z, partialTicks);
     }
 
     @Override
@@ -40,17 +42,17 @@ public class ChalkTESR extends TileEntitySpecialRenderer implements IItemRendere
         GL11.glPushMatrix();
         GL11.glRotatef(-90, 1, 0, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
-        render(null, 0, 0, 0, 0);
+        render(null, ItemChalk.getChalkType(item), 0, 0, 0, 0);
         GL11.glPopMatrix();
     }
 
-    private static void render(ChalkTileEntity tileEntity, double x, double y, double z, float partialTicks) {
+    private static void render(ChalkTileEntity tileEntity, int type, double x, double y, double z, float partialTicks) {
         Tessellator t = Tessellator.instance;
         Minecraft mc = Minecraft.getMinecraft();
         int previousTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
-        IIcon icon = Blocks.stained_hardened_clay.getIcon(0, tileEntity != null ? tileEntity.getType() : 0);
+        IIcon icon = Blocks.stained_hardened_clay.getIcon(0, type);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         GL11.glRotatef(90, 1, 0, 0);

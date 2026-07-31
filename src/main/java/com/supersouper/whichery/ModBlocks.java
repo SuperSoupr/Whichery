@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import com.supersouper.whichery.common.blocks.BlockChalk;
+import com.supersouper.whichery.common.blocks.BlockChalkRune;
 import com.supersouper.whichery.common.blocks.crops.BlockCropWitchesThimble;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -15,7 +15,7 @@ public enum ModBlocks {
     // spotless:off
 
     // make sure to leave a trailing comma
-    CHALK_BLOCK(true, new BlockChalk(), BlockChalk.ItemBlockChalk.class, "chalk_block"),
+    CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalk.class, "chalk_block"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
 
     ; // leave trailing semicolon
