@@ -9,11 +9,12 @@ public class SoundMandrakeIdle extends MovingSound {
 
     private final EntityMandrakeRoot entity;
 
-    public SoundMandrakeIdle(EntityMandrakeRoot entity) {
+    public SoundMandrakeIdle(EntityMandrakeRoot entity, float pitch) {
         super(new ResourceLocation("whichery", "mandrake.idle"));
         this.entity = entity;
         repeat = true;
         volume = 2.0F;
+        field_147663_c = pitch;
     }
 
     @Override

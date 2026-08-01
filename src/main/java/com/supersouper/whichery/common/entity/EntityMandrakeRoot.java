@@ -27,7 +27,7 @@ public class EntityMandrakeRoot extends EntityCreature {
 
         Minecraft.getMinecraft()
             .getSoundHandler()
-            .playSound(new SoundMandrakeIdle(this));
+            .playSound(new SoundMandrakeIdle(this, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1F));
     }
 
     @Override
