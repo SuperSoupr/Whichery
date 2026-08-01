@@ -1,5 +1,6 @@
 package com.supersouper.whichery.common.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -10,22 +11,23 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.ModItems;
+import com.supersouper.whichery.client.sound.SoundMandrakeIdle;
 import com.supersouper.whichery.common.entity.ai.EntityAIMandrakeRootPanic;
 
 public class EntityMandrakeRoot extends EntityCreature {
-
-    int timeSinceScream = 100;
 
     public EntityMandrakeRoot(World world) {
         super(world);
         this.setSize(0.5F, 0.9F);
 
-        livingSoundTime = 0;
-
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIMandrakeRootPanic(this, 2D));
         this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.tasks.addTask(3, new EntityAILookIdle(this));
+
+        Minecraft.getMinecraft()
+            .getSoundHandler()
+            .playSound(new SoundMandrakeIdle(this));
     }
 
     @Override
@@ -44,7 +46,7 @@ public class EntityMandrakeRoot extends EntityCreature {
 
     @Override
     protected float getSoundVolume() {
-        return 4.0f;
+        return 2.0f;
     }
 
     @Override
@@ -60,15 +62,6 @@ public class EntityMandrakeRoot extends EntityCreature {
     @Override
     protected float getSoundPitch() {
         return 1;
-    }
-
-    public void onEntityUpdate() {
-        super.onEntityUpdate();
-
-        if (this.isEntityAlive() && timeSinceScream++ >= 99) {
-            timeSinceScream = 0;
-            playSound("whichery:mandrake.idle", this.getSoundVolume(), this.getSoundPitch());
-        }
     }
 
     @Override
