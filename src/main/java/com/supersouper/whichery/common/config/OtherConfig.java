@@ -7,10 +7,11 @@ import com.supersouper.whichery.Whichery;
 @Config(modid = Whichery.MODID, category = "other")
 public class OtherConfig {
 
-    @Config.Order(0)
-    @Config.DefaultBoolean(true)
-    @Config.Name("Example")
-    @Config.Comment("Example Config Option")
+    @Config.DefaultInt(67)
     @Config.RequiresMcRestart
-    public static boolean exampleConfigOption;
+    public static int spiritRealmDimID;
+
+    @Config.DefaultInt(167)
+    @Config.RequiresMcRestart
+    public static int spiritRealmBiomeID;
 }
