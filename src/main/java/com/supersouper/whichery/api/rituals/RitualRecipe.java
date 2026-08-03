@@ -71,12 +71,12 @@ public class RitualRecipe {
                 }
             }
             for (ISecondaryMatcher secondaryMatcher : secondaryMatchers) {
-                if (secondaryMatcher.match(world, x, y, z, tes)) {
-                    rotationBuffer[0] = i;
-                    return true;
+                if (!secondaryMatcher.match(world, x, y, z, tes)) {
+                    return false;
                 }
             }
-            return false;
+            rotationBuffer[0] = i;
+            return true;
         }
 
         return false;
