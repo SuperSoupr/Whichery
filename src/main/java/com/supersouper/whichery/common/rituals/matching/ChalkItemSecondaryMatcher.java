@@ -13,7 +13,7 @@ import com.supersouper.whichery.utils.WhicheryUtils;
 public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
 
     private final ItemStack stack;
-    private final boolean matchNBT;
+    public final boolean matchNBT;
 
     public ChalkItemSecondaryMatcher(ItemStack stack) {
         this.stack = stack.copy();

@@ -9,8 +9,7 @@ public class RitualUtils {
 
     public static Ritual findRitualAt(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
         for (Ritual ritual : RitualRegistry.rituals()) {
-            if (ritual.getRecipe()
-                .match(world, x, y, z, rotationBuffer)) {
+            if (ritual.recipe.match(world, x, y, z, rotationBuffer, tes)) {
                 return ritual;
             }
         }

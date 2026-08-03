@@ -13,11 +13,11 @@ import cpw.mods.fml.relauncher.SideOnly;
     modid = "structurelib")
 public class Ritual implements IConstructable {
 
-    protected final String name;
-    protected final RitualRecipe recipe;
-    protected final Class<? extends RitualAnimation>[] animationClasses;
-    protected final Class<? extends RitualEffect>[] effectClasses;
-    protected final int[] stages;
+    public final String name;
+    public final RitualRecipe recipe;
+    public final Class<? extends RitualAnimation>[] animationClasses;
+    public final Class<? extends RitualEffect>[] effectClasses;
+    public final int[] stages;
 
     public Ritual(String name, RitualRecipe recipe, Class<? extends RitualEffect>[] effectClasses,
         Class<? extends RitualAnimation>[] animationClasses, int[] stages) {
@@ -51,26 +51,6 @@ public class Ritual implements IConstructable {
     @SafeVarargs
     public static Class<? extends RitualAnimation>[] animations(Class<? extends RitualAnimation>... classes) {
         return classes;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public RitualRecipe getRecipe() {
-        return recipe;
-    }
-
-    public Class<? extends RitualAnimation>[] getAnimationClasses() {
-        return animationClasses;
-    }
-
-    public Class<? extends RitualEffect>[] getEffectClasses() {
-        return effectClasses;
-    }
-
-    public int[] getStages() {
-        return stages;
     }
 
     @Optional.Method(modid = "structurelib")

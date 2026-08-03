@@ -152,7 +152,7 @@ public class RunningRitual {
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        tag.setString("ritual", ritual.getName());
+        tag.setString("ritual", ritual.name);
         tag.setString("starterUUID", starterUUID.toString());
         tag.setInteger("timePassedInPreviousSave", getTimePassed());
 

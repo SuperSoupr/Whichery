@@ -31,26 +31,7 @@ public class RitualRecipe {
         this.centerX = centerX;
         this.centerY = centerY;
         this.centerZ = centerZ;
-    }
 
-    public Int2ObjectMap<IBlockMatcher> matcherPositions() {
-        return matcherPositions;
-    }
-
-    public IBlockMatcher[] matchers() {
-        return matchers;
-    }
-
-    public byte centerZ() {
-        return centerZ;
-    }
-
-    public byte centerX() {
-        return centerX;
-    }
-
-    public byte centerY() {
-        return centerY;
     }
 
     /**
@@ -62,7 +43,7 @@ public class RitualRecipe {
         ArrayList<TileEntity> tes = new ArrayList<>();
         rotations: for (byte i = 0; i < 4; i++) {
             tes.clear();
-            for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
+            for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions)) {
                 IBlockMatcher matcher = e.getValue();
 
                 if (matcher != null) {
@@ -72,15 +53,11 @@ public class RitualRecipe {
                     pos2d[1] = coords[2];
 
                     for (int j = 0; j < i; j++) {
-                        rotate(pos2d, centerX(), centerZ());
+                        rotate(pos2d, centerX, centerZ);
                     }
 
-                    if (!matcher.match(
-                        world,
-                        x + pos2d[0] - centerX(),
-                        y + coords[1] - centerY(),
-                        z + pos2d[1] - centerZ(),
-                        tes)) {
+                    if (!matcher
+                        .match(world, x + pos2d[0] - centerX, y + coords[1] - centerY, z + pos2d[1] - centerZ, tes)) {
                         continue rotations;
                     }
                 }
@@ -106,11 +83,11 @@ public class RitualRecipe {
 
     public void construct(World world, int x, int y, int z) {
         byte[] coords = new byte[3];
-        for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
+        for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions)) {
             IBlockMatcher matcher = e.getValue();
             if (matcher != null) {
                 RitualUtils.unpackCoords(e.getIntKey(), coords);
-                matcher.place(world, x + coords[0] - centerX(), y + coords[1] - centerY(), z + coords[2] - centerZ());
+                matcher.place(world, x + coords[0] - centerX, y + coords[1] - centerY, z + coords[2] - centerZ);
             }
         }
     }
