@@ -13,7 +13,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -65,7 +65,7 @@ public class ItemChalk extends Item {
         if (!world.isRemote) {
             stack.damageItem(1, player);
         }
-        ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y + 1, z);
+        ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y + 1, z);
         if (te != null) {
             te.setType(type);
             te.markDirty();

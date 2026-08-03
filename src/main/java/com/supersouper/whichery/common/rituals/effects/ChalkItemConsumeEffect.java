@@ -10,7 +10,7 @@ import com.supersouper.whichery.api.rituals.RitualEffect;
 import com.supersouper.whichery.api.rituals.RunningRitual;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class ChalkItemConsumeEffect extends RitualEffect {
@@ -49,7 +49,7 @@ public class ChalkItemConsumeEffect extends RitualEffect {
 
         ChalkItemSecondaryMatcher matcher = (ChalkItemSecondaryMatcher) matchers.get(consumed);
         for (TileEntity te : ((IRitualLeader) currentRitual.leader).getCapturedTileEntities()) {
-            if (!(te instanceof ChalkTileEntity cte)) {
+            if (!(te instanceof ChalkRuneTileEntity cte)) {
                 continue;
             }
             if (WhicheryUtils.matchIngredient(matcher.getStack(), cte.getStackInSlot(0), matcher.matchNBT)) {

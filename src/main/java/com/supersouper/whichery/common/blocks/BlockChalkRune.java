@@ -19,7 +19,7 @@ import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.RitualLeaderBlock;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,7 +36,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
         float subY, float subZ) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof ChalkTileEntity cte) {
+        if (te instanceof ChalkRuneTileEntity cte) {
             if (cte.onRightClicked(player)) return true;
         }
 
@@ -45,7 +45,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new ChalkTileEntity(world);
+        return new ChalkRuneTileEntity(world);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
         ItemStack result = super.getPickBlock(target, world, x, y, z);
-        ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
+        ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("type", te.getType());
@@ -107,7 +107,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
         public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
             float hitX, float hitY, float hitZ, int metadata) {
             if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-                ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
+                ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
                 if (te != null) {
                     te.setType(ItemChalk.getChalkType(stack));
                     te.markDirty();

@@ -16,18 +16,18 @@ import com.supersouper.whichery.common.entity.PlacedEntityItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualParticipator, IInventory {
+public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitualParticipator, IInventory {
 
     private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
     @SideOnly(Side.CLIENT)
     private PlacedEntityItem placedEntityItem;
     private ItemStack stack;
 
-    public ChalkTileEntity() {
+    public ChalkRuneTileEntity() {
 
     }
 
-    public ChalkTileEntity(World world) {
+    public ChalkRuneTileEntity(World world) {
         setWorldObj(world);
     }
 

@@ -15,13 +15,13 @@ import org.lwjgl.opengl.GL11;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 
 public class ChalkRuneTESR extends TileEntitySpecialRenderer implements IItemRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks) {
-        ChalkTileEntity cte = (ChalkTileEntity) tileEntity;
+        ChalkRuneTileEntity cte = (ChalkRuneTileEntity) tileEntity;
         render(cte, cte.getType(), x, y, z, partialTicks);
     }
 
@@ -47,7 +47,7 @@ public class ChalkRuneTESR extends TileEntitySpecialRenderer implements IItemRen
         GL11.glPopMatrix();
     }
 
-    private static void render(ChalkTileEntity tileEntity, String type, double x, double y, double z,
+    private static void render(ChalkRuneTileEntity tileEntity, String type, double x, double y, double z,
         float partialTicks) {
         Tessellator t = Tessellator.instance;
         Minecraft mc = Minecraft.getMinecraft();

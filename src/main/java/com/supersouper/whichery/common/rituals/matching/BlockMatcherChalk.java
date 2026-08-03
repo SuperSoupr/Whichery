@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.matching.BlockMatcherBasic;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class BlockMatcherChalk extends BlockMatcherBasic {
@@ -34,7 +34,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     @Override
     public boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (!(te instanceof ChalkTileEntity cte)) return false;
+        if (!(te instanceof ChalkRuneTileEntity cte)) return false;
 
         boolean match = cte.getType()
             .equals(type)
@@ -62,7 +62,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     @Override
     public void place(World world, int x, int y, int z) {
         world.setBlock(x, y, z, block);
-        ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
+        ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(type);
             te.markDirty();

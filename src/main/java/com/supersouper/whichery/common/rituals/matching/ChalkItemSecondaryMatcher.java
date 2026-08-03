@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
@@ -23,7 +23,7 @@ public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
     @Override
     public boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
         for (TileEntity te : tes) {
-            if (!(te instanceof ChalkTileEntity cte)) {
+            if (!(te instanceof ChalkRuneTileEntity cte)) {
                 continue;
             }
 

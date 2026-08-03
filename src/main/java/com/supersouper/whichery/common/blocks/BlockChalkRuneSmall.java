@@ -13,8 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
-import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -32,7 +32,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
         float subY, float subZ) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof ChalkTileEntity cte) {
+        if (te instanceof ChalkRuneTileEntity cte) {
             if (cte.onRightClicked(player)) return true;
         }
 
