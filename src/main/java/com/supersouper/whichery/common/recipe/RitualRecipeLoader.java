@@ -3,12 +3,16 @@ package com.supersouper.whichery.common.recipe;
 import java.util.Arrays;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.ApiStatus;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.BlockMatcherBasic;
 import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
+import com.supersouper.whichery.api.rituals.ChalkItemSecondaryMatcher;
+import com.supersouper.whichery.api.rituals.ISecondaryMatcher;
 import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.RitualBuilder;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
@@ -25,7 +29,8 @@ public class RitualRecipeLoader {
         Arrays.fill(stages, 10);
 
         // spotless:off
-        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe((byte) 3, (byte) 0, (byte) 3,
+        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe((byte) 3, (byte) 0, (byte) 3, new ISecondaryMatcher[]{
+        new ChalkItemSecondaryMatcher(new ItemStack(Items.stick))},
             new String[]{
                 "  ccc  ",
                 " c   c ",
@@ -40,7 +45,7 @@ public class RitualRecipeLoader {
             'o',
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
-        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4,
+        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, null,
             new String[]{
                 "g       g",
                 "   ccc   ",
@@ -68,7 +73,7 @@ public class RitualRecipeLoader {
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
-        RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4,
+        RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, null,
             new String[]{
                 "   ccc   ",
                 "  c   c  ",

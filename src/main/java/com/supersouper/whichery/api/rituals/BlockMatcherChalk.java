@@ -1,5 +1,6 @@
 package com.supersouper.whichery.api.rituals;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
@@ -30,13 +31,17 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     }
 
     @Override
-    public boolean match(IBlockAccess world, int x, int y, int z) {
+    public boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
         TileEntity te = world.getTileEntity(x, y, z);
         if (!(te instanceof ChalkTileEntity cte)) return false;
 
-        return cte.getType()
+        boolean match = cte.getType()
             .equals(type)
             && (getStack() == null || WhicheryUtils.matchIngredient(getStack(), cte.getStackInSlot(0), true));
+        if (match) {
+            tes.add(te);
+        }
+        return match;
     }
 
     @Override

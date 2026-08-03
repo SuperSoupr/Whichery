@@ -1,5 +1,8 @@
 package com.supersouper.whichery.api.rituals;
 
+import java.util.ArrayList;
+
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -12,16 +15,18 @@ public class RitualRecipe {
 
     private final Int2ObjectMap<IBlockMatcher> matcherPositions;
     private final IBlockMatcher[] matchers;
+    private final ISecondaryMatcher[] secondaryMatchers;
     private final byte centerX, centerZ, centerY;
 
     /**
      * IBlockMatcher 3d array formatted as: [y][z][x]
      * This is because most rituals are expected to only require one y level.
      */
-    public RitualRecipe(Int2ObjectMap<IBlockMatcher> matcherPositions, IBlockMatcher[] matchers, byte centerX,
-        byte centerY, byte centerZ) {
+    public RitualRecipe(Int2ObjectMap<IBlockMatcher> matcherPositions, IBlockMatcher[] matchers,
+        ISecondaryMatcher[] secondaryMatchers, byte centerX, byte centerY, byte centerZ) {
         this.matcherPositions = matcherPositions;
         this.matchers = matchers;
+        this.secondaryMatchers = secondaryMatchers;
         this.centerX = centerX;
         this.centerY = centerY;
         this.centerZ = centerZ;
@@ -53,7 +58,9 @@ public class RitualRecipe {
     public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
         byte[] coords = new byte[3];
         int[] pos2d = new int[2];
+        ArrayList<TileEntity> tes = new ArrayList<>();
         rotations: for (byte i = 0; i < 4; i++) {
+            tes.clear();
             for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
                 IBlockMatcher matcher = e.getValue();
 
@@ -67,14 +74,23 @@ public class RitualRecipe {
                         rotate(pos2d, centerX(), centerZ());
                     }
 
-                    if (!matcher
-                        .match(world, x + pos2d[0] - centerX(), y + coords[1] - centerY(), z + pos2d[1] - centerZ())) {
+                    if (!matcher.match(
+                        world,
+                        x + pos2d[0] - centerX(),
+                        y + coords[1] - centerY(),
+                        z + pos2d[1] - centerZ(),
+                        tes)) {
                         continue rotations;
                     }
                 }
             }
-            rotationBuffer[0] = i;
-            return true;
+            for (ISecondaryMatcher secondaryMatcher : secondaryMatchers) {
+                if (secondaryMatcher.match(world, x, y, z, tes)) {
+                    rotationBuffer[0] = i;
+                    return true;
+                }
+            }
+            return false;
         }
 
         return false;

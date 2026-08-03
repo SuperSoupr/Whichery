@@ -1,8 +1,11 @@
 package com.supersouper.whichery.api;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -24,11 +27,10 @@ public class BlockMatcherBasic implements IBlockMatcher {
     }
 
     @Override
-    public boolean match(IBlockAccess world, int x, int y, int z) {
+    public boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
         return world.getBlock(x, y, z) == block && world.getBlockMetadata(x, y, z) == meta;
     }
 
-    @Override
     public ItemStack toItemStack() {
         return new ItemStack(item, 1, meta);
     }

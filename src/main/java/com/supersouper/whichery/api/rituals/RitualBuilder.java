@@ -12,7 +12,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 public class RitualBuilder {
 
-    public static RitualRecipe buildRecipe(byte centerX, byte centerY, byte centerZ, Object... o) {
+    public static RitualRecipe buildRecipe(byte centerX, byte centerY, byte centerZ,
+        ISecondaryMatcher[] secondaryMatchers, Object... o) {
         ArrayList<String[]> levels = new ArrayList<>();
         HashMap<Character, IBlockMatcher> definitions = new HashMap<>();
         definitions.put(' ', null);
@@ -72,6 +73,12 @@ public class RitualBuilder {
         IBlockMatcher[] matchers = definitions.values()
             .toArray(new IBlockMatcher[0]);
 
-        return new RitualRecipe(matcherPositions, matchers, centerX, centerY, centerZ);
+        return new RitualRecipe(
+            matcherPositions,
+            matchers,
+            secondaryMatchers != null ? secondaryMatchers : new ISecondaryMatcher[0],
+            centerX,
+            centerY,
+            centerZ);
     }
 }
