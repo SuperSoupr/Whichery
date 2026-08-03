@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.utils.NBTUtils;
 
 public class ChalkSmallTileEntity extends TileEntity {
@@ -30,12 +31,21 @@ public class ChalkSmallTileEntity extends TileEntity {
         return types[pos];
     }
 
+    private void sanitizeTypes() {
+        for (int i = 0; i < types.length; i++) {
+            if (!RitualRegistry.chalkExists(types[i])) {
+                types[i] = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
+            }
+        }
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         if (tag.hasKey("types")) {
             types = NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
         }
+        sanitizeTypes();
     }
 
     @Override

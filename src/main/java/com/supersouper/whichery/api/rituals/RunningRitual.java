@@ -75,17 +75,7 @@ public class RunningRitual {
             startedAt = leader.getWorldObj()
                 .getTotalWorldTime();
         }
-        int timePassed = getTimePassed();
-        int curStageStart = 0;
-        int stage = ritual.stages.length;
-
-        for (int i = 0; i < ritual.stages.length; i++) {
-            if (timePassed < (curStageStart + ritual.stages[i])) {
-                stage = i;
-                break;
-            }
-            curStageStart += ritual.stages[i];
-        }
+        int stage = getStage();
 
         for (int i = 0; i <= Math.min(stage, seenStages.length - 1); i++) {
             if (!seenStages[i]) {

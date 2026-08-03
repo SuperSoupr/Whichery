@@ -100,6 +100,9 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         type = compound.getString("type");
+        if (!RitualRegistry.chalkExists(type)) {
+            type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
+        }
         if (compound.hasKey("stack")) {
             stack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"));
         } else {

@@ -81,8 +81,10 @@ public class RitualRecipe {
     }
 
     private static void rotate(int[] point, int pivotX, int pivotZ) {
-        point[0] = pivotX - (point[1] - pivotZ);
-        point[1] = pivotZ + (point[0] - pivotX);
+        int dx = point[0] - pivotX;
+        int dz = point[1] - pivotZ;
+        point[0] = pivotX - dz;
+        point[1] = pivotZ + dx;
     }
 
     public void construct(World world, int x, int y, int z) {

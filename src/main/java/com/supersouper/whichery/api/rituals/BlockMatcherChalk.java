@@ -49,6 +49,11 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     }
 
     @Override
+    public int itemStackHashCode() {
+        return item.hashCode() + type.hashCode();
+    }
+
+    @Override
     public void place(World world, int x, int y, int z) {
         world.setBlock(x, y, z, block);
         ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);

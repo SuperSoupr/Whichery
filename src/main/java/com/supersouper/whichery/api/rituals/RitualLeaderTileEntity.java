@@ -22,6 +22,7 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
         if (currentRitual == null) {
             currentRitual = new RunningRitual(this, ritual, starter, rotation);
             markDirty();
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         } else {
             if (!worldObj.isRemote) {
                 starter.addChatComponentMessage(new ChatComponentText("Ritual already active"));
