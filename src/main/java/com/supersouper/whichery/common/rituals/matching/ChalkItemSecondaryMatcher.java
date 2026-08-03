@@ -34,13 +34,12 @@ public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
         return false;
     }
 
-    @Override
-    public ItemStack[] getItemStacks() {
-        return new ItemStack[0];
+    public ItemStack getStack() {
+        return stack;
     }
 
     @Override
-    public int getRequiredMatchCount() {
-        return 1;
+    public ItemStack[] getItemStacks() {
+        return new ItemStack[] { stack };
     }
 }

@@ -1,13 +1,16 @@
 package com.supersouper.whichery.api.rituals;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
 public class RitualUtils {
 
-    public static Ritual findRitualAt(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
+    public static Ritual findRitualAt(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer,
+        ArrayList<TileEntity> tes) {
         for (Ritual ritual : RitualRegistry.rituals()) {
             if (ritual.recipe.match(world, x, y, z, rotationBuffer, tes)) {
                 return ritual;

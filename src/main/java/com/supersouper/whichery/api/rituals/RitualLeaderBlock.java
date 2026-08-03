@@ -1,5 +1,7 @@
 package com.supersouper.whichery.api.rituals;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -26,9 +28,10 @@ public abstract class RitualLeaderBlock extends Block implements ITileEntityProv
             }
 
             byte[] rotationBuffer = new byte[] { 0 };
-            Ritual ritual = RitualUtils.findRitualAt(world, x, y, z, rotationBuffer);
+            ArrayList<TileEntity> tes = new ArrayList<>();
+            Ritual ritual = RitualUtils.findRitualAt(world, x, y, z, rotationBuffer, tes);
             if (ritual != null) {
-                return rlte.startRitual(ritual, rotationBuffer[0], player);
+                return rlte.startRitual(ritual, rotationBuffer[0], tes, player);
             }
         }
         return false;

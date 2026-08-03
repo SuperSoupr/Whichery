@@ -11,6 +11,4 @@ public interface ISecondaryMatcher {
     boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes);
 
     ItemStack[] getItemStacks();
-
-    int getRequiredMatchCount();
 }

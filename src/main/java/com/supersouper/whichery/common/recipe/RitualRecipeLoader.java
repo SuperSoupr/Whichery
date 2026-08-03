@@ -15,6 +15,7 @@ import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.matching.BlockMatcherBasic;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 import com.supersouper.whichery.common.rituals.animations.TestRitualAnimation;
+import com.supersouper.whichery.common.rituals.effects.ChalkItemConsumeEffect;
 import com.supersouper.whichery.common.rituals.effects.TestRitualEffect;
 import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
@@ -45,7 +46,8 @@ public class RitualRecipeLoader {
             'o',
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
-        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, null,
+        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, new ISecondaryMatcher[]{
+                new ChalkItemSecondaryMatcher(new ItemStack(Items.stick))},
             new String[]{
                 "g       g",
                 "   ccc   ",
@@ -72,7 +74,7 @@ public class RitualRecipeLoader {
             new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual"),
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
-        ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
+        ), new Class[] {ChalkItemConsumeEffect.class, TestRitualEffect.class}, new Class[0], new int[]{10, 10}));
         RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, null,
             new String[]{
                 "   ccc   ",

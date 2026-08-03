@@ -1,5 +1,7 @@
 package com.supersouper.whichery.api.rituals;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,6 +13,7 @@ import net.minecraft.util.ChatComponentText;
 public abstract class RitualLeaderTileEntity extends TileEntity implements IRitualLeader {
 
     private RunningRitual currentRitual;
+    public ArrayList<TileEntity> tes;
 
     @Override
     public RunningRitual getCurrentRitual() {
@@ -18,9 +21,10 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
     }
 
     @Override
-    public boolean startRitual(Ritual ritual, byte rotation, EntityPlayer starter) {
+    public boolean startRitual(Ritual ritual, byte rotation, ArrayList<TileEntity> tes, EntityPlayer starter) {
         if (currentRitual == null) {
             currentRitual = new RunningRitual(this, ritual, starter, rotation);
+            this.tes = tes;
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         } else {
@@ -47,6 +51,16 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
             currentRitual = null;
             markDirty();
         }
+    }
+
+    @Override
+
+    public ArrayList<TileEntity> getCapturedTileEntities() {
+        if (tes == null) {
+            tes = new ArrayList<>();
+            currentRitual.getRitual().recipe.match(worldObj, this.xCoord, this.yCoord, this.zCoord, new byte[1], tes);
+        }
+        return tes;
     }
 
     @Override
