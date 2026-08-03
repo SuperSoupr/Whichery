@@ -16,7 +16,7 @@ public class RitualRegistry {
     public static final String DEFAULT_CHALK_TYPE_NAME = "basic";
 
     public static void registerRitual(Ritual ritual) {
-        RITUALS.put(ritual.getName(), ritual);
+        RITUALS.put(ritual.name, ritual);
     }
 
     public static Collection<Ritual> rituals() {

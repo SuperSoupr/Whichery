@@ -17,8 +17,7 @@ public class RitualGuiHandler extends GuiMultiblockHandler {
     @Override
     protected void placeMultiblock() {
         if (renderingController instanceof Ritual ritual) {
-            ritual.getRecipe()
-                .construct(renderer.world, MB_PLACE_POS.x, MB_PLACE_POS.y, MB_PLACE_POS.z);
+            ritual.recipe.construct(renderer.world, MB_PLACE_POS.x, MB_PLACE_POS.y, MB_PLACE_POS.z);
         }
         renderingController.construct(getBuildTriggerStack(), false);
     }
@@ -26,7 +25,7 @@ public class RitualGuiHandler extends GuiMultiblockHandler {
     @Override
     protected @NotNull String getMultiblockName() {
         if (renderingController instanceof Ritual ritual) {
-            return "whichery.ritual." + ritual.getName() + ".name";
+            return "whichery.ritual." + ritual.name + ".name";
         }
         return super.getMultiblockName();
     }
