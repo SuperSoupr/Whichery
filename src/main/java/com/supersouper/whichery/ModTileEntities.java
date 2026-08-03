@@ -2,6 +2,7 @@ package com.supersouper.whichery;
 
 import net.minecraft.tileentity.TileEntity;
 
+import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -10,7 +11,8 @@ public enum ModTileEntities {
     // spotless:off
 
     // make sure to leave a trailing comma
-    CHALK(true, ChalkTileEntity.class, "")
+    CHALK_RUNE(true, ChalkTileEntity.class, "chalk_rune"),
+    CHALK_SMALL_RUNE(true, ChalkSmallTileEntity.class, "chalk")
     ;
     // spotless:on
 
