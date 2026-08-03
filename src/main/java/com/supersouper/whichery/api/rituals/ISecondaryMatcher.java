@@ -1,20 +1,16 @@
-package com.supersouper.whichery.api;
+package com.supersouper.whichery.api.rituals;
 
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
-public interface IBlockMatcher {
+public interface ISecondaryMatcher {
 
     boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes);
 
-    ItemStack getItemStack();
+    ItemStack[] getItemStacks();
 
-    int itemStackHashCode();
-
-    void place(World world, int x, int y, int z);
-
+    int getRequiredMatchCount();
 }
