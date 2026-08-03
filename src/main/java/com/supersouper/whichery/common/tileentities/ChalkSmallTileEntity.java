@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.supersouper.whichery.utils.WhicheryUtils;
+import com.supersouper.whichery.utils.NBTUtils;
 
 public class ChalkSmallTileEntity extends TileEntity {
 
@@ -31,14 +31,16 @@ public class ChalkSmallTileEntity extends TileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        types = WhicheryUtils.StringNBTTagListToArray(compound.getTagList("types", 8));
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        if (tag.hasKey("types")) {
+            types = NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
+        }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        compound.setTag("types", WhicheryUtils.StringArrayToNBTTagList(types));
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setTag("types", NBTUtils.StringArrayToNBTTagList(types));
     }
 }

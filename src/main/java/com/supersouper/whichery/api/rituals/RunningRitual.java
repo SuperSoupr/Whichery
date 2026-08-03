@@ -7,6 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
+import com.supersouper.whichery.utils.WhicheryUtils;
+
 public class RunningRitual {
 
     public final TileEntity leader;
@@ -18,6 +20,7 @@ public class RunningRitual {
     private Long startedAt = null;
     private int timePassedInPreviousSave = 0;
     private byte rotation;
+    private boolean[] seenStages = new boolean[0];
 
     public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter, byte rotation) {
         this(leader);
@@ -25,13 +28,12 @@ public class RunningRitual {
         this.starter = starter;
         this.starterUUID = starter.getUniqueID();
         this.rotation = rotation;
+        this.seenStages = new boolean[ritual.stages.length];
         constructAnimationAndEffect();
     }
 
     public RunningRitual(TileEntity leader) {
         this.leader = leader;
-        startedAt = leader.getWorldObj()
-            .getTotalWorldTime();
     }
 
     private void constructAnimationAndEffect() {
@@ -51,6 +53,7 @@ public class RunningRitual {
         }
     }
 
+    // Warning, this will return (max stages + 1) when the ritual is supposed to be over.
     private int getStage() {
         int timePassed = getTimePassed();
         int curStageStart = 0;
@@ -68,21 +71,31 @@ public class RunningRitual {
     }
 
     public void tick() {
+        if (startedAt == null) {
+            startedAt = leader.getWorldObj()
+                .getTotalWorldTime();
+        }
         int timePassed = getTimePassed();
         int curStageStart = 0;
         int stage = ritual.stages.length;
 
         for (int i = 0; i < ritual.stages.length; i++) {
-            if (timePassed <= curStageStart) {
+            if (timePassed <= (curStageStart + ritual.stages[i])) {
                 stage = i;
                 break;
             }
             curStageStart += ritual.stages[i];
         }
 
-        if (timePassed == curStageStart) {
-            effect.transitionToStage(stage);
-            animation.transitionToStage(stage);
+        leader.getWorldObj()
+            .markBlockForUpdate(leader.xCoord, leader.yCoord, leader.zCoord);
+
+        for (int i = 0; i <= Math.min(stage, seenStages.length - 1); i++) {
+            if (!seenStages[i]) {
+                effect.transitionToStage(i);
+                animation.transitionToStage(i);
+                seenStages[i] = true;
+            }
         }
 
         effect.onTick();
@@ -94,14 +107,17 @@ public class RunningRitual {
     }
 
     public void end() {
-        effect.end(getStage());
-        animation.end(getStage());
+        int stage = Math.min(getStage(), ritual.stages.length - 1);
+        effect.end(stage);
+        animation.end(stage);
     }
 
     public int getTimePassed() {
         return Math.toIntExact(
             (leader.getWorldObj()
-                .getTotalWorldTime() + timePassedInPreviousSave) - startedAt);
+                .getTotalWorldTime() + timePassedInPreviousSave) - (startedAt != null ? startedAt
+                    : leader.getWorldObj()
+                        .getTotalWorldTime()));
     }
 
     public EntityPlayer getStarter() {
@@ -123,6 +139,7 @@ public class RunningRitual {
         tag.setTag("animation", animation.writeToNBT(new NBTTagCompound()));
         tag.setTag("effect", effect.writeToNBT(new NBTTagCompound()));
         tag.setByte("rotation", rotation);
+        tag.setByteArray("seenStages", WhicheryUtils.booleanArrayToByteArray(seenStages));
         return tag;
     }
 
@@ -136,5 +153,8 @@ public class RunningRitual {
         animation.readFromNBT(tag.getCompoundTag("animation"));
         effect.readFromNBT(tag.getCompoundTag("effect"));
         rotation = tag.getByte("rotation");
+        if (tag.hasKey("seenStages")) {
+            seenStages = WhicheryUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
+        }
     }
 }

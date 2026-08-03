@@ -6,6 +6,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 
 public abstract class RitualLeaderTileEntity extends TileEntity implements IRitualLeader {
 
@@ -18,8 +19,14 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
 
     @Override
     public boolean startRitual(Ritual ritual, byte rotation, EntityPlayer starter) {
-        currentRitual = new RunningRitual(this, ritual, starter, rotation);
-        markDirty();
+        if (currentRitual == null) {
+            currentRitual = new RunningRitual(this, ritual, starter, rotation);
+            markDirty();
+        } else {
+            if (!worldObj.isRemote) {
+                starter.addChatComponentMessage(new ChatComponentText("Ritual already active"));
+            }
+        }
 
         return true;
     }
@@ -34,9 +41,11 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
 
     @Override
     public void endRitual() {
-        currentRitual.end();
-        currentRitual = null;
-        markDirty();
+        if (currentRitual != null) {
+            currentRitual.end();
+            currentRitual = null;
+            markDirty();
+        }
     }
 
     @Override
@@ -57,6 +66,8 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
         if (tag.hasKey("currentRitual")) {
             currentRitual = new RunningRitual(this);
             currentRitual.readFromNBT(tag.getCompoundTag("currentRitual"));
+        } else {
+            currentRitual = null;
         }
     }
 

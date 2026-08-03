@@ -5,6 +5,7 @@ import java.util.Objects;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -30,12 +31,12 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
 
     @Override
     public boolean match(IBlockAccess world, int x, int y, int z) {
-        ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
-        if (te == null) return false;
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (!(te instanceof ChalkTileEntity cte)) return false;
 
-        return te.getType()
+        return cte.getType()
             .equals(type)
-            && (getStack() == null || WhicheryUtils.matchIngredient(getStack(), te.getStackInSlot(0), true));
+            && (getStack() == null || WhicheryUtils.matchIngredient(getStack(), cte.getStackInSlot(0), true));
     }
 
     @Override

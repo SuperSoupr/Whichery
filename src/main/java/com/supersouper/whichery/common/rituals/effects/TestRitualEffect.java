@@ -23,7 +23,9 @@ public class TestRitualEffect extends RitualEffect {
     public void transitionToStage(int stage) {
         EntityPlayer player = currentRitual.getStarter();
         if (player != null) {
-            player.addChatComponentMessage(new ChatComponentText("transitioned to stage " + stage));
+            player.addChatComponentMessage(
+                new ChatComponentText(
+                    "transitioned to stage " + stage + " (" + (player.worldObj.isRemote ? "client" : "server") + ")"));
         }
     }
 
