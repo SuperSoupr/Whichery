@@ -64,7 +64,7 @@ public class RitualRecipe {
                     pos2d[1] = coords[2];
 
                     for (int j = 0; j < i; j++) {
-                        pos2d = rotate(pos2d, centerX(), centerZ());
+                        rotate(pos2d, centerX(), centerZ());
                     }
 
                     if (!matcher
@@ -80,10 +80,9 @@ public class RitualRecipe {
         return false;
     }
 
-    private static int[] rotate(int[] point, int pivotX, int pivotZ) {
-        int dx = point[0] - pivotX;
-        int dz = point[1] - pivotZ;
-        return new int[] { pivotX - dz, pivotZ + dx };
+    private static void rotate(int[] point, int pivotX, int pivotZ) {
+        point[0] = pivotX - (point[1] - pivotZ);
+        point[1] = pivotZ + (point[0] - pivotX);
     }
 
     public void construct(World world, int x, int y, int z) {

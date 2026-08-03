@@ -105,7 +105,9 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
         } else {
             stack = null;
         }
-        updateDisplayItem();
+        if (worldObj != null && worldObj.isRemote) {
+            updateDisplayItem();
+        }
     }
 
     @Override

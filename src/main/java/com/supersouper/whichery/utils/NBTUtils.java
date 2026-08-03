@@ -13,7 +13,8 @@ public class NBTUtils {
         }
         String[] result = new String[tagList.tagCount()];
         for (int i = 0; i < tagList.tagCount(); i++) {
-            result[i] = tagList.getStringTagAt(i);
+            String s = tagList.getStringTagAt(i);
+            result[i] = s.equals(" ") ? null : s;
         }
         return result;
     }
@@ -21,7 +22,7 @@ public class NBTUtils {
     public static NBTTagList StringArrayToNBTTagList(String[] array) {
         NBTTagList tagList = new NBTTagList();
         for (int i = 0; i < array.length; i++) {
-            tagList.appendTag(new NBTTagString(array[i]));
+            tagList.appendTag(new NBTTagString(array[i] == null || array[i].isEmpty() ? " " : array[i]));
         }
         return tagList;
     }

@@ -29,11 +29,10 @@ public class RitualUtils {
         return px | py | pz;
     }
 
-    public static byte[] unpackCoords(int packedCoords, byte[] coords) {
+    public static void unpackCoords(int packedCoords, byte[] coords) {
         coords[0] = (byte) ((packedCoords >> 16) & 0xFF);
         coords[1] = (byte) ((packedCoords >> 8) & 0xFF);
         coords[2] = (byte) (packedCoords & 0xFF);
-        return coords;
     }
 
     public static int hashItemStack(ItemStack item) {

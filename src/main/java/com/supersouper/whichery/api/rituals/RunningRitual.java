@@ -60,7 +60,7 @@ public class RunningRitual {
         int stage = ritual.stages.length;
 
         for (int i = 0; i < ritual.stages.length; i++) {
-            if (timePassed <= curStageStart) {
+            if (timePassed < (curStageStart + ritual.stages[i])) {
                 stage = i;
                 break;
             }
@@ -80,15 +80,12 @@ public class RunningRitual {
         int stage = ritual.stages.length;
 
         for (int i = 0; i < ritual.stages.length; i++) {
-            if (timePassed <= (curStageStart + ritual.stages[i])) {
+            if (timePassed < (curStageStart + ritual.stages[i])) {
                 stage = i;
                 break;
             }
             curStageStart += ritual.stages[i];
         }
-
-        leader.getWorldObj()
-            .markBlockForUpdate(leader.xCoord, leader.yCoord, leader.zCoord);
 
         for (int i = 0; i <= Math.min(stage, seenStages.length - 1); i++) {
             if (!seenStages[i]) {
@@ -153,8 +150,6 @@ public class RunningRitual {
         animation.readFromNBT(tag.getCompoundTag("animation"));
         effect.readFromNBT(tag.getCompoundTag("effect"));
         rotation = tag.getByte("rotation");
-        if (tag.hasKey("seenStages")) {
-            seenStages = WhicheryUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
-        }
+        seenStages = WhicheryUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
     }
 }
