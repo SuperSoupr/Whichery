@@ -9,15 +9,15 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.supersouper.whichery.ModBlocks;
-import com.supersouper.whichery.api.BlockMatcherBasic;
-import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
-import com.supersouper.whichery.api.rituals.ChalkItemSecondaryMatcher;
-import com.supersouper.whichery.api.rituals.ISecondaryMatcher;
 import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.RitualBuilder;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.api.rituals.matching.BlockMatcherBasic;
+import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 import com.supersouper.whichery.common.rituals.animations.TestRitualAnimation;
 import com.supersouper.whichery.common.rituals.effects.TestRitualEffect;
+import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
+import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
 
 @ApiStatus.Internal
 public class RitualRecipeLoader {

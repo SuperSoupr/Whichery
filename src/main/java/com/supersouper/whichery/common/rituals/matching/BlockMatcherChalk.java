@@ -1,4 +1,4 @@
-package com.supersouper.whichery.api.rituals;
+package com.supersouper.whichery.common.rituals.matching;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -10,7 +10,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.supersouper.whichery.api.BlockMatcherBasic;
+import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.api.rituals.matching.BlockMatcherBasic;
 import com.supersouper.whichery.common.tileentities.ChalkTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 

@@ -1,4 +1,4 @@
-package com.supersouper.whichery.api.rituals;
+package com.supersouper.whichery.api.rituals.matching;
 
 import java.util.ArrayList;
 
