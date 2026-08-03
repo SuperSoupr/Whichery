@@ -11,13 +11,15 @@ import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class RitualRecipe {
 
-    private final Int2ObjectMap<IBlockMatcher> matcherPositions;
-    private final IBlockMatcher[] matchers;
-    private final ISecondaryMatcher[] secondaryMatchers;
-    private final byte centerX, centerZ, centerY;
+    public final Int2ObjectMap<IBlockMatcher> matcherPositions;
+    public final IBlockMatcher[] matchers;
+    public final ISecondaryMatcher[] secondaryMatchers;
+    public final Int2ObjectOpenHashMap<ArrayList<ISecondaryMatcher>> secondaryMatchersByClass = new Int2ObjectOpenHashMap<>();
+    public final byte centerX, centerZ, centerY;
 
     /**
      * IBlockMatcher 3d array formatted as: [y][z][x]
@@ -32,15 +34,21 @@ public class RitualRecipe {
         this.centerY = centerY;
         this.centerZ = centerZ;
 
+        for (ISecondaryMatcher secondaryMatcher : secondaryMatchers) {
+            secondaryMatchersByClass.computeIfAbsent(
+                secondaryMatcher.getClass()
+                    .hashCode(),
+                k -> new ArrayList<>())
+                .add(secondaryMatcher);
+        }
     }
 
     /**
      * Called with the coords of the "center" block to validate ritual placement
      */
-    public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
+    public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer, ArrayList<TileEntity> tes) {
         byte[] coords = new byte[3];
         int[] pos2d = new int[2];
-        ArrayList<TileEntity> tes = new ArrayList<>();
         rotations: for (byte i = 0; i < 4; i++) {
             tes.clear();
             for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions)) {

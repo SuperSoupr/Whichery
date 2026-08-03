@@ -34,9 +34,13 @@ public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
         return false;
     }
 
+    public ItemStack getStack() {
+        return stack;
+    }
+
     @Override
     public ItemStack[] getItemStacks() {
-        return new ItemStack[0];
+        return new ItemStack[] { stack };
     }
 
     @Override
