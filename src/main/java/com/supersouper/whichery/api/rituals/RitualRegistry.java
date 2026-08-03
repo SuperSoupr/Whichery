@@ -34,4 +34,8 @@ public class RitualRegistry {
     public static void registerChalkType(String name, int color) {
         CHALK_TYPES.put(name, color);
     }
+
+    public static boolean chalkExists(String name) {
+        return CHALK_TYPES.containsKey(name);
+    }
 }

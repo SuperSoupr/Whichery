@@ -2,8 +2,6 @@ package com.supersouper.whichery.utils;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.oredict.OreDictionary;
@@ -27,24 +25,20 @@ public class WhicheryUtils {
         return !matchNBT || ItemStack.areItemStackTagsEqual(target, input);
     }
 
-    public static String[] StringNBTTagListToArray(NBTTagList tagList) {
-        if (tagList == null) return null;
-        if (tagList.func_150303_d() != 8) {
-            throw new IllegalArgumentException(
-                "Incorrect tag list type. Expected 8 but got " + tagList.func_150303_d());
+    public static boolean[] byteArrayToBooleanArray(byte[] byteArray) {
+        boolean[] boolArray = new boolean[byteArray.length];
+        for (int i = 0; i < byteArray.length; i++) {
+            boolArray[i] = byteArray[i] != 0;
         }
-        String[] result = new String[tagList.tagCount()];
-        for (int i = 0; i < tagList.tagCount(); i++) {
-            result[i] = tagList.getStringTagAt(i);
-        }
-        return result;
+        return boolArray;
     }
 
-    public static NBTTagList StringArrayToNBTTagList(String[] array) {
-        NBTTagList tagList = new NBTTagList();
-        for (int i = 0; i < array.length; i++) {
-            tagList.appendTag(new NBTTagString(array[i]));
+    public static byte[] booleanArrayToByteArray(boolean[] boolArray) {
+        byte[] byteArray = new byte[boolArray.length];
+        for (int i = 0; i < boolArray.length; i++) {
+            byteArray[i] = (byte) (boolArray[i] ? 1 : 0);
         }
-        return tagList;
+        return byteArray;
     }
+
 }

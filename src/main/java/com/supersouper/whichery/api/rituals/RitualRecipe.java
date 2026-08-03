@@ -51,17 +51,20 @@ public class RitualRecipe {
      * Called with the coords of the "center" block to validate ritual placement
      */
     public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer) {
+        byte[] coords = new byte[3];
+        int[] pos2d = new int[2];
         rotations: for (byte i = 0; i < 4; i++) {
             for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
                 IBlockMatcher matcher = e.getValue();
 
                 if (matcher != null) {
-                    byte[] coords = RitualUtils.unpackCoords(e.getIntKey());
+                    RitualUtils.unpackCoords(e.getIntKey(), coords);
 
-                    int[] pos2d = { coords[0], coords[2] };
+                    pos2d[0] = coords[0];
+                    pos2d[1] = coords[2];
 
                     for (int j = 0; j < i; j++) {
-                        pos2d = rotate(pos2d, centerX(), centerZ());
+                        rotate(pos2d, centerX(), centerZ());
                     }
 
                     if (!matcher
@@ -77,17 +80,19 @@ public class RitualRecipe {
         return false;
     }
 
-    private static int[] rotate(int[] point, int pivotX, int pivotZ) {
+    private static void rotate(int[] point, int pivotX, int pivotZ) {
         int dx = point[0] - pivotX;
         int dz = point[1] - pivotZ;
-        return new int[] { pivotX - dz, pivotZ + dx };
+        point[0] = pivotX - dz;
+        point[1] = pivotZ + dx;
     }
 
     public void construct(World world, int x, int y, int z) {
+        byte[] coords = new byte[3];
         for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions())) {
             IBlockMatcher matcher = e.getValue();
             if (matcher != null) {
-                byte[] coords = RitualUtils.unpackCoords(e.getIntKey());
+                RitualUtils.unpackCoords(e.getIntKey(), coords);
                 matcher.place(world, x + coords[0] - centerX(), y + coords[1] - centerY(), z + coords[2] - centerZ());
             }
         }

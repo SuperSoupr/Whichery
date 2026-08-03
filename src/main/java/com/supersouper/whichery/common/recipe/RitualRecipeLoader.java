@@ -21,7 +21,7 @@ public class RitualRecipeLoader {
     @ApiStatus.Internal
     public static void loadRecipes() {
 
-        int[] stages = new int[60];
+        int[] stages = new int[30];
         Arrays.fill(stages, 10);
 
         // spotless:off

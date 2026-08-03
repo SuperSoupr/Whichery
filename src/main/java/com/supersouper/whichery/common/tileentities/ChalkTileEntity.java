@@ -62,9 +62,13 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
                 EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.6, zCoord + 0.5, stack);
                 worldObj.spawnEntityInWorld(entityItem);
                 entityItem.delayBeforeCanPickup = 5;
+                stack = null;
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            } else {
+                stack = null;
+                updateDisplayItem();
             }
-            stack = null;
-            updateDisplayItem();
+            markDirty();
         }
     }
 
@@ -91,19 +95,24 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
             placedEntityItem = null;
         }
         dropHeldItem();
-        this.tileEntityInvalid = true;
+        super.invalidate();
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         type = compound.getString("type");
+        if (!RitualRegistry.chalkExists(type)) {
+            type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
+        }
         if (compound.hasKey("stack")) {
             stack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"));
         } else {
             stack = null;
         }
-        updateDisplayItem();
+        if (worldObj != null && worldObj.isRemote) {
+            updateDisplayItem();
+        }
     }
 
     @Override
@@ -129,9 +138,7 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
 
     @Override
     public void markDirty() {
-        if (!worldObj.isRemote) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        } else {
+        if (worldObj.isRemote) {
             updateDisplayItem();
         }
         super.markDirty();
@@ -149,6 +156,8 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
+        if (stack == null) return null;
+
         ItemStack tmp;
         if (stack.stackSize <= count) {
             tmp = stack;
@@ -160,18 +169,20 @@ public class ChalkTileEntity extends RitualLeaderTileEntity implements IRitualPa
                 stack = null;
             }
         }
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         markDirty();
         return tmp;
     }
 
     @Override
     public ItemStack getStackInSlotOnClosing(int index) {
-        return stack;
+        return null;
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
         this.stack = stack;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         markDirty();
     }
 
