@@ -3,7 +3,8 @@ package com.supersouper.whichery.api.rituals;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.supersouper.whichery.api.IBlockMatcher;
+import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
+import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

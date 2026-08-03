@@ -6,7 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.supersouper.whichery.api.IBlockMatcher;
+import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
+import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;

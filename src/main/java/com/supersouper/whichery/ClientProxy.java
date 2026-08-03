@@ -6,12 +6,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.supersouper.whichery.api.rituals.BlockMatcherChalk;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.client.gui.BloodMeterRenderer;
 import com.supersouper.whichery.client.render.ChalkRuneSmallTESR;
 import com.supersouper.whichery.client.render.ChalkRuneTESR;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
+import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
