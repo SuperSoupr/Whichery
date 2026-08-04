@@ -15,8 +15,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class RitualRecipe {
 
-    public final Int2ObjectMap<IBlockMatcher> matcherPositions;
+    public final int[] matcherPositions;
     public final IBlockMatcher[] matchers;
+    public final IBlockMatcher[] matchersRaw;
+    public final IBlockMatcher centerMatcher;
     public final ISecondaryMatcher[] secondaryMatchers;
     public final Int2ObjectOpenHashMap<ArrayList<ISecondaryMatcher>> secondaryMatchersByClass = new Int2ObjectOpenHashMap<>();
     public final byte centerX, centerZ, centerY;
@@ -25,10 +27,12 @@ public class RitualRecipe {
      * IBlockMatcher 3d array formatted as: [y][z][x]
      * This is because most rituals are expected to only require one y level.
      */
-    public RitualRecipe(Int2ObjectMap<IBlockMatcher> matcherPositions, IBlockMatcher[] matchers,
+    public RitualRecipe(int[] matcherPositions, IBlockMatcher[] matchers, IBlockMatcher[] matchersRaw,
         ISecondaryMatcher[] secondaryMatchers, byte centerX, byte centerY, byte centerZ) {
+        IBlockMatcher centerMatcherTmp = null;
         this.matcherPositions = matcherPositions;
         this.matchers = matchers;
+        this.matchersRaw = matchersRaw;
         this.secondaryMatchers = secondaryMatchers;
         this.centerX = centerX;
         this.centerY = centerY;
@@ -41,6 +45,18 @@ public class RitualRecipe {
                 k -> new ArrayList<>())
                 .add(secondaryMatcher);
         }
+
+        int packedCenter = RitualUtils.packCoords(this.centerX, this.centerY, this.centerZ);
+        for (int i = 0;  i < matchers.length; i++) {
+            if (matcherPositions[i] == packedCenter) {
+                centerMatcherTmp = matchers[i];
+                break;
+            }
+        }
+        centerMatcher = centerMatcherTmp;
+        if (centerMatcher == null) {
+            throw new IllegalArgumentException("Center matcher cannot be null");
+        }
     }
 
     /**
@@ -51,16 +67,16 @@ public class RitualRecipe {
         int[] pos2d = new int[2];
         rotations: for (byte i = 0; i < 4; i++) {
             tes.clear();
-            for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions)) {
-                IBlockMatcher matcher = e.getValue();
+            for (int j = 0;  j < matchers.length; j++) {
+                IBlockMatcher matcher = matchers[j];
 
                 if (matcher != null) {
-                    RitualUtils.unpackCoords(e.getIntKey(), coords);
+                    RitualUtils.unpackCoords(matcherPositions[j], coords);
 
                     pos2d[0] = coords[0];
                     pos2d[1] = coords[2];
 
-                    for (int j = 0; j < i; j++) {
+                    for (int j2 = 0; j2 < i; j2++) {
                         rotate(pos2d, centerX, centerZ);
                     }
 
@@ -91,10 +107,10 @@ public class RitualRecipe {
 
     public void construct(World world, int x, int y, int z) {
         byte[] coords = new byte[3];
-        for (Int2ObjectMap.Entry<IBlockMatcher> e : Int2ObjectMaps.fastIterable(matcherPositions)) {
-            IBlockMatcher matcher = e.getValue();
+        for (int i = 0;  i < matchers.length; i++) {
+            IBlockMatcher matcher = matchers[i];
             if (matcher != null) {
-                RitualUtils.unpackCoords(e.getIntKey(), coords);
+                RitualUtils.unpackCoords(matcherPositions[i], coords);
                 matcher.place(world, x + coords[0] - centerX, y + coords[1] - centerY, z + coords[2] - centerZ);
             }
         }

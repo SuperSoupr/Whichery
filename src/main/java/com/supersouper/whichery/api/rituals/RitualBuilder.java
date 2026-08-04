@@ -63,20 +63,26 @@ public class RitualBuilder {
             }
         }
 
-        Int2ObjectMap<IBlockMatcher> matcherPositions = Int2ObjectMaps
-            .unmodifiable(new Int2ObjectArrayMap<>(keys.toIntArray(), vals.toArray(new IBlockMatcher[0])));
 
-        IBlockMatcher centerMatcher = matcherPositions.get(RitualUtils.packCoords(centerX, centerY, centerZ));
-        if (centerMatcher == null) {
-            throw new IllegalArgumentException("Center matcher cannot be null");
+        int[] matcherPositions = new int[keys.size()];
+        IBlockMatcher[] matchers = new IBlockMatcher[keys.size()];
+        for (int i = 0;  i < keys.size(); i++) {
+            matcherPositions[i] = keys.getInt(i);
+            matchers[i] = vals.get(i);
         }
 
-        IBlockMatcher[] matchers = definitions.values()
+//        IBlockMatcher centerMatcher = matcherPositions.get(RitualUtils.packCoords(centerX, centerY, centerZ));
+//        if (centerMatcher == null) {
+//            throw new IllegalArgumentException("Center matcher cannot be null");
+//        }
+
+        IBlockMatcher[] matchersRaw = definitions.values()
             .toArray(new IBlockMatcher[0]);
 
         return new RitualRecipe(
             matcherPositions,
             matchers,
+            matchersRaw,
             secondaryMatchers != null ? secondaryMatchers : new ISecondaryMatcher[0],
             centerX,
             centerY,

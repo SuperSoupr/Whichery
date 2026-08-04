@@ -37,7 +37,7 @@ public class RitualInfoScan implements Runnable {
         for (Ritual ritual : RitualRegistry.rituals()) {
             RitualRecipe recipe = ritual.recipe;
 
-            IBlockMatcher[] matchers = recipe.matchers;
+            IBlockMatcher[] matchers = recipe.matchersRaw;
             for (IBlockMatcher matcher : matchers) {
                 if (matcher != null) {
                     result.computeIfAbsent(matcher.itemStackHashCode(), k -> new ObjectOpenHashSet<>())
@@ -47,7 +47,7 @@ public class RitualInfoScan implements Runnable {
 
             stacks.put(
                 ritual,
-                recipe.matcherPositions.get(RitualUtils.packCoords(recipe.centerX, recipe.centerY, recipe.centerZ))
+                recipe.centerMatcher
                     .getItemStack());
 
         }
