@@ -173,12 +173,14 @@ public class RunningRitual {
         return tag;
     }
 
-    public void readFromNBT(NBTTagCompound tag) {
+    public void readFromNBT(NBTTagCompound tag, boolean isNew) {
         ritual = RitualRegistry.getRitual(tag.getString("ritual"));
         timePassedInPreviousSave = tag.getInteger("timePassedInPreviousSave");
         starterUUID = UUID.fromString(tag.getString("starterUUID"));
 
-        constructEffectsAndAnimations();
+        if (isNew) {
+            constructEffectsAndAnimations();
+        }
 
         // A ritual's effect/animation list can change between saves, so only restore the overlap: any
         // saved state past the end is dropped, and any new component simply starts fresh.

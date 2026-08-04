@@ -14,6 +14,7 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
 
     private RunningRitual currentRitual;
     public ArrayList<TileEntity> tes;
+    private boolean ticking;
 
     @Override
     public RunningRitual getCurrentRitual() {
@@ -36,6 +37,18 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
         return true;
     }
 
+    private void beginTicking() {
+        if (!ticking && worldObj != null) {
+            ticking = true;
+            worldObj.addTileEntity(this);
+        }
+    }
+
+    @Override
+    public boolean canUpdate() {
+        return currentRitual != null;
+    }
+
     @Override
     public void updateEntity() {
         if (currentRitual != null) {
@@ -50,6 +63,7 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
             currentRitual.end();
             currentRitual = null;
             markDirty();
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
@@ -79,8 +93,12 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         if (tag.hasKey("currentRitual")) {
-            currentRitual = new RunningRitual(this);
-            currentRitual.readFromNBT(tag.getCompoundTag("currentRitual"));
+            if (currentRitual == null) {
+                currentRitual = new RunningRitual(this);
+                currentRitual.readFromNBT(tag.getCompoundTag("currentRitual"), true);
+            }
+            currentRitual.readFromNBT(tag.getCompoundTag("currentRitual"), false);
+            beginTicking();
         } else {
             currentRitual = null;
         }
