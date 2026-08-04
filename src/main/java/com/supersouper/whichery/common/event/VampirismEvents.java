@@ -22,6 +22,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
 import com.gtnewhorizon.gtnhlib.keybind.SyncedKeybind;
+import com.supersouper.whichery.Whichery;
+import com.supersouper.whichery.api.TransformationRegistry;
+import com.supersouper.whichery.common.entity.extendedproperties.TransformationProperty;
 import com.supersouper.whichery.common.entity.extendedproperties.VampirismProperty;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -153,5 +156,21 @@ public class VampirismEvents {
         }
 
         return closestHit;
+    }
+
+    public static void transformPressed(EntityPlayerMP player, SyncedKeybind keybind, boolean keyDown) {
+        if (!keyDown) return;
+
+        VampirismProperty props = VampirismProperty.get(player);
+        if (props == null || !props.isVampire()) return;
+
+        TransformationProperty tProps = TransformationProperty.get(player);
+        if (tProps == null) return;
+
+        if (tProps.getTransformation() != null) {
+            tProps.setTransformation(null);
+        } else if (props.drainBloodSafe(100, player)) {
+            tProps.setTransformation(TransformationRegistry.getTransformation(Whichery.MODID + "bat"));
+        }
     }
 }

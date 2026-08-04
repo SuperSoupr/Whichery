@@ -4,6 +4,7 @@ whichery.config.other=Other
 #### Keybind
 whichery.key.categories.whichery=Whichery Keybinds
 whichery.key.vampire_bite=Vampire - Bite
+whichery.key.vampire_transform=Vampire - Bat Form
 
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble

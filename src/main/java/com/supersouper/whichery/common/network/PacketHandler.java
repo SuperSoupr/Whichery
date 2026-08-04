@@ -1,6 +1,7 @@
 package com.supersouper.whichery.common.network;
 
 import com.supersouper.whichery.Whichery;
+import com.supersouper.whichery.common.network.s2c.TransformationPacket;
 import com.supersouper.whichery.common.network.s2c.VampireStatsPacket;
 
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -14,5 +15,7 @@ public class PacketHandler {
         int packetId = 0;
 
         INSTANCE.registerMessage(VampireStatsPacket.Handler.class, VampireStatsPacket.class, packetId++, Side.CLIENT);
+        INSTANCE
+            .registerMessage(TransformationPacket.Handler.class, TransformationPacket.class, packetId++, Side.CLIENT);
     }
 }
