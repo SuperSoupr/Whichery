@@ -1,6 +1,7 @@
 package com.supersouper.whichery.common.entity.extendedproperties;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,6 +45,7 @@ public class TransformationProperty implements IExtendedEntityProperties {
         if (currentTransformation != null) {
             if (renderEntity == null) {
                 renderEntity = currentTransformation.getRenderEntity(player);
+                if (renderEntity instanceof EntityLiving living) living.tasks.taskEntries.clear();
             }
             return renderEntity;
         }
@@ -63,7 +65,9 @@ public class TransformationProperty implements IExtendedEntityProperties {
 
         this.currentTransformation = transformation;
 
-        if (player.worldObj.isRemote) {
+        if (player.worldObj.isRemote && renderEntity != null) {
+            this.renderEntity.setDead();
+            this.renderEntity.worldObj = null;
             this.renderEntity = null;
         }
 
