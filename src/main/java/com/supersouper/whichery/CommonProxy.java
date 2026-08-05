@@ -18,6 +18,7 @@ public class CommonProxy {
         PacketHandler.init();
         ModTileEntities.init();
         ModKeybindings.init();
+        ModEntities.init();
     }
 
     public void postInit(FMLPostInitializationEvent event) {}

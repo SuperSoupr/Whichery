@@ -16,6 +16,9 @@ public class Whichery {
 
     public static final String MODID = "whichery";
 
+    @Mod.Instance(MODID)
+    public static Whichery INSTANCE;
+
     @SidedProxy(
         clientSide = "com.supersouper.whichery.ClientProxy",
         serverSide = "com.supersouper.whichery.CommonProxy")

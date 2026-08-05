@@ -4,14 +4,14 @@ import net.minecraft.block.Block;
 
 import com.supersouper.whichery.ModBlocks;
 
-public class ItemSeedWitchesThimble extends ItemWhicherySeed {
+public class ItemSeedMandrake extends ItemWhicherySeed {
 
-    public ItemSeedWitchesThimble() {
-        super("witches_thimble");
+    public ItemSeedMandrake() {
+        super("mandrake");
     }
 
     @Override
     protected Block getCropBlock() {
-        return ModBlocks.WITCHES_THIMBLE.get();
+        return ModBlocks.MANDRAKE.get();
     }
 }

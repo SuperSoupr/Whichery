@@ -1,0 +1,5 @@
+{
+  "mandrake.idle": { "category": "neutral", "sounds": ["whichery:mandrake/idle"] },
+  "mandrake.hurt": { "category": "neutral", "sounds": ["whichery:mandrake/hurt"] },
+  "mandrake.death": { "category": "neutral", "sounds": ["whichery:mandrake/death"] }
+}

@@ -7,8 +7,14 @@ whichery.key.vampire_bite=Vampire - Bite
 
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble
+tile.crop_mandrake.name=Mandrake
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds
 item.witch_petal.name=Witchpetal
+item.seed_mandrake.name=Mandrake Seeds
+item.mandrake_root.name=Mandrake Root
 item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
+
+### Entities
+entity.whichery.MandrakeRoot.name=Mandrake Root
