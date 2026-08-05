@@ -19,7 +19,7 @@ public class SoundMandrakeIdle extends MovingSound {
 
     @Override
     public void update() {
-        if (entity.getHealth() <= 0) {
+        if (entity.getHealth() <= 0 || entity.isDead) {
             donePlaying = true;
             return;
         }
