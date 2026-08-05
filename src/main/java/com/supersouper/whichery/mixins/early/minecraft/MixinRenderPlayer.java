@@ -5,6 +5,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLivingBase;
@@ -95,6 +96,13 @@ public abstract class MixinRenderPlayer {
         if (player == Minecraft.getMinecraft().thePlayer && !inInventory) {
             renderY += TransformationEvents.renderYOffset;
         }
+
+        // Logic for lightmap adapted from vanilla
+        int i = proxy.isBurning() ? 15728880 : proxy.getBrightnessForRender(0);
+
+        int j = i % 65536;
+        int k = i / 65536;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
 
         renderY = renderY - player.yOffset + proxy.yOffset;
         return renderY;
