@@ -74,9 +74,27 @@ public class VampirismProperty implements IExtendedEntityProperties {
         syncToClient(player);
     }
 
-    public void drainBlood(int amount, EntityPlayer player) {
-        blood = Math.max(0, blood - amount);
+    /**
+     * Consume blood, returns true if full amount could be drained. If the full amount couldn't be drained, it will
+     * still drain as much as it can.
+     */
+    public boolean drainBlood(int amount, EntityPlayer player) {
+        int newBlood = blood - amount;
+        blood = Math.max(0, newBlood);
         syncToClient(player);
+        return newBlood > 0;
+    }
+
+    /**
+     * Consume blood, returns true if full amount could be drained. If the full amount couldn't be drained, it won't
+     * consume any.
+     */
+    public boolean drainBloodSafe(int amount, EntityPlayer player) {
+        int newBlood = blood - amount;
+        if (newBlood < 0) return false;
+        blood = newBlood;
+        syncToClient(player);
+        return true;
     }
 
     public void setBlood(int amount, EntityPlayer player) {

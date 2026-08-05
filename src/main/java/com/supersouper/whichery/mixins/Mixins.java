@@ -9,10 +9,12 @@ public enum Mixins implements IMixins {
     // spotless:off
 
     // make sure to leave a trailing comma
-//    EXAMPLE_MIXIN(new MixinBuilder("")
-//        .addCommonMixins("minecraft.MixinMinecraftClass")
-//        .setPhase(Phase.EARLY)
-//        .setApplyIf(() -> true)),
+    TRANSFORMATION_ENTITY_RENDER(new MixinBuilder("Render dummy entity for transformation")
+        .addClientMixins("minecraft.MixinRenderPlayer")
+        .setPhase(Phase.EARLY)),
+    ACCESSORS(new MixinBuilder("Accessors")
+        .addCommonMixins("minecraft.EntityAccessor")
+        .setPhase(Phase.EARLY)),
     ;
     // leave trailing semicolon
     // spotless:on
