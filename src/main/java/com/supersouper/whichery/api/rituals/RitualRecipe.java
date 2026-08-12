@@ -9,8 +9,6 @@ import net.minecraft.world.World;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class RitualRecipe {
@@ -47,7 +45,7 @@ public class RitualRecipe {
         }
 
         int packedCenter = RitualUtils.packCoords(this.centerX, this.centerY, this.centerZ);
-        for (int i = 0;  i < matchers.length; i++) {
+        for (int i = 0; i < matchers.length; i++) {
             if (matcherPositions[i] == packedCenter) {
                 centerMatcherTmp = matchers[i];
                 break;
@@ -67,7 +65,7 @@ public class RitualRecipe {
         int[] pos2d = new int[2];
         rotations: for (byte i = 0; i < 4; i++) {
             tes.clear();
-            for (int j = 0;  j < matchers.length; j++) {
+            for (int j = 0; j < matchers.length; j++) {
                 IBlockMatcher matcher = matchers[j];
 
                 if (matcher != null) {
@@ -107,7 +105,7 @@ public class RitualRecipe {
 
     public void construct(World world, int x, int y, int z) {
         byte[] coords = new byte[3];
-        for (int i = 0;  i < matchers.length; i++) {
+        for (int i = 0; i < matchers.length; i++) {
             IBlockMatcher matcher = matchers[i];
             if (matcher != null) {
                 RitualUtils.unpackCoords(matcherPositions[i], coords);

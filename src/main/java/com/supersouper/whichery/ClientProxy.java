@@ -8,8 +8,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.client.gui.BloodMeterRenderer;
+import com.supersouper.whichery.client.render.ChalkRuneISBRH;
 import com.supersouper.whichery.client.render.ChalkRuneSmallTESR;
-import com.supersouper.whichery.client.render.ChalkRuneTESR;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
 import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 
@@ -24,9 +24,10 @@ public class ClientProxy extends CommonProxy {
         super.init(event);
         MinecraftForge.EVENT_BUS.register(new BloodMeterRenderer(Minecraft.getMinecraft()));
         if (ModItems.CHALK.isEnabled()) {
-            ChalkRuneTESR renderer = new ChalkRuneTESR();
-            ClientRegistry.bindTileEntitySpecialRenderer(ModTileEntities.CHALK_RUNE.getTileEntityClass(), renderer);
-            MinecraftForgeClient.registerItemRenderer(ModBlocks.CHALK_RUNE_BLOCK.getItem(), renderer);
+            // ChalkRuneTESR renderer = new ChalkRuneTESR();
+            // ClientRegistry.bindTileEntitySpecialRenderer(ModTileEntities.CHALK_RUNE.getTileEntityClass(), renderer);
+            MinecraftForgeClient.registerItemRenderer(ModBlocks.CHALK_RUNE_BLOCK.getItem(), ChalkRuneISBRH.INSTANCE);
+
             ChalkRuneSmallTESR renderer2 = new ChalkRuneSmallTESR();
             ClientRegistry
                 .bindTileEntitySpecialRenderer(ModTileEntities.CHALK_SMALL_RUNE.getTileEntityClass(), renderer2);

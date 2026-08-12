@@ -8,7 +8,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.RitualRecipe;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
-import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -45,10 +44,7 @@ public class RitualInfoScan implements Runnable {
                 }
             }
 
-            stacks.put(
-                ritual,
-                recipe.centerMatcher
-                    .getItemStack());
+            stacks.put(ritual, recipe.centerMatcher.getItemStack());
 
         }
 

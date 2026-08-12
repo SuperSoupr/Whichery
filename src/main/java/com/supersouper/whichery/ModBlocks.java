@@ -16,7 +16,7 @@ public enum ModBlocks {
     // spotless:off
 
     // make sure to leave a trailing comma
-    CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalkRune.class, "chalk_block"),
+    CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalkRune.class, "chalk_rune"),
     CHALK_RUNE_BLOCK_SMALL(true, new BlockChalkRuneSmall(), BlockChalkRuneSmall.ItemBlockChalkRuneSmall.class, "chalk_block_small"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
 

@@ -9,12 +9,15 @@ import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -116,6 +119,14 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
         }
 
         return true;
+    }
+
+    public static String[] getChalkTypes(ItemStack itemStack) {
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag != null) {
+            return NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
+        }
+        return new String[4];
     }
 
     // @Override

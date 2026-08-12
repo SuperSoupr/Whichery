@@ -1,10 +1,18 @@
 package com.supersouper.whichery.utils;
 
+import java.io.IOException;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class WhicheryUtils {
 
@@ -39,6 +47,19 @@ public class WhicheryUtils {
             byteArray[i] = (byte) (boolArray[i] ? 1 : 0);
         }
         return byteArray;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static boolean resourceExists(ResourceLocation location) {
+        try {
+            IResource resource = Minecraft.getMinecraft()
+                .getResourceManager()
+                .getResource(location);
+
+            return resource != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 }

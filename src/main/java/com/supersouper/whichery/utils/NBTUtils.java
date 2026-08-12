@@ -6,7 +6,8 @@ import net.minecraft.nbt.NBTTagString;
 public class NBTUtils {
 
     public static String[] StringNBTTagListToArray(NBTTagList tagList) {
-        if (tagList == null) return null;
+        if (tagList == null) return new String[4];
+        if (tagList.func_150303_d() == 0) return new String[4];
         if (tagList.func_150303_d() != 8) {
             throw new IllegalArgumentException(
                 "Incorrect tag list type. Expected 8 but got " + tagList.func_150303_d());

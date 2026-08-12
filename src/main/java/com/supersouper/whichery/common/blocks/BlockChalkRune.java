@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,14 +13,19 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.ModBlocks;
+import com.supersouper.whichery.Whichery;
 import com.supersouper.whichery.api.rituals.RitualLeaderBlock;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,8 +34,39 @@ public class BlockChalkRune extends RitualLeaderBlock {
 
     public BlockChalkRune() {
         super(Material.ground);
-        setBlockName("chalk_block");
+        setBlockName("chalk_rune");
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister reg) {
+        IIcon[] baseIcons = new IIcon[12];
+        for (int i = 0; i < baseIcons.length; i++) {
+            baseIcons[i] = reg
+                .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/rune_" + i);
+        }
+        RitualRegistry.RUNE_ICONS.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIcons);
+
+        for (String type : RitualRegistry.CHALK_TYPES.keySet()) {
+            if (type.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
+
+            IIcon[] icons = RitualRegistry.RUNE_ICONS.get(type);
+            if (icons == null) {
+                icons = new IIcon[12];
+            }
+            for (int i = 0; i < icons.length; i++) {
+                ResourceLocation iconLocation = new ResourceLocation(
+                    Whichery.MODID + ":textures/blocks/runes/" + type + "/rune_" + i + ".png");
+                if (WhicheryUtils.resourceExists(iconLocation)) {
+                    icons[i] = reg.registerIcon(Whichery.MODID + ":runes/" + type + "/rune_" + i + ".png");
+                } else {
+                    icons[i] = baseIcons[i];
+                }
+            }
+            RitualRegistry.RUNE_ICONS.put(type, icons);
+        }
+        this.blockIcon = baseIcons[0];
     }
 
     @Override
@@ -60,7 +97,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
 
     @Override
     public int getRenderType() {
-        return -1;
+        return CommonProxy.chalkRuneRenderID;
     }
 
     @Override

@@ -6,9 +6,6 @@ import java.util.HashMap;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 public class RitualBuilder {
@@ -63,18 +60,17 @@ public class RitualBuilder {
             }
         }
 
-
         int[] matcherPositions = new int[keys.size()];
         IBlockMatcher[] matchers = new IBlockMatcher[keys.size()];
-        for (int i = 0;  i < keys.size(); i++) {
+        for (int i = 0; i < keys.size(); i++) {
             matcherPositions[i] = keys.getInt(i);
             matchers[i] = vals.get(i);
         }
 
-//        IBlockMatcher centerMatcher = matcherPositions.get(RitualUtils.packCoords(centerX, centerY, centerZ));
-//        if (centerMatcher == null) {
-//            throw new IllegalArgumentException("Center matcher cannot be null");
-//        }
+        // IBlockMatcher centerMatcher = matcherPositions.get(RitualUtils.packCoords(centerX, centerY, centerZ));
+        // if (centerMatcher == null) {
+        // throw new IllegalArgumentException("Center matcher cannot be null");
+        // }
 
         IBlockMatcher[] matchersRaw = definitions.values()
             .toArray(new IBlockMatcher[0]);

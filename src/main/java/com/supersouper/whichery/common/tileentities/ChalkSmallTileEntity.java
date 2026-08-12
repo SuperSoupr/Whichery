@@ -1,6 +1,9 @@
 package com.supersouper.whichery.common.tileentities;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -23,6 +26,10 @@ public class ChalkSmallTileEntity extends TileEntity {
         this.types[pos] = type;
     }
 
+    public void setTypes(String[] types) {
+        this.types = types;
+    }
+
     public String[] getTypes() {
         return types;
     }
@@ -33,10 +40,22 @@ public class ChalkSmallTileEntity extends TileEntity {
 
     private void sanitizeTypes() {
         for (int i = 0; i < types.length; i++) {
-            if (!RitualRegistry.chalkExists(types[i])) {
+            if (types[i] != null && !RitualRegistry.chalkExists(types[i])) {
                 types[i] = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
             }
         }
+    }
+
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.func_148857_g());
     }
 
     @Override
