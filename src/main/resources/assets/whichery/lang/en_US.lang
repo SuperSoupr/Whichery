@@ -7,11 +7,21 @@ whichery.key.vampire_bite=Vampire - Bite
 
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble
+tile.chalk_rune_small.name=Small Chalk Rune
+tile.chalk_rune.basic.name=Chalk Rune
+tile.chalk_rune.spiritual.name=Chalk Rune (Spiritual)
+tile.chalk_rune.bloody.name=Chalk Rune (Bloody)
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds
 item.witch_petal.name=Witchpetal
 item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
+item.chalk.basic.name=Chalk
+item.chalk.spiritual.name=Chalk (Spiritual)
+item.chalk.bloody.name=Chalk (Bloody)
+item.chalk_small.basic.name=Small Chalk
+item.chalk_small.spiritual.name=Small Chalk (Spiritual)
+item.chalk_small.bloody.name=Small Chalk (Bloody)
 
 #### Tooltip
 tooltip.family.families=Ingredient Families:

@@ -65,5 +65,5 @@ public class RitualRegistry {
 
     // Rune textures
     @SideOnly(Side.CLIENT)
-    public static HashMap<String, IIcon[]> RUNE_ICONS = new HashMap<>();
+    public static HashMap<String, IIcon[]> RUNE_ICONS;
 }

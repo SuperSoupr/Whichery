@@ -1,5 +1,7 @@
 package com.supersouper.whichery;
 
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
@@ -15,8 +17,15 @@ import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
+
+    @Override
+    public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
+        RitualRegistry.RUNE_ICONS = new HashMap<>();
+    }
 
     @Override
     public void init(FMLInitializationEvent event) {

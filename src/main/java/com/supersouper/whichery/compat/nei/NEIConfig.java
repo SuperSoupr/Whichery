@@ -51,7 +51,7 @@ public class NEIConfig implements IConfigureNEI {
 
     @Override
     public String getName() {
-        return Whichery.MODNAME + " BlockRenderer6343";
+        return Whichery.MODNAME;
     }
 
     @Override

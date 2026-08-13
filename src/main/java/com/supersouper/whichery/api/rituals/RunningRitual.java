@@ -8,11 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-import com.supersouper.whichery.utils.WhicheryUtils;
+import com.supersouper.whichery.utils.ArrayUtils;
 
 public class RunningRitual {
 
-    /** NBT tag id for a compound, as used by {@link NBTTagCompound#getTagList}. */
     private static final int TAG_COMPOUND = 10;
 
     public final TileEntity leader;
@@ -169,7 +168,7 @@ public class RunningRitual {
         tag.setTag("animations", animationTags);
 
         tag.setByte("rotation", rotation);
-        tag.setByteArray("seenStages", WhicheryUtils.booleanArrayToByteArray(seenStages));
+        tag.setByteArray("seenStages", ArrayUtils.booleanArrayToByteArray(seenStages));
         return tag;
     }
 
@@ -182,8 +181,6 @@ public class RunningRitual {
             constructEffectsAndAnimations();
         }
 
-        // A ritual's effect/animation list can change between saves, so only restore the overlap: any
-        // saved state past the end is dropped, and any new component simply starts fresh.
         NBTTagList effectTags = tag.getTagList("effects", TAG_COMPOUND);
         for (int i = 0; i < Math.min(effectTags.tagCount(), effects.length); i++) {
             effects[i].readFromNBT(effectTags.getCompoundTagAt(i));
@@ -195,6 +192,6 @@ public class RunningRitual {
         }
 
         rotation = tag.getByte("rotation");
-        seenStages = WhicheryUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
+        seenStages = ArrayUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
     }
 }

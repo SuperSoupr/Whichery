@@ -26,6 +26,7 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
         if (currentRitual == null) {
             currentRitual = new RunningRitual(this, ritual, starter, rotation);
             this.tes = tes;
+            beginTicking();
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         } else {
@@ -64,6 +65,8 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
             currentRitual = null;
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.func_147457_a(this); // Mark this TE to be unloaded
+            ticking = false;
         }
     }
 

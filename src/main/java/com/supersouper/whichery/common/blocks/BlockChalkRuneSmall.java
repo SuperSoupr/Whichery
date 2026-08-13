@@ -28,7 +28,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
 
     public BlockChalkRuneSmall() {
         super(Material.ground);
-        setBlockName("chalk_block");
+        setBlockName("chalk_rune_small");
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
     }
 

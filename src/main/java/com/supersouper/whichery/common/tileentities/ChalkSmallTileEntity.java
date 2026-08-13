@@ -8,8 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
-import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class ChalkSmallTileEntity extends TileEntity {
 
@@ -84,15 +84,15 @@ public class ChalkSmallTileEntity extends TileEntity {
             types = NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
         }
         sanitizeTypes();
-        runes = WhicheryUtils.byteArrayToIntArray(tag.getByteArray("runes"));
-        rotations = WhicheryUtils.byteArrayToIntArray(tag.getByteArray("rotations"));
+        runes = ArrayUtils.byteArrayToIntArray(tag.getByteArray("runes"));
+        rotations = ArrayUtils.byteArrayToIntArray(tag.getByteArray("rotations"));
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setTag("types", NBTUtils.StringArrayToNBTTagList(types));
-        tag.setByteArray("runes", WhicheryUtils.intArrayToByteArray(runes));
-        tag.setByteArray("rotations", WhicheryUtils.intArrayToByteArray(rotations));
+        tag.setByteArray("runes", ArrayUtils.intArrayToByteArray(runes));
+        tag.setByteArray("rotations", ArrayUtils.intArrayToByteArray(rotations));
     }
 }

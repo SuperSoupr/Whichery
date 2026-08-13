@@ -34,15 +34,6 @@ public class ChalkItemConsumeEffect extends RitualEffect {
         }
         ArrayList<ISecondaryMatcher> matchers = currentRitual.getRitual().recipe.secondaryMatchersByClass.get(tmp);
         int nextConsumeStage = currentRitual.getRitual().stages.length - (matchers.size() - consumed);
-        if (nextConsumeStage < 0) {
-            throw new IllegalArgumentException(
-                "Ritual '" + currentRitual.getRitual().name
-                    + "' requires "
-                    + matchers.size()
-                    + " items but only has "
-                    + currentRitual.getRitual().stages.length
-                    + " stages.");
-        }
         if (stage != nextConsumeStage) {
             return;
         }
@@ -54,6 +45,7 @@ public class ChalkItemConsumeEffect extends RitualEffect {
             }
             if (WhicheryUtils.matchIngredient(matcher.getStack(), cte.getStackInSlot(0), matcher.matchNBT)) {
                 cte.decrStackSize(0, matcher.getStack().stackSize);
+                consumed++;
                 break;
             }
         }

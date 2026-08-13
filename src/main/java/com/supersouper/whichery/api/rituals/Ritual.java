@@ -1,8 +1,12 @@
 package com.supersouper.whichery.api.rituals;
 
+import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
+import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
 
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
@@ -26,28 +30,30 @@ public class Ritual implements IConstructable {
         this.effectClasses = effectClasses;
         this.animationClasses = animationClasses;
         this.stages = stages;
+
+        ArrayList<ISecondaryMatcher> requiredItems = recipe.secondaryMatchersByClass
+            .get(ChalkItemSecondaryMatcher.class.hashCode());
+        if (requiredItems != null && requiredItems.size() > stages.length) {
+            throw new IllegalArgumentException(
+                "Ritual '" + name
+                    + "'s recipe requires "
+                    + requiredItems
+                    + " items but it only has "
+                    + stages.length
+                    + " stages.");
+        }
     }
 
-    /**
-     * Convenience overload for the common single-effect, single-animation ritual.
-     */
     public Ritual(String name, RitualRecipe recipe, Class<? extends RitualEffect> effectClass,
         Class<? extends RitualAnimation> animationClass, int[] stages) {
         this(name, recipe, effects(effectClass), animations(animationClass), stages);
     }
 
-    /**
-     * Builds an effect class array. Exists so callers can write {@code Ritual.effects(A.class, B.class)}
-     * instead of an unchecked {@code new Class[]{...}} — a generic array cannot be created directly.
-     */
     @SafeVarargs
     public static Class<? extends RitualEffect>[] effects(Class<? extends RitualEffect>... classes) {
         return classes;
     }
 
-    /**
-     * Builds an animation class array. See {@link #effects}.
-     */
     @SafeVarargs
     public static Class<? extends RitualAnimation>[] animations(Class<? extends RitualAnimation>... classes) {
         return classes;
