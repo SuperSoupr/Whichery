@@ -1,6 +1,8 @@
 package com.supersouper.whichery;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.client.render.ChalkRuneISBRH;
+import com.supersouper.whichery.client.render.ChalkRuneSmallISBRH;
 import com.supersouper.whichery.common.network.PacketHandler;
 import com.supersouper.whichery.common.recipe.RitualRecipeLoader;
 
@@ -14,6 +16,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 public class CommonProxy {
 
     public static int chalkRuneRenderID;
+    public static int chalkRuneSmallRenderID;
 
     public void preInit(FMLPreInitializationEvent event) {
 
@@ -25,6 +28,9 @@ public class CommonProxy {
         if (ModItems.CHALK.isEnabled()) {
             chalkRuneRenderID = RenderingRegistry.getNextAvailableRenderId();
             RenderingRegistry.registerBlockHandler(ChalkRuneISBRH.INSTANCE);
+
+            chalkRuneSmallRenderID = RenderingRegistry.getNextAvailableRenderId();
+            RenderingRegistry.registerBlockHandler(ChalkRuneSmallISBRH.INSTANCE);
         }
     }
 

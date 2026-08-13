@@ -19,6 +19,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitualParticipator, IInventory {
 
     private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
+    private int rune = 0;
+    private int rotation = 0;
     @SideOnly(Side.CLIENT)
     private PlacedEntityItem placedEntityItem;
     private ItemStack stack;
@@ -37,6 +39,22 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitu
 
     public String getType() {
         return type;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRune(int rune) {
+        this.rune = rune;
+    }
+
+    public int getRune() {
+        return rune;
     }
 
     public boolean onRightClicked(EntityPlayer player) {
@@ -110,6 +128,8 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitu
         } else {
             stack = null;
         }
+        rune = compound.getByte("rune");
+        rotation = compound.getByte("rotation");
         if (worldObj != null && worldObj.isRemote) {
             updateDisplayItem();
         }
@@ -122,6 +142,8 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitu
         if (stack != null) {
             compound.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
         }
+        compound.setByte("rune", (byte) rune);
+        compound.setByte("rotation", (byte) rotation);
     }
 
     @Override

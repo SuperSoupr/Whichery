@@ -65,6 +65,8 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(type);
+            te.setRune(WhicheryUtils.rand.nextInt(12));
+            te.setRotation(WhicheryUtils.rand.nextInt(4));
             te.markDirty();
         }
     }

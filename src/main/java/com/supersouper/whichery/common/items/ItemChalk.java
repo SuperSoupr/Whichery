@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -60,14 +61,23 @@ public class ItemChalk extends Item {
         if (!world.isAirBlock(x, y + 1, z)) return false;
         if (side != ForgeDirection.UP.ordinal()) return false;
 
-        String type = getChalkType(stack);
         world.setBlock(x, y + 1, z, ModBlocks.CHALK_RUNE_BLOCK.get(), 0, 3);
         if (!world.isRemote) {
             stack.damageItem(1, player);
         }
         ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y + 1, z);
         if (te != null) {
+            String type = getChalkType(stack);
+            int rotation = (int) ((((player.rotationYaw % 360) + 22.5f) / 45f + 8f) % 8f);
             te.setType(type);
+            te.setRotation(rotation);
+            te.setRune(
+                stack.getTagCompound()
+                    .getByte("nextRune"));
+            if (!world.isRemote) {
+                stack.getTagCompound()
+                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(12));
+            }
             te.markDirty();
         }
 

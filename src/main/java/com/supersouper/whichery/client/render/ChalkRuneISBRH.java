@@ -3,7 +3,6 @@ package com.supersouper.whichery.client.render;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -32,7 +31,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         RenderBlocks renderer) {
         if (!(world.getTileEntity(x, y, z) instanceof ChalkRuneTileEntity cte)) return false;
 
-        render(cte.getType(), x, y, z);
+        render(cte.getType(), cte.getRune(), cte.getRotation(), x, y, z);
         return true;
     }
 
@@ -46,118 +45,124 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         return CommonProxy.chalkRuneRenderID;
     }
 
-    private static void render(String type, int x, int y, int z) {
+    private static void render(String type, int rune, int rotation, int x, int y, int z) {
 
         Tessellator t = Tessellator.instance;
 
-        IIcon icon = Blocks.rail.getIcon(0, 0);
-        // TODO custom chalk textures for each type
         int color = RitualRegistry.CHALK_TYPES.get(type);
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
-        // GL11.glColor3f(r / 255f, g / 255f, b / 255f);
-        // GL11.glPushMatrix();
-        // GL11.glTranslated(x, y, z);
-        // GL11.glRotatef(90, 1, 0, 0);
-        // t.addVertexWithUV(0, 1, (double)(0 - icon.getIconHeight()), (double)icon.getMinU(), (double)icon.getMaxV());
-        // t.addVertexWithUV(1, 1, (double)(0 - icon.getIconHeight()), (double)icon.getMaxU(), (double)icon.getMaxV());
-        // t.addVertexWithUV(1, 0, (double)(0 - icon.getIconHeight()), (double)icon.getMaxU(), (double)icon.getMinV());
-        // t.addVertexWithUV(0, 0, (double)(0 - icon.getIconHeight()), (double)icon.getMinU(), (double)icon.getMinV());
-        // ItemRenderer.renderItemIn2D(
-        // new NoStartTessellator(t),
-        // icon.getMinU(),
-        // icon.getMinV(),
-        // icon.getMaxU(),
-        // icon.getMaxV(),
-        // icon.getIconWidth(),
-        // icon.getIconHeight(),
-        // 1f / 16f);
-        icon = RitualRegistry.RUNE_ICONS.get(type)[0];
-        t.setColorOpaque(r, g, b);
+
+        IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune];
         t.addTranslation(x, y, z);
-        renderIconIn2D(t, icon, 1f / 16f);
+        renderIconIn2D(t, icon, 1f / 16f, 1, 45 * rotation, r, g, b);
         t.addTranslation(-x, -y, -z);
-        // GL11.glPopMatrix();
-        // GL11.glColor4f(1f, 1f, 1f, 1f);
+
     }
 
-    public static void renderIconIn2D(Tessellator t, IIcon icon, float width) {
+    public static void renderIconIn2D(Tessellator t, IIcon icon, float width, float scale, float rotationDegrees, int r,
+        int g, int b) {
         float minU = icon.getMinU();
         float minV = icon.getMinV();
         float maxU = icon.getMaxU();
         float maxV = icon.getMaxV();
-        float iconWidth = icon.getIconWidth() / 2;
-        float iconHeight = icon.getIconHeight() / 2;
+        float iconWidth = icon.getIconWidth() / 2.0f;
+        float iconHeight = icon.getIconHeight() / 2.0f;
 
-        t.setNormal(0, 1, 0);
-        t.addVertexWithUV(0, 0, 0, minU, maxV);
-        t.addVertexWithUV(1, 0, 0, maxU, maxV);
-        t.addVertexWithUV(1, 0, 1, maxU, minV);
-        t.addVertexWithUV(0, 0, 1, minU, minV);
+        float rad = (float) Math.toRadians(rotationDegrees);
+        float cos = (float) Math.cos(rad);
+        float sin = (float) Math.sin(rad);
 
-        t.setNormal(0, -1, 0);
-        t.addVertexWithUV(0, width, 1, minU, minV);
-        t.addVertexWithUV(1, width, 1, maxU, minV);
-        t.addVertexWithUV(1, width, 0, maxU, maxV);
-        t.addVertexWithUV(0, width, 0, minU, maxV);
+        float pivotX = 0.5f;
+        float pivotZ = 0.5f;
 
-        float f5 = 0.5f * (minU - maxU) / (float) iconWidth;
-        float f6 = 0.5f * (maxV - minV) / (float) iconHeight;
+        t.setColorOpaque(r, g, b);
+        setRotatedNormal(t, 0, -1, 0, sin, cos);
+        addRotatedScaledVertex(t, 0, width, 1, minU, minV, sin, cos, pivotX, pivotZ, scale);
+        addRotatedScaledVertex(t, 1, width, 1, maxU, minV, sin, cos, pivotX, pivotZ, scale);
+        addRotatedScaledVertex(t, 1, width, 0, maxU, maxV, sin, cos, pivotX, pivotZ, scale);
+        addRotatedScaledVertex(t, 0, width, 0, minU, maxV, sin, cos, pivotX, pivotZ, scale);
 
-        t.setBrightness(160);
-        t.setNormal(-1, 0, 0);
+        t.setColorOpaque((int) (r * 0.5), (int) (g * 0.5), (int) (b * 0.5));
+        setRotatedNormal(t, 0, 1, 0, sin, cos);
+        addRotatedScaledVertex(t, 0, 0, 0, minU, maxV, sin, cos, pivotX, pivotZ, scale);
+        addRotatedScaledVertex(t, 1, 0, 0, maxU, maxV, sin, cos, pivotX, pivotZ, scale);
+        addRotatedScaledVertex(t, 1, 0, 1, maxU, minV, sin, cos, pivotX, pivotZ, scale);
+        addRotatedScaledVertex(t, 0, 0, 1, minU, minV, sin, cos, pivotX, pivotZ, scale);
+
+        float f5 = 0.5f * (minU - maxU) / iconWidth;
+        float f6 = 0.5f * (maxV - minV) / iconHeight;
+
+        t.setColorOpaque((int) (r * 0.6), (int) (g * 0.6), (int) (b * 0.6));
+        setRotatedNormal(t, -1, 0, 0, sin, cos);
         int k;
         float f7;
         float f8;
 
         for (k = 0; k < iconWidth; ++k) {
-            f7 = (float) k / (float) iconWidth;
+            f7 = (float) k / iconWidth;
             f8 = minU + (maxU - minU) * f7 - f5;
-            t.addVertexWithUV(f7, width, 0, f8, maxV);
-            t.addVertexWithUV(f7, 0, 0, f8, maxV);
-            t.addVertexWithUV(f7, 0, 1, f8, minV);
-            t.addVertexWithUV(f7, width, 1, f8, minV);
+            addRotatedScaledVertex(t, f7, width, 0, f8, maxV, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, f7, 0, 0, f8, maxV, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, f7, 0, 1, f8, minV, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, f7, width, 1, f8, minV, sin, cos, pivotX, pivotZ, scale);
         }
 
-        t.setNormal(1, 0, 0);
+        setRotatedNormal(t, 1, 0, 0, sin, cos);
         float f9;
 
         for (k = 0; k < iconWidth; ++k) {
-            f7 = (float) k / (float) iconWidth;
+            f7 = (float) k / iconWidth;
             f8 = minU + (maxU - minU) * f7 - f5;
-            f9 = (float) ((f7 + 1 / (float) iconWidth));
-            t.addVertexWithUV(f9, width, 1, f8, minV);
-            t.addVertexWithUV(f9, 0, 1, f8, minV);
-            t.addVertexWithUV(f9, 0, 0, f8, maxV);
-            t.addVertexWithUV(f9, width, 0, f8, maxV);
+            f9 = f7 + 1.0f / iconWidth;
+            addRotatedScaledVertex(t, f9, width, 1, f8, minV, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, f9, 0, 1, f8, minV, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, f9, 0, 0, f8, maxV, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, f9, width, 0, f8, maxV, sin, cos, pivotX, pivotZ, scale);
         }
 
-        t.setBrightness(170);
-        t.setNormal(0, 0, 1);
+        t.setColorOpaque((int) (r * 0.8), (int) (g * 0.8), (int) (b * 0.8));
+        setRotatedNormal(t, 0, 0, 1, sin, cos);
 
         for (k = 0; k < iconHeight; ++k) {
-            f7 = (float) k / (float) iconHeight;
+            f7 = (float) k / iconHeight;
             f8 = maxV + (minV - maxV) * f7 - f6;
-            f9 = f7 + 1 / (float) iconHeight;
+            f9 = f7 + 1.0f / iconHeight;
 
-            t.addVertexWithUV(0, 0, f9, minU, f8);
-            t.addVertexWithUV(1, 0, f9, maxU, f8);
-            t.addVertexWithUV(1, width, f9, maxU, f8);
-            t.addVertexWithUV(0, width, f9, minU, f8);
+            addRotatedScaledVertex(t, 0, 0, f9, minU, f8, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, 1, 0, f9, maxU, f8, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, 1, width, f9, maxU, f8, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, 0, width, f9, minU, f8, sin, cos, pivotX, pivotZ, scale);
         }
 
-        t.setNormal(0, 0, -1);
+        setRotatedNormal(t, 0, 0, -1, sin, cos);
 
         for (k = 0; k < iconHeight; ++k) {
-            f7 = (float) k / (float) iconHeight;
+            f7 = (float) k / iconHeight;
             f8 = maxV + (minV - maxV) * f7 - f6;
-            t.addVertexWithUV(1, 0, f7, maxU, f8);
-            t.addVertexWithUV(0, 0, f7, minU, f8);
-            t.addVertexWithUV(0, width, f7, minU, f8);
-            t.addVertexWithUV(1, width, f7, maxU, f8);
+            addRotatedScaledVertex(t, 1, 0, f7, maxU, f8, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, 0, 0, f7, minU, f8, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, 0, width, f7, minU, f8, sin, cos, pivotX, pivotZ, scale);
+            addRotatedScaledVertex(t, 1, width, f7, maxU, f8, sin, cos, pivotX, pivotZ, scale);
         }
-        t.setBrightness(240);
+    }
+
+    private static void addRotatedScaledVertex(Tessellator t, float x, float y, float z, float u, float v, float sin,
+        float cos, float pivotX, float pivotZ, float scale) {
+        float dx = (x - pivotX) * scale;
+        float dz = (z - pivotZ) * scale;
+
+        float rx = dx * cos - dz * sin;
+        float rz = dx * sin + dz * cos;
+
+        t.addVertexWithUV(rx + pivotX, y * scale, rz + pivotZ, u, v);
+    }
+
+    private static void setRotatedNormal(Tessellator t, float nx, float ny, float nz, float sin, float cos) {
+        float rx = nx * cos - nz * sin;
+        float rz = nx * sin + nz * cos;
+        t.setNormal(rx, ny, rz);
     }
 
     @Override
@@ -178,7 +183,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         GL11.glPushMatrix();
         GL11.glRotatef(-90, 1, 0, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
-        render(ItemChalk.getChalkType(item), 0, 0, 0);
+        render(ItemChalk.getChalkType(item), 0, 0, 0, 0, 0);
         GL11.glPopMatrix();
     }
 }

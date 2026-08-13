@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 import com.supersouper.whichery.utils.NBTUtils;
@@ -59,7 +60,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
 
     @Override
     public int getRenderType() {
-        return -1;
+        return CommonProxy.chalkRuneSmallRenderID;
     }
 
     @Override
@@ -78,6 +79,9 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
         int pos = clickPosToOrdinal((float) (hit.hitVec.xCoord - x), (float) (hit.hitVec.zCoord - z));
         if (cste.getType(pos) != null) {
             cste.setType(pos, null);
+            if (world.isRemote) {
+                world.markBlockForUpdate(x, y, z);
+            }
             cste.markDirty();
             for (int i = 0; i < 4; i++) {
                 if (cste.getType(i) != null) {

@@ -9,10 +9,13 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.utils.NBTUtils;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class ChalkSmallTileEntity extends TileEntity {
 
     private String[] types = new String[4];
+    private int[] runes = new int[4];
+    private int[] rotations = new int[4];
 
     public ChalkSmallTileEntity() {
 
@@ -46,6 +49,22 @@ public class ChalkSmallTileEntity extends TileEntity {
         }
     }
 
+    public void setRotation(int pos, int rotation) {
+        this.rotations[pos] = rotation;
+    }
+
+    public int[] getRotations() {
+        return this.rotations;
+    }
+
+    public void setRune(int pos, int rune) {
+        this.runes[pos] = rune;
+    }
+
+    public int[] getRunes() {
+        return this.runes;
+    }
+
     @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound tag = new NBTTagCompound();
@@ -65,11 +84,15 @@ public class ChalkSmallTileEntity extends TileEntity {
             types = NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
         }
         sanitizeTypes();
+        runes = WhicheryUtils.byteArrayToIntArray(tag.getByteArray("runes"));
+        rotations = WhicheryUtils.byteArrayToIntArray(tag.getByteArray("rotations"));
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setTag("types", NBTUtils.StringArrayToNBTTagList(types));
+        tag.setByteArray("runes", WhicheryUtils.intArrayToByteArray(runes));
+        tag.setByteArray("rotations", WhicheryUtils.intArrayToByteArray(rotations));
     }
 }

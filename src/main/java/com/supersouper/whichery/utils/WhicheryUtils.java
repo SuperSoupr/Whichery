@@ -1,6 +1,7 @@
 package com.supersouper.whichery.utils;
 
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
@@ -15,6 +16,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class WhicheryUtils {
+
+    public static final Random rand = new Random();
 
     public static MovingObjectPosition rayTraceLook(EntityPlayerMP player) {
         return rayTraceLook(player, player.theItemInWorldManager.getBlockReachDistance(), false);
@@ -45,6 +48,22 @@ public class WhicheryUtils {
         byte[] byteArray = new byte[boolArray.length];
         for (int i = 0; i < boolArray.length; i++) {
             byteArray[i] = (byte) (boolArray[i] ? 1 : 0);
+        }
+        return byteArray;
+    }
+
+    public static int[] byteArrayToIntArray(byte[] byteArray) {
+        int[] intArray = new int[byteArray.length];
+        for (int i = 0; i < byteArray.length; i++) {
+            intArray[i] = byteArray[i];
+        }
+        return intArray;
+    }
+
+    public static byte[] intArrayToByteArray(int[] intArray) {
+        byte[] byteArray = new byte[intArray.length];
+        for (int i = 0; i < intArray.length; i++) {
+            byteArray[i] = (byte) intArray[i];
         }
         return byteArray;
     }
