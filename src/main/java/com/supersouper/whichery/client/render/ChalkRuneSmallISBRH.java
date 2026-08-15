@@ -44,13 +44,14 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         }
     }
 
-    private static void render(String[] types, int[] runes, int[] rotations, int x, int y, int z) {
+    private static void render(String[] types, int[] runes, int[] rotations, boolean[] hides, int x, int y, int z) {
         if (types == null) return;
 
         Tessellator t = Tessellator.instance;
 
         t.addTranslation(x, y, z);
         for (int i = 0; i < types.length; i++) {
+            if (hides[i]) continue;
             if (types[i] == null) continue;
             int color = RitualRegistry.CHALK_TYPES.get(types[i]);
             int r = (color >> 16) & 255;
@@ -62,7 +63,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
                 BlockChalkRuneSmall.positions[i][0] - 0.25f,
                 0,
                 BlockChalkRuneSmall.positions[i][1] - 0.25f);
-            ChalkRuneISBRH.renderIconIn2D(t, icon, 1f / 16f + i / 1000f, 0.5f, 45 * rotations[i], r, g, b);
+            ChalkRuneISBRH.renderIconIn2D(t, icon, 1f / 16f + i / 1000f, 0.5f, 45 * rotations[i], r, g, b, false);
             t.addTranslation(
                 -BlockChalkRuneSmall.positions[i][0] + 0.25f,
                 0,
@@ -82,7 +83,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         RenderBlocks renderer) {
         if (!(world.getTileEntity(x, y, z) instanceof ChalkSmallTileEntity cte)) return false;
 
-        render(cte.getTypes(), cte.getRunes(), cte.getRotations(), x, y, z);
+        render(cte.getTypes(), cte.getRunes(), cte.getRotations(), cte.hides, x, y, z);
         return true;
     }
 

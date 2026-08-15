@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import com.supersouper.whichery.api.rituals.IRitualLeader;
 import com.supersouper.whichery.api.rituals.RitualEffect;
 import com.supersouper.whichery.api.rituals.RunningRitual;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
@@ -39,7 +38,7 @@ public class ChalkItemConsumeEffect extends RitualEffect {
         }
 
         ChalkItemSecondaryMatcher matcher = (ChalkItemSecondaryMatcher) matchers.get(consumed);
-        for (TileEntity te : ((IRitualLeader) currentRitual.leader).getCapturedTileEntities()) {
+        for (TileEntity te : currentRitual.getCapturedTileEntities()) {
             if (!(te instanceof ChalkRuneTileEntity cte)) {
                 continue;
             }

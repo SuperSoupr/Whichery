@@ -28,11 +28,6 @@ public class TestRitualAnimation extends RitualAnimation {
     }
 
     @Override
-    public void render() {
-
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         return tag;
     }

@@ -1,6 +1,7 @@
 package com.supersouper.whichery.api.rituals;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,13 +25,16 @@ public class RunningRitual {
     private int timePassedInPreviousSave = 0;
     private byte rotation;
     private boolean[] seenStages = new boolean[0];
+    private ArrayList<TileEntity> tes;
 
-    public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter, byte rotation) {
+    public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter, byte rotation,
+        ArrayList<TileEntity> tes) {
         this(leader);
         this.ritual = ritual;
         this.starter = starter;
         this.starterUUID = starter.getUniqueID();
         this.rotation = rotation;
+        this.tes = tes;
         this.seenStages = new boolean[ritual.stages.length];
         constructEffectsAndAnimations();
     }
@@ -138,6 +142,14 @@ public class RunningRitual {
         return starter;
     }
 
+    public ArrayList<TileEntity> getCapturedTileEntities() {
+        if (tes == null) {
+            tes = new ArrayList<>();
+            ritual.recipe.match(leader.getWorldObj(), leader.xCoord, leader.yCoord, leader.zCoord, new byte[1], tes);
+        }
+        return tes;
+    }
+
     public Ritual getRitual() {
         return ritual;
     }
@@ -192,6 +204,14 @@ public class RunningRitual {
         }
 
         rotation = tag.getByte("rotation");
-        seenStages = ArrayUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
+
+        boolean[] newSeenStages = ArrayUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
+        if (leader.hasWorldObj() && leader.getWorldObj().isRemote) {
+            for (int i = 0; i < seenStages.length; i++) {
+                seenStages[i] = seenStages[i] || newSeenStages[i];
+            }
+        } else {
+            seenStages = newSeenStages;
+        }
     }
 }

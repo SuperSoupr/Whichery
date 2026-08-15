@@ -11,17 +11,32 @@ import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ChalkSmallTileEntity extends TileEntity {
 
     private String[] types = new String[4];
     private int[] runes = new int[4];
     private int[] rotations = new int[4];
+    @SideOnly(Side.CLIENT)
+    public boolean[] hides;
 
     public ChalkSmallTileEntity() {
-
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide()
+            .isClient()) {
+            hides = new boolean[4];
+        }
     }
 
     public ChalkSmallTileEntity(World world) {
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide()
+            .isClient()) {
+            hides = new boolean[4];
+        }
         setWorldObj(world);
     }
 
@@ -41,6 +56,16 @@ public class ChalkSmallTileEntity extends TileEntity {
         return types[pos];
     }
 
+    @SideOnly(Side.CLIENT)
+    public void hide(int pos, boolean hide) {
+        this.hides[pos] = hide;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean isHidden(int pos) {
+        return hides[pos];
+    }
+
     private void sanitizeTypes() {
         for (int i = 0; i < types.length; i++) {
             if (types[i] != null && !RitualRegistry.chalkExists(types[i])) {
@@ -57,8 +82,16 @@ public class ChalkSmallTileEntity extends TileEntity {
         return this.rotations;
     }
 
+    public int getRotation(int pos) {
+        return this.rotations[pos];
+    }
+
     public void setRune(int pos, int rune) {
         this.runes[pos] = rune;
+    }
+
+    public int getRune(int pos) {
+        return this.runes[pos];
     }
 
     public int[] getRunes() {

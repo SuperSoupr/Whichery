@@ -23,7 +23,7 @@ public abstract class RitualLeaderBlock extends Block implements ITileEntityProv
 
             if (player.isSneaking() && player.capabilities.isCreativeMode) {
                 // TODO Remove
-                RitualRegistry.getRitual("banana1").recipe.construct(world, x, y, z);
+                RitualRegistry.getRitual("banana2").recipe.construct(world, x, y, z);
                 return true;
             }
 

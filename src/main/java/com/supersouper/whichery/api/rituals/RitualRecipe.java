@@ -57,9 +57,6 @@ public class RitualRecipe {
         }
     }
 
-    /**
-     * Called with the coords of the "center" block to validate ritual placement
-     */
     public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer, ArrayList<TileEntity> tes) {
         byte[] coords = new byte[3];
         int[] pos2d = new int[2];

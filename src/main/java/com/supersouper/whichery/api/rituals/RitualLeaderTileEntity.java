@@ -13,7 +13,6 @@ import net.minecraft.util.ChatComponentText;
 public abstract class RitualLeaderTileEntity extends TileEntity implements IRitualLeader {
 
     private RunningRitual currentRitual;
-    public ArrayList<TileEntity> tes;
     private boolean ticking;
 
     @Override
@@ -24,8 +23,7 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
     @Override
     public boolean startRitual(Ritual ritual, byte rotation, ArrayList<TileEntity> tes, EntityPlayer starter) {
         if (currentRitual == null) {
-            currentRitual = new RunningRitual(this, ritual, starter, rotation);
-            this.tes = tes;
+            currentRitual = new RunningRitual(this, ritual, starter, rotation, tes);
             beginTicking();
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -68,16 +66,6 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
             worldObj.func_147457_a(this); // Mark this TE to be unloaded
             ticking = false;
         }
-    }
-
-    @Override
-
-    public ArrayList<TileEntity> getCapturedTileEntities() {
-        if (tes == null) {
-            tes = new ArrayList<>();
-            currentRitual.getRitual().recipe.match(worldObj, this.xCoord, this.yCoord, this.zCoord, new byte[1], tes);
-        }
-        return tes;
     }
 
     @Override

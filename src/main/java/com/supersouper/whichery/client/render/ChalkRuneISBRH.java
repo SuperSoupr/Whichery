@@ -56,13 +56,13 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
         IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune];
         t.addTranslation(x, y, z);
-        renderIconIn2D(t, icon, 1f / 16f, 1, 45 * rotation, r, g, b);
+        renderIconIn2D(t, icon, 1f / 16f, 1, 45 * rotation, r, g, b, false);
         t.addTranslation(-x, -y, -z);
 
     }
 
     public static void renderIconIn2D(Tessellator t, IIcon icon, float width, float scale, float rotationDegrees, int r,
-        int g, int b) {
+        int g, int b, boolean highlightBoth) {
         float minU = icon.getMinU();
         float minV = icon.getMinV();
         float maxU = icon.getMaxU();
@@ -84,7 +84,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         addRotatedScaledVertex(t, 1, width, 0, maxU, maxV, sin, cos, pivotX, pivotZ, scale);
         addRotatedScaledVertex(t, 0, width, 0, minU, maxV, sin, cos, pivotX, pivotZ, scale);
 
-        t.setColorOpaque((int) (r * 0.5), (int) (g * 0.5), (int) (b * 0.5));
+        if (!highlightBoth) t.setColorOpaque((int) (r * 0.5), (int) (g * 0.5), (int) (b * 0.5));
         setRotatedNormal(t, 0, 1, 0, sin, cos);
         addRotatedScaledVertex(t, 0, 0, 0, minU, maxV, sin, cos, pivotX, pivotZ, scale);
         addRotatedScaledVertex(t, 1, 0, 0, maxU, maxV, sin, cos, pivotX, pivotZ, scale);

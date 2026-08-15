@@ -3,9 +3,6 @@ package com.supersouper.whichery.api.rituals;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public abstract class RitualAnimation {
 
     protected final RunningRitual currentRitual;
@@ -21,9 +18,6 @@ public abstract class RitualAnimation {
     public abstract void transitionToStage(int stage);
 
     public abstract void end(int stage);
-
-    @SideOnly(Side.CLIENT)
-    public abstract void render();
 
     public abstract NBTTagCompound writeToNBT(NBTTagCompound tag);
 

@@ -12,6 +12,4 @@ public interface IRitualLeader {
     boolean startRitual(Ritual ritual, byte rotation, ArrayList<TileEntity> tes, EntityPlayer starter);
 
     void endRitual();
-
-    ArrayList<TileEntity> getCapturedTileEntities();
 }

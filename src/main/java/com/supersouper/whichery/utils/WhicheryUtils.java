@@ -49,4 +49,12 @@ public class WhicheryUtils {
         }
     }
 
+    public static double lerpD(double cur, double target, double speed) {
+        return cur + (target - cur) * speed;
+    }
+
+    public static float lerpF(float cur, float target, float speed) {
+        return cur + (target - cur) * speed;
+    }
+
 }
