@@ -16,6 +16,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.CommonProxy;
+import com.supersouper.whichery.common.items.ItemChalkSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
@@ -127,13 +128,26 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     }
 
     @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+        return getPickBlock(target, world, x, y, z, player.isSneaking());
+    }
+
+    @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+        return getPickBlock(target, world, x, y, z, false);
+    }
+
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z,
+        boolean copyRotations) {
         ItemStack result = super.getPickBlock(target, world, x, y, z);
         ChalkSmallTileEntity te = (ChalkSmallTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setTag("types", NBTUtils.StringArrayToNBTTagList(te.getTypes()));
             tag.setByteArray("runes", ArrayUtils.intArrayToByteArray(te.getRunes()));
+            if (copyRotations) {
+                tag.setByteArray("rotations", ArrayUtils.intArrayToByteArray(te.getRotations()));
+            }
             result.setTagCompound(tag);
         }
         return result;
@@ -145,29 +159,24 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
             super(block);
         }
 
-        // @Override
-        // public String getUnlocalizedName(final ItemStack stack) {
-        // NBTTagCompound tag = stack.getTagCompound();
-        // if (tag != null) {
-        // return this.getUnlocalizedName() + "." + tag.getString("type");
-        // }
-        // return this.getUnlocalizedName();
-        // }
-        //
-        // @Override
-        //
-        // public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
-        // float hitX, float hitY, float hitZ, int metadata) {
-        // if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-        // ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
-        // if (te != null) {
-        // te.setType(ItemChalk.getChalkType(stack));
-        // te.markDirty();
-        // }
-        // return true;
-        // }
-        // return false;
-        // }
+        @Override
+        public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ, int metadata) {
+            if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
+                ChalkSmallTileEntity te = (ChalkSmallTileEntity) world.getTileEntity(x, y, z);
+                if (te != null) {
+                    te.setTypes(ItemChalkSmall.getChalkTypes(stack));
+                    te.setRunes(ItemChalkSmall.getChalkRunes(stack));
+                    if (stack.getTagCompound()
+                        .hasKey("rotations")) {
+                        te.setRotations(ItemChalkSmall.getChalkRotations(stack));
+                    }
+                    te.markDirty();
+                }
+                return true;
+            }
+            return false;
+        }
     }
 
     public static final float[][] positions = new float[][] { new float[] { 0, 0 }, new float[] { 0, 0.5f },

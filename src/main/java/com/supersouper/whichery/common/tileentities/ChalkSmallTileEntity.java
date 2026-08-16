@@ -78,6 +78,10 @@ public class ChalkSmallTileEntity extends TileEntity {
         }
     }
 
+    public void setRotations(int[] rotations) {
+        this.rotations = rotations;
+    }
+
     public void setRotation(int pos, int rotation) {
         this.rotations[pos] = rotation;
     }
@@ -88,6 +92,10 @@ public class ChalkSmallTileEntity extends TileEntity {
 
     public int getRotation(int pos) {
         return this.rotations[pos];
+    }
+
+    public void setRunes(int[] runes) {
+        this.runes = runes;
     }
 
     public void setRune(int pos, int rune) {
@@ -112,7 +120,7 @@ public class ChalkSmallTileEntity extends TileEntity {
 
         Collections.shuffle(Arrays.asList(types));
         for (int i = 0; i < types.length; i++) {
-            setRune(i, WhicheryUtils.rand.nextInt(12));
+            setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
             setRotation(i, WhicheryUtils.rand.nextInt(4));
         }
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

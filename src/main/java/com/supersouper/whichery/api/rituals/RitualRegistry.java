@@ -64,6 +64,7 @@ public class RitualRegistry {
     }
 
     // Rune textures
+    public static final int RUNE_COUNT = 12;
     @SideOnly(Side.CLIENT)
     public static HashMap<String, IIcon[]> RUNE_ICONS;
 }

@@ -17,8 +17,6 @@ import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRenderer {
 
@@ -181,16 +179,14 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         };
     }
 
-    @SideOnly(Side.CLIENT)
     private int cycleRune = 0;
-    @SideOnly(Side.CLIENT)
     private long lastCycle = System.currentTimeMillis();
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         if (System.currentTimeMillis() - lastCycle >= 1000) {
             lastCycle = System.currentTimeMillis();
-            cycleRune = WhicheryUtils.rand.nextInt(12);
+            cycleRune = WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT);
         }
         Tessellator t = Tessellator.instance;
 
@@ -204,7 +200,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         render(
             ItemChalk.getChalkType(stack),
             stackHasRune ? ItemChalk.getChalkRune(stack) : cycleRune,
-            0,
+            ItemChalk.getChalkRotation(stack),
             0,
             0,
             0,

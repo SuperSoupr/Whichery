@@ -15,14 +15,11 @@ import org.lwjgl.opengl.GL11;
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
+import com.supersouper.whichery.common.items.ItemChalkSmall;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
-import com.supersouper.whichery.utils.ArrayUtils;
-import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemRenderer {
 
@@ -96,15 +93,10 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         };
     }
 
-    @SideOnly(Side.CLIENT)
     private long lastCycle = System.currentTimeMillis();
-    @SideOnly(Side.CLIENT)
     private final int[] cycleRunes = new int[] { 0, 0, 0, 0 };
-    @SideOnly(Side.CLIENT)
     private final String[] cycleTypes = new String[4];
-    @SideOnly(Side.CLIENT)
     private final int[] zeros = new int[] { 0, 0, 0, 0 };
-    @SideOnly(Side.CLIENT)
     private final boolean[] falses = new boolean[] { false, false, false, false };
 
     private void randomizeCycle() {
@@ -121,26 +113,27 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
             } else {
                 cycleTypes[i] = allTypes.get(j);
             }
-            cycleRunes[i] = WhicheryUtils.rand.nextInt(12);
+            cycleRunes[i] = WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT);
         }
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         randomizeCycle();
 
         String[] types;
         int[] runes;
-        if (item.getTagCompound() == null) {
+        int[] rotations = zeros;
+        if (stack.getTagCompound() == null) {
             types = cycleTypes;
             runes = cycleRunes;
         } else {
-            types = NBTUtils.StringNBTTagListToArray(
-                item.getTagCompound()
-                    .getTagList("types", 8));
-            runes = ArrayUtils.byteArrayToIntArray(
-                item.getTagCompound()
-                    .getByteArray("runes"));
+            types = ItemChalkSmall.getChalkTypes(stack);
+            runes = ItemChalkSmall.getChalkRunes(stack);
+            if (stack.getTagCompound()
+                .hasKey("rotations")) {
+                rotations = ItemChalkSmall.getChalkRotations(stack);
+            }
         }
 
         Tessellator t = Tessellator.instance;
@@ -148,7 +141,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         GL11.glRotatef(-90, 1, 0, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
         t.startDrawingQuads();
-        render(types, runes, zeros, falses, 0, 0, 0, true);
+        render(types, runes, rotations, falses, 0, 0, 0, true);
         t.draw();
         GL11.glPopMatrix();
     }

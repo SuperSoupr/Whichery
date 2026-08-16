@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.ModItems;
+import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
@@ -83,7 +84,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
             Collections.shuffle(Arrays.asList(tmp));
             for (int i = 0; i < tmp.length; i++) {
                 te.setType(i, tmp[i]);
-                te.setRune(i, WhicheryUtils.rand.nextInt(12));
+                te.setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
                 te.setRotation(i, WhicheryUtils.rand.nextInt(4));
                 te.markDirty();
             }

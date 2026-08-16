@@ -17,6 +17,8 @@ import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.utils.ArrayUtils;
+import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -28,6 +30,30 @@ public class ItemChalkSmall extends Item {
     public ItemChalkSmall() {
         setUnlocalizedName("chalk_small");
         setMaxDamage(256);
+    }
+
+    public static String[] getChalkTypes(ItemStack itemStack) {
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag != null && tag.hasKey("types")) {
+            return NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
+        }
+        return new String[4];
+    }
+
+    public static int[] getChalkRunes(ItemStack itemStack) {
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag != null && tag.hasKey("runes")) {
+            return ArrayUtils.byteArrayToIntArray(tag.getByteArray("runes"));
+        }
+        return new int[4];
+    }
+
+    public static int[] getChalkRotations(ItemStack itemStack) {
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag != null && tag.hasKey("rotations")) {
+            return ArrayUtils.byteArrayToIntArray(tag.getByteArray("rotations"));
+        }
+        return new int[4];
     }
 
     @SideOnly(Side.CLIENT)
@@ -77,7 +103,7 @@ public class ItemChalkSmall extends Item {
                 world.markBlockForUpdate(x, y, z);
             } else {
                 stack.getTagCompound()
-                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(12));
+                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
             }
             cste.markDirty();
         }

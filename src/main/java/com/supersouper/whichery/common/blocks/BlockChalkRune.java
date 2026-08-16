@@ -41,7 +41,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-        IIcon[] baseIcons = new IIcon[12];
+        IIcon[] baseIcons = new IIcon[RitualRegistry.RUNE_COUNT];
         for (int i = 0; i < baseIcons.length; i++) {
             baseIcons[i] = reg
                 .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/rune_" + i);
@@ -53,7 +53,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
 
             IIcon[] icons = RitualRegistry.RUNE_ICONS.get(type);
             if (icons == null) {
-                icons = new IIcon[12];
+                icons = new IIcon[RitualRegistry.RUNE_COUNT];
             }
             for (int i = 0; i < icons.length; i++) {
                 ResourceLocation iconLocation = new ResourceLocation(
@@ -113,13 +113,26 @@ public class BlockChalkRune extends RitualLeaderBlock {
     }
 
     @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+        return getPickBlock(target, world, x, y, z, player.isSneaking());
+    }
+
+    @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+        return getPickBlock(target, world, x, y, z, false);
+    }
+
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z,
+        boolean copyRotations) {
         ItemStack result = super.getPickBlock(target, world, x, y, z);
         ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("type", te.getType());
             tag.setByte("rune", (byte) te.getRune());
+            if (copyRotations) {
+                tag.setByte("rotation", (byte) te.getRotation());
+            }
             result.setTagCompound(tag);
         }
         return result;
@@ -141,7 +154,6 @@ public class BlockChalkRune extends RitualLeaderBlock {
         }
 
         @Override
-
         public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
             float hitX, float hitY, float hitZ, int metadata) {
             if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
@@ -149,6 +161,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
                 if (te != null) {
                     te.setType(ItemChalk.getChalkType(stack));
                     te.setRune(ItemChalk.getChalkRune(stack));
+                    te.setRotation(ItemChalk.getChalkRotation(stack));
                     te.markDirty();
                 }
                 return true;

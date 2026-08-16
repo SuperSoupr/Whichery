@@ -60,6 +60,14 @@ public class ItemChalk extends Item {
         return 0;
     }
 
+    public static int getChalkRotation(ItemStack itemStack) {
+        NBTTagCompound tag = itemStack.getTagCompound();
+        if (tag != null) {
+            return tag.getByte("rotation");
+        }
+        return 0;
+    }
+
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
         float clickX, float clickY, float clickZ) {
@@ -81,7 +89,7 @@ public class ItemChalk extends Item {
                     .getByte("nextRune"));
             if (!world.isRemote) {
                 stack.getTagCompound()
-                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(12));
+                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
             }
             te.markDirty();
         }
