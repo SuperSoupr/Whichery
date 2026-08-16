@@ -16,35 +16,20 @@ import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.utils.ArrayUtils;
+import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemRenderer {
 
     public static final ChalkRuneSmallISBRH INSTANCE = new ChalkRuneSmallISBRH();
 
-    private static final String[] cycleTypes = new String[4];
-    private static long lastCycle = 0;
-
-    private static void randomizeCycleTypes() {
-        if (System.currentTimeMillis() - lastCycle < 1000) {
-            return;
-        }
-        lastCycle = System.currentTimeMillis();
-
-        for (int i = 0; i < 4; i++) {
-            List<String> allTypes = RitualRegistry.getChalkTypeList();
-            int j = WhicheryUtils.rand.nextInt(allTypes.size() + 1);
-            if (j >= allTypes.size()) {
-                cycleTypes[i] = null;
-            } else {
-                cycleTypes[i] = allTypes.get(j);
-            }
-        }
-    }
-
-    private static void render(String[] types, int[] runes, int[] rotations, boolean[] hides, int x, int y, int z) {
+    private static void render(String[] types, int[] runes, int[] rotations, boolean[] hides, int x, int y, int z,
+        boolean noBakedLights) {
         if (types == null) return;
 
         Tessellator t = Tessellator.instance;
@@ -63,7 +48,8 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
                 BlockChalkRuneSmall.positions[i][0] - 0.25f,
                 0,
                 BlockChalkRuneSmall.positions[i][1] - 0.25f);
-            ChalkRuneISBRH.renderIconIn2D(t, icon, 1f / 16f + i / 1000f, 0.5f, 45 * rotations[i], r, g, b, false);
+            ChalkRuneISBRH
+                .renderIconIn2D(t, icon, 1f / 16f + i / 1000f, 0.5f, 45 * rotations[i], r, g, b, false, noBakedLights);
             t.addTranslation(
                 -BlockChalkRuneSmall.positions[i][0] + 0.25f,
                 0,
@@ -83,7 +69,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         RenderBlocks renderer) {
         if (!(world.getTileEntity(x, y, z) instanceof ChalkSmallTileEntity cte)) return false;
 
-        render(cte.getTypes(), cte.getRunes(), cte.getRotations(), cte.hides, x, y, z);
+        render(cte.getTypes(), cte.getRunes(), cte.getRotations(), cte.hides, x, y, z, false);
         return true;
     }
 
@@ -110,23 +96,60 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         };
     }
 
-    private static final int[] zeros = new int[] { 0, 0, 0, 0 };
+    @SideOnly(Side.CLIENT)
+    private long lastCycle = System.currentTimeMillis();
+    @SideOnly(Side.CLIENT)
+    private final int[] cycleRunes = new int[] { 0, 0, 0, 0 };
+    @SideOnly(Side.CLIENT)
+    private final String[] cycleTypes = new String[4];
+    @SideOnly(Side.CLIENT)
+    private final int[] zeros = new int[] { 0, 0, 0, 0 };
+    @SideOnly(Side.CLIENT)
+    private final boolean[] falses = new boolean[] { false, false, false, false };
+
+    private void randomizeCycle() {
+        if (System.currentTimeMillis() - lastCycle < 1000) {
+            return;
+        }
+        lastCycle = System.currentTimeMillis();
+
+        for (int i = 0; i < 4; i++) {
+            List<String> allTypes = RitualRegistry.getChalkTypeList();
+            int j = WhicheryUtils.rand.nextInt(allTypes.size() + 1);
+            if (j >= allTypes.size()) {
+                cycleTypes[i] = null;
+            } else {
+                cycleTypes[i] = allTypes.get(j);
+            }
+            cycleRunes[i] = WhicheryUtils.rand.nextInt(12);
+        }
+    }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        randomizeCycleTypes();
+        randomizeCycle();
 
         String[] types;
+        int[] runes;
         if (item.getTagCompound() == null) {
             types = cycleTypes;
+            runes = cycleRunes;
         } else {
-            types = BlockChalkRuneSmall.getChalkTypes(item);
+            types = NBTUtils.StringNBTTagListToArray(
+                item.getTagCompound()
+                    .getTagList("types", 8));
+            runes = ArrayUtils.byteArrayToIntArray(
+                item.getTagCompound()
+                    .getByteArray("runes"));
         }
 
+        Tessellator t = Tessellator.instance;
         GL11.glPushMatrix();
         GL11.glRotatef(-90, 1, 0, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
-        // render(types, zeros, zeros, 0, 0, 0);
+        t.startDrawingQuads();
+        render(types, runes, zeros, falses, 0, 0, 0, true);
+        t.draw();
         GL11.glPopMatrix();
     }
 }

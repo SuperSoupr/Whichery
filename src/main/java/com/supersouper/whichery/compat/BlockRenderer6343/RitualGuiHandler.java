@@ -1,9 +1,13 @@
 package com.supersouper.whichery.compat.BlockRenderer6343;
 
+import net.minecraft.tileentity.TileEntity;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.supersouper.whichery.api.rituals.Ritual;
+import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 
+import blockrenderer6343.client.renderer.WorldSceneRenderer;
 import blockrenderer6343.integration.nei.GuiMultiblockHandler;
 
 public class RitualGuiHandler extends GuiMultiblockHandler {
@@ -28,5 +32,15 @@ public class RitualGuiHandler extends GuiMultiblockHandler {
             return "whichery.ritual." + ritual.name + ".name";
         }
         return super.getMultiblockName();
+    }
+
+    @Override
+    public void onRendererRender(WorldSceneRenderer renderer) {
+        super.onRendererRender(renderer);
+        for (TileEntity te : renderer.world.tileMap.values()) {
+            if (te.getClass() == ChalkSmallTileEntity.class) {
+                ((ChalkSmallTileEntity) te).tryCycleRune();
+            }
+        }
     }
 }

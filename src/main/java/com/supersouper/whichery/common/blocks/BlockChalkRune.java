@@ -119,6 +119,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
         if (te != null) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("type", te.getType());
+            tag.setByte("rune", (byte) te.getRune());
             result.setTagCompound(tag);
         }
         return result;
@@ -147,6 +148,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
                 ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
                 if (te != null) {
                     te.setType(ItemChalk.getChalkType(stack));
+                    te.setRune(ItemChalk.getChalkRune(stack));
                     te.markDirty();
                 }
                 return true;

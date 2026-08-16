@@ -39,8 +39,10 @@ public class RitualInfoScan implements Runnable {
             IBlockMatcher[] matchers = recipe.matchersRaw;
             for (IBlockMatcher matcher : matchers) {
                 if (matcher != null) {
-                    result.computeIfAbsent(matcher.itemStackHashCode(), k -> new ObjectOpenHashSet<>())
-                        .add(ritual);
+                    for (int hash : matcher.itemStackHashCodes()) {
+                        result.computeIfAbsent(hash, k -> new ObjectOpenHashSet<>())
+                            .add(ritual);
+                    }
                 }
             }
 

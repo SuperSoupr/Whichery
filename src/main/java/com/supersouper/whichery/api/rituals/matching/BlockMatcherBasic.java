@@ -44,8 +44,8 @@ public class BlockMatcherBasic implements IBlockMatcher {
     }
 
     @Override
-    public int itemStackHashCode() {
-        return item.hashCode() + meta;
+    public int[] itemStackHashCodes() {
+        return new int[] { item.hashCode() + meta };
     }
 
     @Override

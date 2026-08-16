@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
@@ -33,11 +34,7 @@ public class ItemChalkSmall extends Item {
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (Map.Entry<String, Integer> type : RitualRegistry.CHALK_TYPES.entrySet()) {
-            ItemStack result = new ItemStack(item);
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("type", type.getKey());
-            result.setTagCompound(tag);
-            list.add(result);
+            list.add(RitualUtils.createChalkItem(item, type.getKey()));
         }
     }
 

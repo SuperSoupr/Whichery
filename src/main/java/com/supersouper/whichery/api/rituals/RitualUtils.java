@@ -3,7 +3,9 @@ package com.supersouper.whichery.api.rituals;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
@@ -45,5 +47,13 @@ public class RitualUtils {
             stack -> stack.getItem()
                 .hashCode() + stack.getItemDamage())
             .apply(item);
+    }
+
+    public static ItemStack createChalkItem(Item item, String type) {
+        ItemStack result = new ItemStack(item);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString("type", type);
+        result.setTagCompound(tag);
+        return result;
     }
 }

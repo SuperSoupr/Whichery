@@ -43,7 +43,9 @@ public class ClientProxy extends CommonProxy {
                 .registerItemRenderer(ModBlocks.CHALK_RUNE_BLOCK_SMALL.getItem(), ChalkRuneSmallISBRH.INSTANCE);
 
             RitualRegistry
-                .registerItemHasher(ModBlocks.CHALK_RUNE_BLOCK.getItem(), BlockMatcherChalk::itemStackToHashCode);
+                .registerItemHasher(ModBlocks.CHALK_RUNE_BLOCK.getItem(), BlockMatcherChalk::chalkItemStackToHashCode);
+            RitualRegistry.registerItemHasher(ModItems.CHALK.get(), BlockMatcherChalk::chalkItemStackToHashCode);
+            RitualRegistry.registerItemHasher(ModItems.CHALK_SMALL.get(), BlockMatcherChalk::chalkItemStackToHashCode);
 
             RenderingRegistry.registerEntityRenderingHandler(
                 PlacedEntityItem.class,

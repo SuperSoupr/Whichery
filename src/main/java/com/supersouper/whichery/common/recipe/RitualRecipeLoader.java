@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.RitualBuilder;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
@@ -44,7 +43,7 @@ public class RitualRecipeLoader {
                 "  ccc  ",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual"),
+            new BlockMatcherChalk("spiritual"),
             'o',
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
@@ -74,7 +73,7 @@ public class RitualRecipeLoader {
                 "g       g",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual"),
+            new BlockMatcherChalk("spiritual"),
             's',
             new BlockMatcherChalkSmall("spiritual"),
             'g',
@@ -95,7 +94,7 @@ public class RitualRecipeLoader {
                 "   ccc   ",
             },
             'c',
-            new BlockMatcherChalk(ModBlocks.CHALK_RUNE_BLOCK.get(), "spiritual")
+            new BlockMatcherChalk("spiritual")
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
         // spotless:on
     }

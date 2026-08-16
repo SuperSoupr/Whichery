@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
@@ -125,37 +126,18 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
         return true;
     }
 
-    public static String[] getChalkTypes(ItemStack itemStack) {
-        NBTTagCompound tag = itemStack.getTagCompound();
-        if (tag != null) {
-            return NBTUtils.StringNBTTagListToArray(tag.getTagList("types", 8));
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+        ItemStack result = super.getPickBlock(target, world, x, y, z);
+        ChalkSmallTileEntity te = (ChalkSmallTileEntity) world.getTileEntity(x, y, z);
+        if (te != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setTag("types", NBTUtils.StringArrayToNBTTagList(te.getTypes()));
+            tag.setByteArray("runes", ArrayUtils.intArrayToByteArray(te.getRunes()));
+            result.setTagCompound(tag);
         }
-        return new String[4];
+        return result;
     }
-
-    // @Override
-    // @SideOnly(Side.CLIENT)
-    // public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-    // for (Map.Entry<String, Integer> type : RitualRegistry.CHALK_TYPES.entrySet()) {
-    // ItemStack result = new ItemStack(ModBlocks.CHALK_RUNE_BLOCK.get());
-    // NBTTagCompound tag = new NBTTagCompound();
-    // tag.setString("type", type.getKey());
-    // result.setTagCompound(tag);
-    // list.add(result);
-    // }
-    // }
-    //
-    // @Override
-    // public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-    // ItemStack result = super.getPickBlock(target, world, x, y, z);
-    // ChalkTileEntity te = (ChalkTileEntity) world.getTileEntity(x, y, z);
-    // if (te != null) {
-    // NBTTagCompound tag = new NBTTagCompound();
-    // tag.setString("type", te.getType());
-    // result.setTagCompound(tag);
-    // }
-    // return result;
-    // }
 
     public static class ItemBlockChalkRuneSmall extends ItemBlock {
 

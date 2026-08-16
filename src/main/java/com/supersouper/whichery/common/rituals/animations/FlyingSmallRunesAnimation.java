@@ -149,7 +149,8 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
                 r,
                 g,
                 b,
-                true);
+                true,
+                false);
             t.setTranslation(0, 0, 0);
             t.draw();
 

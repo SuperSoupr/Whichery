@@ -3,32 +3,26 @@ package com.supersouper.whichery.common.rituals.matching;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.supersouper.whichery.ModBlocks;
+import com.supersouper.whichery.ModItems;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
-import com.supersouper.whichery.api.rituals.matching.BlockMatcherBasic;
+import com.supersouper.whichery.api.rituals.RitualUtils;
+import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
-public class BlockMatcherChalk extends BlockMatcherBasic {
+public class BlockMatcherChalk implements IBlockMatcher {
 
-    private ItemStack stack = null;
-    private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
+    private final String type;
 
-    public BlockMatcherChalk(Block block, String type) {
-        super(block);
+    public BlockMatcherChalk(String type) {
         this.type = type;
-    }
-
-    public BlockMatcherChalk(Block block, String type, ItemStack stack) {
-        super(block);
-        this.type = type;
-        this.stack = stack;
     }
 
     @Override
@@ -37,8 +31,7 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         if (!(te instanceof ChalkRuneTileEntity cte)) return false;
 
         boolean match = cte.getType()
-            .equals(type)
-            && (getStack() == null || WhicheryUtils.matchIngredient(getStack(), cte.getStackInSlot(0), true));
+            .equals(type);
         if (match) {
             tes.add(te);
         }
@@ -46,22 +39,19 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
     }
 
     @Override
-    public ItemStack toItemStack() {
-        ItemStack result = new ItemStack(item);
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("type", type);
-        result.setTagCompound(tag);
-        return result;
+    public ItemStack getItemStack() {
+        return RitualUtils.createChalkItem(ModItems.CHALK.get(), type);
     }
 
     @Override
-    public int itemStackHashCode() {
-        return item.hashCode() + type.hashCode();
+    public int[] itemStackHashCodes() {
+        return new int[] { ModItems.CHALK.get()
+            .hashCode() + type.hashCode() };
     }
 
     @Override
     public void place(World world, int x, int y, int z) {
-        world.setBlock(x, y, z, block);
+        world.setBlock(x, y, z, ModBlocks.CHALK_RUNE_BLOCK.get());
         ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(type);
@@ -71,20 +61,18 @@ public class BlockMatcherChalk extends BlockMatcherBasic {
         }
     }
 
-    public static int itemStackToHashCode(ItemStack stack) {
+    public static int chalkItemStackToHashCode(ItemStack stack) {
         Objects.requireNonNull(stack);
         Objects.requireNonNull(stack.getItem());
 
-        String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
+        String type;
         NBTTagCompound tag = stack.getTagCompound();
         if (tag != null) {
             type = tag.getString("type");
+        } else {
+            type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
         }
         return stack.getItem()
             .hashCode() + type.hashCode();
-    }
-
-    public ItemStack getStack() {
-        return stack;
     }
 }

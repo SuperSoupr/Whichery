@@ -14,8 +14,11 @@ import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRenderer {
 
@@ -31,7 +34,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         RenderBlocks renderer) {
         if (!(world.getTileEntity(x, y, z) instanceof ChalkRuneTileEntity cte)) return false;
 
-        render(cte.getType(), cte.getRune(), cte.getRotation(), x, y, z);
+        render(cte.getType(), cte.getRune(), cte.getRotation(), x, y, z, false);
         return true;
     }
 
@@ -45,7 +48,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         return CommonProxy.chalkRuneRenderID;
     }
 
-    private static void render(String type, int rune, int rotation, int x, int y, int z) {
+    private static void render(String type, int rune, int rotation, int x, int y, int z, boolean noBakedLight) {
 
         Tessellator t = Tessellator.instance;
 
@@ -56,13 +59,13 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
         IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune];
         t.addTranslation(x, y, z);
-        renderIconIn2D(t, icon, 1f / 16f, 1, 45 * rotation, r, g, b, false);
+        renderIconIn2D(t, icon, 1f / 16f, 1, 45 * rotation, r, g, b, false, noBakedLight);
         t.addTranslation(-x, -y, -z);
 
     }
 
     public static void renderIconIn2D(Tessellator t, IIcon icon, float width, float scale, float rotationDegrees, int r,
-        int g, int b, boolean highlightBoth) {
+        int g, int b, boolean highlightBoth, boolean noBakedLights) {
         float minU = icon.getMinU();
         float minV = icon.getMinV();
         float maxU = icon.getMaxU();
@@ -84,7 +87,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         addRotatedScaledVertex(t, 1, width, 0, maxU, maxV, sin, cos, pivotX, pivotZ, scale);
         addRotatedScaledVertex(t, 0, width, 0, minU, maxV, sin, cos, pivotX, pivotZ, scale);
 
-        if (!highlightBoth) t.setColorOpaque((int) (r * 0.5), (int) (g * 0.5), (int) (b * 0.5));
+        if (!highlightBoth && !noBakedLights) t.setColorOpaque((int) (r * 0.5), (int) (g * 0.5), (int) (b * 0.5));
         setRotatedNormal(t, 0, 1, 0, sin, cos);
         addRotatedScaledVertex(t, 0, 0, 0, minU, maxV, sin, cos, pivotX, pivotZ, scale);
         addRotatedScaledVertex(t, 1, 0, 0, maxU, maxV, sin, cos, pivotX, pivotZ, scale);
@@ -94,7 +97,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         float f5 = 0.5f * (minU - maxU) / iconWidth;
         float f6 = 0.5f * (maxV - minV) / iconHeight;
 
-        t.setColorOpaque((int) (r * 0.6), (int) (g * 0.6), (int) (b * 0.6));
+        if (!noBakedLights) t.setColorOpaque((int) (r * 0.6), (int) (g * 0.6), (int) (b * 0.6));
         setRotatedNormal(t, -1, 0, 0, sin, cos);
         int k;
         float f7;
@@ -122,7 +125,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
             addRotatedScaledVertex(t, f9, width, 0, f8, maxV, sin, cos, pivotX, pivotZ, scale);
         }
 
-        t.setColorOpaque((int) (r * 0.8), (int) (g * 0.8), (int) (b * 0.8));
+        if (!noBakedLights) t.setColorOpaque((int) (r * 0.8), (int) (g * 0.8), (int) (b * 0.8));
         setRotatedNormal(t, 0, 0, 1, sin, cos);
 
         for (k = 0; k < iconHeight; ++k) {
@@ -178,12 +181,36 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         };
     }
 
+    @SideOnly(Side.CLIENT)
+    private int cycleRune = 0;
+    @SideOnly(Side.CLIENT)
+    private long lastCycle = System.currentTimeMillis();
+
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+        if (System.currentTimeMillis() - lastCycle >= 1000) {
+            lastCycle = System.currentTimeMillis();
+            cycleRune = WhicheryUtils.rand.nextInt(12);
+        }
+        Tessellator t = Tessellator.instance;
+
+        boolean stackHasRune = stack.hasTagCompound() && stack.getTagCompound()
+            .hasKey("rune");
+
         GL11.glPushMatrix();
         GL11.glRotatef(-90, 1, 0, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);
-        render(ItemChalk.getChalkType(item), 0, 0, 0, 0, 0);
+        t.startDrawingQuads();
+        render(
+            ItemChalk.getChalkType(stack),
+            stackHasRune ? ItemChalk.getChalkRune(stack) : cycleRune,
+            0,
+            0,
+            0,
+            0,
+            true);
+        t.draw();
         GL11.glPopMatrix();
+
     }
 }

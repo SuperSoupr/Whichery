@@ -13,7 +13,7 @@ public interface IBlockMatcher {
 
     ItemStack getItemStack();
 
-    int itemStackHashCode();
+    int[] itemStackHashCodes();
 
     void place(World world, int x, int y, int z);
 
