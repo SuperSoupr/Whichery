@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.jetbrains.annotations.NotNull;
 
 import com.supersouper.whichery.api.rituals.Ritual;
-import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 
 import blockrenderer6343.client.renderer.WorldSceneRenderer;
 import blockrenderer6343.integration.nei.GuiMultiblockHandler;
@@ -38,8 +38,8 @@ public class RitualGuiHandler extends GuiMultiblockHandler {
     public void onRendererRender(WorldSceneRenderer renderer) {
         super.onRendererRender(renderer);
         for (TileEntity te : renderer.world.tileMap.values()) {
-            if (te.getClass() == ChalkSmallTileEntity.class) {
-                ((ChalkSmallTileEntity) te).tryCycleRune();
+            if (te.getClass() == ChalkRuneSmallTileEntity.class) {
+                ((ChalkRuneSmallTileEntity) te).tryCycleRune();
             }
         }
     }

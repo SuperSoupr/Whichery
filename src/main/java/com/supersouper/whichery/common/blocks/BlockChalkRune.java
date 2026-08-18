@@ -13,19 +13,15 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.ModBlocks;
-import com.supersouper.whichery.Whichery;
 import com.supersouper.whichery.api.rituals.RitualLeaderBlock;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
-import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -41,32 +37,8 @@ public class BlockChalkRune extends RitualLeaderBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-        IIcon[] baseIcons = new IIcon[RitualRegistry.RUNE_COUNT];
-        for (int i = 0; i < baseIcons.length; i++) {
-            baseIcons[i] = reg
-                .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/rune_" + i);
-        }
-        RitualRegistry.RUNE_ICONS.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIcons);
-
-        for (String type : RitualRegistry.CHALK_TYPES.keySet()) {
-            if (type.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
-
-            IIcon[] icons = RitualRegistry.RUNE_ICONS.get(type);
-            if (icons == null) {
-                icons = new IIcon[RitualRegistry.RUNE_COUNT];
-            }
-            for (int i = 0; i < icons.length; i++) {
-                ResourceLocation iconLocation = new ResourceLocation(
-                    Whichery.MODID + ":textures/blocks/runes/" + type + "/rune_" + i + ".png");
-                if (WhicheryUtils.resourceExists(iconLocation)) {
-                    icons[i] = reg.registerIcon(Whichery.MODID + ":runes/" + type + "/rune_" + i + ".png");
-                } else {
-                    icons[i] = baseIcons[i];
-                }
-            }
-            RitualRegistry.RUNE_ICONS.put(type, icons);
-        }
-        this.blockIcon = baseIcons[0];
+        this.blockIcon = RitualRegistry.registerRuneIcons(reg);
+        ((BlockChalkRuneSmall) ModBlocks.CHALK_RUNE_BLOCK_SMALL.get()).setBlockIcon(this.blockIcon);
     }
 
     @Override

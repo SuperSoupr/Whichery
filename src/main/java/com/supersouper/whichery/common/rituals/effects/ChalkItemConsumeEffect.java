@@ -51,6 +51,11 @@ public class ChalkItemConsumeEffect extends RitualEffect {
     }
 
     @Override
+    public void complete(int stage) {
+
+    }
+
+    @Override
     public void end(int stage) {
 
     }

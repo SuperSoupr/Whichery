@@ -6,19 +6,21 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.common.items.ItemChalkSmall;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
-import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
@@ -47,7 +49,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new ChalkSmallTileEntity(world);
+        return new ChalkRuneSmallTileEntity(world);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     @SuppressWarnings("deprecation")
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (!(te instanceof ChalkSmallTileEntity cste)) return super.removedByPlayer(world, player, x, y, z);
+        if (!(te instanceof ChalkRuneSmallTileEntity cste)) return super.removedByPlayer(world, player, x, y, z);
 
         MovingObjectPosition hit;
         if (world.isRemote) {
@@ -97,7 +99,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (!(te instanceof ChalkSmallTileEntity cste)) return true;
+        if (!(te instanceof ChalkRuneSmallTileEntity cste)) return true;
         MovingObjectPosition hit = Minecraft.getMinecraft().objectMouseOver;
         int pos = clickPosToOrdinal((float) (hit.hitVec.xCoord - x), (float) (hit.hitVec.zCoord - z));
 
@@ -128,6 +130,14 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister reg) {}
+
+    public void setBlockIcon(IIcon icon) {
+        this.blockIcon = icon;
+    }
+
+    @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
         return getPickBlock(target, world, x, y, z, player.isSneaking());
     }
@@ -140,7 +150,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z,
         boolean copyRotations) {
         ItemStack result = super.getPickBlock(target, world, x, y, z);
-        ChalkSmallTileEntity te = (ChalkSmallTileEntity) world.getTileEntity(x, y, z);
+        ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setTag("types", NBTUtils.StringArrayToNBTTagList(te.getTypes()));
@@ -163,7 +173,7 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
         public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
             float hitX, float hitY, float hitZ, int metadata) {
             if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
-                ChalkSmallTileEntity te = (ChalkSmallTileEntity) world.getTileEntity(x, y, z);
+                ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
                 if (te != null) {
                     te.setTypes(ItemChalkSmall.getChalkTypes(stack));
                     te.setRunes(ItemChalkSmall.getChalkRunes(stack));

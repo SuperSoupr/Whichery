@@ -16,7 +16,7 @@ import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.items.ItemChalkSmall;
-import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -40,13 +40,23 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
             int g = (color >> 8) & 255;
             int b = color & 255;
 
-            IIcon icon = RitualRegistry.RUNE_ICONS.get(types[i])[runes[i]];
+            IIcon icon = RitualRegistry.RUNE_ICONS_SMALL.get(types[i])[runes[i]];
             t.addTranslation(
                 BlockChalkRuneSmall.positions[i][0] - 0.25f,
                 0,
                 BlockChalkRuneSmall.positions[i][1] - 0.25f);
-            ChalkRuneISBRH
-                .renderIconIn2D(t, icon, 1f / 16f + i / 1000f, 0.5f, 45 * rotations[i], r, g, b, false, noBakedLights);
+            ChalkRuneISBRH.renderIconIn2D(
+                t,
+                icon,
+                8,
+                1f / 16f + i / 1000f,
+                0.5f,
+                45 * rotations[i],
+                r,
+                g,
+                b,
+                false,
+                noBakedLights);
             t.addTranslation(
                 -BlockChalkRuneSmall.positions[i][0] + 0.25f,
                 0,
@@ -64,7 +74,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
         RenderBlocks renderer) {
-        if (!(world.getTileEntity(x, y, z) instanceof ChalkSmallTileEntity cte)) return false;
+        if (!(world.getTileEntity(x, y, z) instanceof ChalkRuneSmallTileEntity cte)) return false;
 
         render(cte.getTypes(), cte.getRunes(), cte.getRotations(), cte.hides, x, y, z, false);
         return true;
@@ -118,7 +128,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+    public void renderItem(ItemRenderType renderType, ItemStack stack, Object... data) {
         randomizeCycle();
 
         String[] types;
@@ -137,12 +147,16 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         }
 
         Tessellator t = Tessellator.instance;
-        GL11.glPushMatrix();
-        GL11.glRotatef(-90, 1, 0, 0);
-        GL11.glTranslatef(-0.5f, 0, -0.5f);
+        if (renderType == ItemRenderType.INVENTORY) {
+            GL11.glPushMatrix();
+            GL11.glRotatef(-90, 1, 0, 0);
+            GL11.glTranslatef(-0.5f, 0, -0.5f);
+        }
         t.startDrawingQuads();
         render(types, runes, rotations, falses, 0, 0, 0, true);
         t.draw();
-        GL11.glPopMatrix();
+        if (renderType == ItemRenderType.INVENTORY) {
+            GL11.glPopMatrix();
+        }
     }
 }

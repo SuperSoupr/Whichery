@@ -22,10 +22,6 @@ public class RitualUtils {
         return null;
     }
 
-    public static int packCoords(int x, int y, int z) {
-        return packCoords((byte) x, (byte) y, (byte) z);
-    }
-
     public static int packCoords(byte x, byte y, byte z) {
         int px = ((x << 16) & 0xFF0000);
         int py = ((y << 8) & 0xFF00);

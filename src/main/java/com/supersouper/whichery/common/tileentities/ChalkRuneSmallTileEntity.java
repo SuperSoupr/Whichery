@@ -19,7 +19,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ChalkSmallTileEntity extends TileEntity {
+public class ChalkRuneSmallTileEntity extends TileEntity {
 
     private String[] types = new String[4];
     private int[] runes = new int[4];
@@ -27,7 +27,7 @@ public class ChalkSmallTileEntity extends TileEntity {
     @SideOnly(Side.CLIENT)
     public boolean[] hides;
 
-    public ChalkSmallTileEntity() {
+    public ChalkRuneSmallTileEntity() {
         if (FMLCommonHandler.instance()
             .getEffectiveSide()
             .isClient()) {
@@ -35,7 +35,7 @@ public class ChalkSmallTileEntity extends TileEntity {
         }
     }
 
-    public ChalkSmallTileEntity(World world) {
+    public ChalkRuneSmallTileEntity(World world) {
         if (FMLCommonHandler.instance()
             .getEffectiveSide()
             .isClient()) {
@@ -111,7 +111,7 @@ public class ChalkSmallTileEntity extends TileEntity {
     }
 
     @SideOnly(Side.CLIENT)
-    private long lastUpdate = System.currentTimeMillis();
+    private long lastUpdate;
 
     @SideOnly(Side.CLIENT)
     public void tryCycleRune() {

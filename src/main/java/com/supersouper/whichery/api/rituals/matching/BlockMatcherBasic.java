@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 
 public class BlockMatcherBasic implements IBlockMatcher {
 
-    protected final Block block;
-    protected final int meta;
-    protected final Item item;
+    public final Block block;
+    public final int meta;
+    public final Item item;
     protected ItemStack asItemStack;
 
     public BlockMatcherBasic(Block block) {
@@ -51,13 +51,5 @@ public class BlockMatcherBasic implements IBlockMatcher {
     @Override
     public void place(World world, int x, int y, int z) {
         world.setBlock(x, y, z, block);
-    }
-
-    public Block getBlock() {
-        return block;
-    }
-
-    public int getMeta() {
-        return meta;
     }
 }

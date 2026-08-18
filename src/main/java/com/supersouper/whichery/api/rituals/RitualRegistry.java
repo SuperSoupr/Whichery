@@ -7,11 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.ApiStatus;
+
+import com.supersouper.whichery.Whichery;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -67,4 +72,53 @@ public class RitualRegistry {
     public static final int RUNE_COUNT = 12;
     @SideOnly(Side.CLIENT)
     public static HashMap<String, IIcon[]> RUNE_ICONS;
+    @SideOnly(Side.CLIENT)
+    public static HashMap<String, IIcon[]> RUNE_ICONS_SMALL;
+
+    @SideOnly(Side.CLIENT)
+    @ApiStatus.Internal
+    public static IIcon registerRuneIcons(IIconRegister reg) {
+        IIcon[] baseIcons = new IIcon[RitualRegistry.RUNE_COUNT];
+        IIcon[] baseIconsSmall = new IIcon[RitualRegistry.RUNE_COUNT];
+        for (int i = 0; i < baseIcons.length; i++) {
+            baseIcons[i] = reg
+                .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/large/rune_" + i);
+            baseIconsSmall[i] = reg
+                .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/small/rune_" + i);
+        }
+        RitualRegistry.RUNE_ICONS.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIcons);
+        RitualRegistry.RUNE_ICONS_SMALL.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIconsSmall);
+
+        for (String type : RitualRegistry.CHALK_TYPES.keySet()) {
+            if (type.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
+
+            IIcon[] icons = RitualRegistry.RUNE_ICONS.get(type);
+            if (icons == null) {
+                icons = new IIcon[RitualRegistry.RUNE_COUNT];
+            }
+            IIcon[] iconsSmall = RitualRegistry.RUNE_ICONS_SMALL.get(type);
+            if (iconsSmall == null) {
+                iconsSmall = new IIcon[RitualRegistry.RUNE_COUNT];
+            }
+            for (int i = 0; i < icons.length; i++) {
+                ResourceLocation iconLocation = new ResourceLocation(
+                    Whichery.MODID + ":textures/blocks/runes/" + type + "/large/rune_" + i + ".png");
+                if (WhicheryUtils.resourceExists(iconLocation)) {
+                    icons[i] = reg.registerIcon(Whichery.MODID + ":runes/" + type + "/large/rune_" + i);
+                } else {
+                    icons[i] = baseIcons[i];
+                }
+                ResourceLocation iconLocationSmall = new ResourceLocation(
+                    Whichery.MODID + ":textures/blocks/runes/" + type + "/small/rune_" + i + ".png");
+                if (WhicheryUtils.resourceExists(iconLocationSmall)) {
+                    iconsSmall[i] = reg.registerIcon(Whichery.MODID + ":runes/" + type + "/small/rune_" + i);
+                } else {
+                    iconsSmall[i] = baseIconsSmall[i];
+                }
+            }
+            RitualRegistry.RUNE_ICONS.put(type, icons);
+            RitualRegistry.RUNE_ICONS_SMALL.put(type, iconsSmall);
+        }
+        return baseIcons[0];
+    }
 }

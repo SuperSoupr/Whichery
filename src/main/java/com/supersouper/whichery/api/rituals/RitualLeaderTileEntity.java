@@ -57,6 +57,13 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
     }
 
     @Override
+    public void completeRitual() {
+        if (currentRitual != null) {
+            currentRitual.complete();
+        }
+    }
+
+    @Override
     public void endRitual() {
         if (currentRitual != null) {
             currentRitual.end();

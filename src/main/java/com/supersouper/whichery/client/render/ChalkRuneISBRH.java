@@ -57,19 +57,19 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
         IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune];
         t.addTranslation(x, y, z);
-        renderIconIn2D(t, icon, 1f / 16f, 1, 45 * rotation, r, g, b, false, noBakedLight);
+        renderIconIn2D(t, icon, 16, 1f / 16f, 1, 45 * rotation, r, g, b, false, noBakedLight);
         t.addTranslation(-x, -y, -z);
 
     }
 
-    public static void renderIconIn2D(Tessellator t, IIcon icon, float width, float scale, float rotationDegrees, int r,
-        int g, int b, boolean highlightBoth, boolean noBakedLights) {
+    public static void renderIconIn2D(Tessellator t, IIcon icon, int iconSize, float width, float scale,
+        float rotationDegrees, int r, int g, int b, boolean highlightBoth, boolean noBakedLights) {
         float minU = icon.getMinU();
         float minV = icon.getMinV();
         float maxU = icon.getMaxU();
         float maxV = icon.getMaxV();
-        float iconWidth = icon.getIconWidth() / 2.0f;
-        float iconHeight = icon.getIconHeight() / 2.0f;
+        float iconWidth = iconSize;
+        float iconHeight = iconSize;
 
         float rad = (float) Math.toRadians(rotationDegrees);
         float cos = (float) Math.cos(rad);

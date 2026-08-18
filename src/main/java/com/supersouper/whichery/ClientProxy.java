@@ -25,6 +25,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         RitualRegistry.RUNE_ICONS = new HashMap<>();
+        RitualRegistry.RUNE_ICONS_SMALL = new HashMap<>();
     }
 
     @Override

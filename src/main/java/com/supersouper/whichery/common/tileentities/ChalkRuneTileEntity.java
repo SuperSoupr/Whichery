@@ -1,6 +1,5 @@
 package com.supersouper.whichery.common.tileentities;
 
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -8,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import com.supersouper.whichery.api.rituals.IRitualParticipator;
 import com.supersouper.whichery.api.rituals.RitualLeaderTileEntity;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
@@ -16,7 +14,7 @@ import com.supersouper.whichery.common.entity.PlacedEntityItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitualParticipator, IInventory {
+public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInventory {
 
     private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
     private int rune = 0;
@@ -136,26 +134,14 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IRitu
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        compound.setString("type", type);
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setString("type", type);
         if (stack != null) {
-            compound.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
+            tag.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
         }
-        compound.setByte("rune", (byte) rune);
-        compound.setByte("rotation", (byte) rotation);
-    }
-
-    @Override
-    public void ritualTick() {
-        if (worldObj.isRemote) {
-            worldObj.spawnEntityInWorld(new EntityLightningBolt(worldObj, xCoord, yCoord, zCoord));
-        }
-    }
-
-    @Override
-    public void transitionToStage(int stage) {
-
+        tag.setByte("rune", (byte) rune);
+        tag.setByte("rotation", (byte) rotation);
     }
 
     @Override

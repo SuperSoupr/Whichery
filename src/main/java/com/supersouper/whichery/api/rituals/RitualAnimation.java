@@ -17,6 +17,8 @@ public abstract class RitualAnimation {
 
     public abstract void transitionToStage(int stage);
 
+    public abstract void complete(int stage);
+
     public abstract void end(int stage);
 
     public abstract NBTTagCompound writeToNBT(NBTTagCompound tag);

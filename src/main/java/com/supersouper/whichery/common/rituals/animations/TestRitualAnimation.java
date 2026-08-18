@@ -23,6 +23,11 @@ public class TestRitualAnimation extends RitualAnimation {
     }
 
     @Override
+    public void complete(int stage) {
+
+    }
+
+    @Override
     public void end(int stage) {
 
     }

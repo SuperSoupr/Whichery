@@ -20,7 +20,7 @@ import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RunningRitual;
 import com.supersouper.whichery.client.render.ChalkRuneISBRH;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
-import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -72,8 +72,8 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
         if (leader.getWorldObj().isRemote && stage == 0) {
             animations.add(this);
             for (TileEntity te : currentRitual.getCapturedTileEntities()) {
-                if (te.getClass() != ChalkSmallTileEntity.class) continue;
-                ChalkSmallTileEntity cte = (ChalkSmallTileEntity) te;
+                if (te.getClass() != ChalkRuneSmallTileEntity.class) continue;
+                ChalkRuneSmallTileEntity cte = (ChalkRuneSmallTileEntity) te;
                 Arrays.fill(cte.hides, true);
                 cte.getWorldObj()
                     .markBlockForUpdate(cte.xCoord, cte.yCoord, cte.zCoord);
@@ -98,12 +98,17 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
     }
 
     @Override
+    public void complete(int stage) {
+
+    }
+
+    @Override
     public void end(int stage) {
         if (leader.getWorldObj().isRemote) {
             animations.remove(this);
             for (TileEntity te : currentRitual.getCapturedTileEntities()) {
-                if (te.getClass() != ChalkSmallTileEntity.class) continue;
-                ChalkSmallTileEntity cte = (ChalkSmallTileEntity) te;
+                if (te.getClass() != ChalkRuneSmallTileEntity.class) continue;
+                ChalkRuneSmallTileEntity cte = (ChalkRuneSmallTileEntity) te;
                 Arrays.fill(cte.hides, false);
                 cte.getWorldObj()
                     .markBlockForUpdate(cte.xCoord, cte.yCoord, cte.zCoord);
@@ -142,7 +147,8 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
             rune.rr[2] = WhicheryUtils.lerpF(rune.rr[2], 180, 0.02f);
             ChalkRuneISBRH.renderIconIn2D(
                 t,
-                RitualRegistry.RUNE_ICONS.get(rune.type)[rune.rune],
+                RitualRegistry.RUNE_ICONS_SMALL.get(rune.type)[rune.rune],
+                8,
                 1f / 16f,
                 0.5f,
                 rune.rr[2],

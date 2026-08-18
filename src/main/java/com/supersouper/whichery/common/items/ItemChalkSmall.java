@@ -16,7 +16,7 @@ import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
-import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
@@ -89,7 +89,7 @@ public class ItemChalkSmall extends Item {
             stack.damageItem(1, player);
         }
         int pos = BlockChalkRuneSmall.clickPosToOrdinal(clickX, clickZ);
-        if (te instanceof ChalkSmallTileEntity cste) {
+        if (te instanceof ChalkRuneSmallTileEntity cste) {
             if (cste.getType(pos) != null) return false;
             String type = ItemChalk.getChalkType(stack);
             int rotation = (int) ((((player.rotationYaw % 360) + 22.5f) / 45f + 8f) % 8f);

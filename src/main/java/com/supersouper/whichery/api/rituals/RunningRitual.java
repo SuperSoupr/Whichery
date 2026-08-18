@@ -111,7 +111,19 @@ public class RunningRitual {
         }
 
         if (stage >= ritual.stages.length) {
+            ((IRitualLeader) leader).completeRitual();
             ((IRitualLeader) leader).endRitual();
+        }
+    }
+
+    public void complete() {
+        int stage = Math.min(getStage(), ritual.stages.length - 1);
+
+        for (RitualEffect effect : effects) {
+            effect.complete(stage);
+        }
+        for (RitualAnimation animation : animations) {
+            animation.complete(stage);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.supersouper.whichery.api.rituals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import net.minecraft.item.ItemStack;
 
@@ -22,6 +23,7 @@ public class Ritual implements IConstructable {
     public final Class<? extends RitualAnimation>[] animationClasses;
     public final Class<? extends RitualEffect>[] effectClasses;
     public final int[] stages;
+    public final boolean infiniteLastStage;
 
     public Ritual(String name, RitualRecipe recipe, Class<? extends RitualEffect>[] effectClasses,
         Class<? extends RitualAnimation>[] animationClasses, int[] stages) {
@@ -29,7 +31,14 @@ public class Ritual implements IConstructable {
         this.recipe = recipe;
         this.effectClasses = effectClasses;
         this.animationClasses = animationClasses;
-        this.stages = stages;
+
+        if (stages[stages.length - 1] == -1) {
+            infiniteLastStage = true;
+            this.stages = Arrays.copyOf(stages, stages.length - 1);
+        } else {
+            infiniteLastStage = false;
+            this.stages = stages;
+        }
 
         ArrayList<ISecondaryMatcher> requiredItems = recipe.secondaryMatchersByClass
             .get(ChalkItemSecondaryMatcher.class.hashCode());

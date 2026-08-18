@@ -13,7 +13,7 @@ import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.ModItems;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
-import com.supersouper.whichery.common.tileentities.ChalkSmallTileEntity;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class BlockMatcherChalkSmall implements IBlockMatcher {
@@ -31,7 +31,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
     @Override
     public boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
         TileEntity te = world.getTileEntity(x, y, z);
-        if (!(te instanceof ChalkSmallTileEntity cte)) return false;
+        if (!(te instanceof ChalkRuneSmallTileEntity cte)) return false;
 
         boolean match = true;
         String[] tmp = Arrays.copyOf(cte.getTypes(), types.length);
@@ -78,7 +78,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
     @Override
     public void place(World world, int x, int y, int z) {
         world.setBlock(x, y, z, ModBlocks.CHALK_RUNE_BLOCK_SMALL.get());
-        ChalkSmallTileEntity te = (ChalkSmallTileEntity) world.getTileEntity(x, y, z);
+        ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             String[] tmp = Arrays.copyOf(types, types.length);
             Collections.shuffle(Arrays.asList(tmp));
