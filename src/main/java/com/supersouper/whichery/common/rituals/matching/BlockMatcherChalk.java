@@ -55,7 +55,7 @@ public class BlockMatcherChalk implements IBlockMatcher {
         ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(type);
-            te.setRune(WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
+            te.setRune(WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
             te.setRotation(WhicheryUtils.rand.nextInt(4));
             te.markDirty();
         }

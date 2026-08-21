@@ -139,7 +139,7 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
             rune.rr[1] = WhicheryUtils.lerpF(rune.rr[1], 90, 0.02f);
             GL11.glRotatef(rune.rr[1], 1.0F, 0.0F, 0.0F);
             t.startDrawingQuads();
-            int color = RitualRegistry.CHALK_TYPES.get(rune.type);
+            int color = RitualRegistry.CHALK_TYPES.get(rune.type).drawColor;
             int r = (color >> 16) & 255;
             int g = (color >> 8) & 255;
             int b = color & 255;

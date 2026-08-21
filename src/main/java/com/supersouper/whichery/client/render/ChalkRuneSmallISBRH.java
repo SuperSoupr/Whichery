@@ -35,7 +35,7 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         for (int i = 0; i < types.length; i++) {
             if (hides[i]) continue;
             if (types[i] == null) continue;
-            int color = RitualRegistry.CHALK_TYPES.get(types[i]);
+            int color = RitualRegistry.CHALK_TYPES.get(types[i]).drawColor;
             int r = (color >> 16) & 255;
             int g = (color >> 8) & 255;
             int b = color & 255;
@@ -120,10 +120,11 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
             int j = WhicheryUtils.rand.nextInt(allTypes.size() + 1);
             if (j >= allTypes.size()) {
                 cycleTypes[i] = null;
+                cycleRunes[i] = 0;
             } else {
                 cycleTypes[i] = allTypes.get(j);
+                cycleRunes[i] = WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(cycleTypes[i]).runeCount);
             }
-            cycleRunes[i] = WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT);
         }
     }
 

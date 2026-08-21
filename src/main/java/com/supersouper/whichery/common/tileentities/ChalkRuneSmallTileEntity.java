@@ -120,7 +120,7 @@ public class ChalkRuneSmallTileEntity extends TileEntity {
 
         Collections.shuffle(Arrays.asList(types));
         for (int i = 0; i < types.length; i++) {
-            setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
+            setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(types[i]).runeCount));
             setRotation(i, WhicheryUtils.rand.nextInt(4));
         }
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

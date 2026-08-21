@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.supersouper.whichery.ModBlocks;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
@@ -30,7 +31,7 @@ public class ItemChalk extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (Map.Entry<String, Integer> type : RitualRegistry.CHALK_TYPES.entrySet()) {
+        for (Map.Entry<String, ChalkType> type : RitualRegistry.CHALK_TYPES.entrySet()) {
             list.add(RitualUtils.createChalkItem(item, type.getKey()));
         }
     }
@@ -89,7 +90,9 @@ public class ItemChalk extends Item {
                     .getByte("nextRune"));
             if (!world.isRemote) {
                 stack.getTagCompound()
-                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
+                    .setByte(
+                        "nextRune",
+                        (byte) WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
             }
             te.markDirty();
         }

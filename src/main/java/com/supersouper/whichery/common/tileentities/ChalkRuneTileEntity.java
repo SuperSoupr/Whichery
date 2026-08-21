@@ -21,7 +21,8 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     private int rotation = 0;
     @SideOnly(Side.CLIENT)
     private PlacedEntityItem placedEntityItem;
-    private ItemStack stack;
+    // 0 is result stack, 1 is input stack
+    private final ItemStack[] stacks = new ItemStack[2];
 
     public ChalkRuneTileEntity() {
 
@@ -56,14 +57,12 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     }
 
     public boolean onRightClicked(EntityPlayer player) {
-        if (stack == null) {
+        if (stacks[1] == null) {
             ItemStack held = player.getHeldItem();
             if (held != null) {
-                if (isItemValidForSlot(0, held)) {
-                    setInventorySlotContents(0, held);
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-                    return true;
-                }
+                setInventorySlotContents(1, held);
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                return true;
             }
         } else {
             dropHeldItem();
@@ -73,15 +72,15 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     }
 
     private void dropHeldItem() {
-        if (stack != null) {
+        if (stacks[1] != null) {
             if (!worldObj.isRemote) {
-                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.6, zCoord + 0.5, stack);
+                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.6, zCoord + 0.5, stacks[1]);
                 worldObj.spawnEntityInWorld(entityItem);
                 entityItem.delayBeforeCanPickup = 5;
-                stack = null;
+                stacks[1] = null;
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             } else {
-                stack = null;
+                stacks[1] = null;
                 updateDisplayItem();
             }
             markDirty();
@@ -91,15 +90,15 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     @SideOnly(Side.CLIENT)
     public void updateDisplayItem() {
         if (placedEntityItem != null) {
-            if (stack == null) {
+            if (stacks[1] == null) {
                 placedEntityItem.setDead();
                 placedEntityItem = null;
             } else {
-                placedEntityItem.setEntityItemStack(stack);
+                placedEntityItem.setEntityItemStack(stacks[1]);
             }
         } else {
-            if (stack != null) {
-                placedEntityItem = new PlacedEntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
+            if (stacks[1] != null) {
+                placedEntityItem = new PlacedEntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stacks[1]);
                 worldObj.spawnEntityInWorld(placedEntityItem);
             }
         }
@@ -111,6 +110,13 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
             placedEntityItem = null;
         }
         dropHeldItem();
+        if (!worldObj.isRemote) {
+            if (stacks[0] != null) {
+                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.6, zCoord + 0.5, stacks[0]);
+                worldObj.spawnEntityInWorld(entityItem);
+                entityItem.delayBeforeCanPickup = 5;
+            }
+        }
         super.invalidate();
     }
 
@@ -121,10 +127,15 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
         if (!RitualRegistry.chalkExists(type)) {
             type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
         }
-        if (compound.hasKey("stack")) {
-            stack = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack"));
+        if (compound.hasKey("stack0")) {
+            stacks[0] = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack0"));
         } else {
-            stack = null;
+            stacks[0] = null;
+        }
+        if (compound.hasKey("stack1")) {
+            stacks[1] = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack1"));
+        } else {
+            stacks[1] = null;
         }
         rune = compound.getByte("rune");
         rotation = compound.getByte("rotation");
@@ -137,8 +148,11 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setString("type", type);
-        if (stack != null) {
-            tag.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
+        if (stacks[0] != null) {
+            tag.setTag("stack0", stacks[0].writeToNBT(new NBTTagCompound()));
+        }
+        if (stacks[1] != null) {
+            tag.setTag("stack1", stacks[1].writeToNBT(new NBTTagCompound()));
         }
         tag.setByte("rune", (byte) rune);
         tag.setByte("rotation", (byte) rotation);
@@ -154,27 +168,27 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
 
     @Override
     public int getSizeInventory() {
-        return 1;
+        return 2;
     }
 
     @Override
     public ItemStack getStackInSlot(int slotIn) {
-        return stack;
+        return stacks[slotIn];
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (stack == null) return null;
+        if (stacks[index] == null) return null;
 
         ItemStack tmp;
-        if (stack.stackSize <= count) {
-            tmp = stack;
-            stack = null;
+        if (stacks[index].stackSize <= count) {
+            tmp = stacks[index];
+            stacks[index] = null;
         } else {
-            tmp = stack.splitStack(count);
+            tmp = stacks[index].splitStack(count);
 
-            if (stack.stackSize == 0) {
-                stack = null;
+            if (stacks[index].stackSize == 0) {
+                stacks[index] = null;
             }
         }
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -189,7 +203,7 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        this.stack = stack;
+        this.stacks[index] = stack.copy();
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         markDirty();
     }

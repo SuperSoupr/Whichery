@@ -50,7 +50,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
         Tessellator t = Tessellator.instance;
 
-        int color = RitualRegistry.CHALK_TYPES.get(type);
+        int color = RitualRegistry.CHALK_TYPES.get(type).drawColor;
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
@@ -183,10 +183,12 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
     private long lastCycle = System.currentTimeMillis();
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+    public void renderItem(ItemRenderType itemRenderType, ItemStack stack, Object... data) {
+        String type = ItemChalk.getChalkType(stack);
+        type = type == null ? RitualRegistry.DEFAULT_CHALK_TYPE_NAME : type;
         if (System.currentTimeMillis() - lastCycle >= 1000) {
             lastCycle = System.currentTimeMillis();
-            cycleRune = WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT);
+            cycleRune = WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount);
         }
         Tessellator t = Tessellator.instance;
 
@@ -198,7 +200,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         GL11.glTranslatef(-0.5f, 0, -0.5f);
         t.startDrawingQuads();
         render(
-            ItemChalk.getChalkType(stack),
+            type,
             stackHasRune ? ItemChalk.getChalkRune(stack) : cycleRune,
             ItemChalk.getChalkRotation(stack),
             0,

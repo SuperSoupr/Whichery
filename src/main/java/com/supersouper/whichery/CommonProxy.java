@@ -1,5 +1,6 @@
 package com.supersouper.whichery;
 
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.client.render.ChalkRuneISBRH;
 import com.supersouper.whichery.client.render.ChalkRuneSmallISBRH;
@@ -22,9 +23,9 @@ public class CommonProxy {
 
         FamilyRegistry.initFamilies();
 
-        RitualRegistry.registerChalkType(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, 0xFFFFFF);
-        RitualRegistry.registerChalkType("spiritual", 0x0088FF);
-        RitualRegistry.registerChalkType("bloody", 0x771111);
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, RitualRegistry.DEFAULT_CHALK_TYPE_NAME));
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "spiritual"));
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "bloody"));
         if (ModItems.CHALK.isEnabled()) {
             chalkRuneRenderID = RenderingRegistry.getNextAvailableRenderId();
             RenderingRegistry.registerBlockHandler(ChalkRuneISBRH.INSTANCE);

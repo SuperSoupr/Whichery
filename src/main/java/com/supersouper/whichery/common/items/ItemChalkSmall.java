@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.supersouper.whichery.ModBlocks;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
-import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -59,7 +59,7 @@ public class ItemChalkSmall extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for (Map.Entry<String, Integer> type : RitualRegistry.CHALK_TYPES.entrySet()) {
+        for (Map.Entry<String, ChalkType> type : RitualRegistry.CHALK_TYPES.entrySet()) {
             list.add(RitualUtils.createChalkItem(item, type.getKey()));
         }
     }
@@ -102,8 +102,12 @@ public class ItemChalkSmall extends Item {
             if (world.isRemote) {
                 world.markBlockForUpdate(x, y, z);
             } else {
+                // stack.getTagCompound()
+                // .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
+                int a = stack.getTagCompound()
+                    .getByte("nextRune") + 1;
                 stack.getTagCompound()
-                    .setByte("nextRune", (byte) WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
+                    .setByte("nextRune", (byte) (a < 12 ? a : 0));
             }
             cste.markDirty();
         }

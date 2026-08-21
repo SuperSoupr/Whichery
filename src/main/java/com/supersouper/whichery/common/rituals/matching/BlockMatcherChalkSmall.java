@@ -84,7 +84,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
             Collections.shuffle(Arrays.asList(tmp));
             for (int i = 0; i < tmp.length; i++) {
                 te.setType(i, tmp[i]);
-                te.setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.RUNE_COUNT));
+                te.setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(tmp[i]).runeCount));
                 te.setRotation(i, WhicheryUtils.rand.nextInt(4));
                 te.markDirty();
             }

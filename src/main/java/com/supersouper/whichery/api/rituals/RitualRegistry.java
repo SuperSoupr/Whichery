@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -45,12 +46,12 @@ public class RitualRegistry {
 
     // Chalk Types
 
-    public static final HashMap<String, Integer> CHALK_TYPES = new HashMap<>();
+    public static final HashMap<String, ChalkType> CHALK_TYPES = new HashMap<>();
     private static List<String> CHALK_TYPES_LIST;
     public static final String DEFAULT_CHALK_TYPE_NAME = "basic";
 
-    public static void registerChalkType(String name, int color) {
-        CHALK_TYPES.put(name, color);
+    public static void registerChalkType(ChalkType chalkType) {
+        CHALK_TYPES.put(chalkType.name, chalkType);
     }
 
     public static boolean chalkExists(String name) {
@@ -69,7 +70,6 @@ public class RitualRegistry {
     }
 
     // Rune textures
-    public static final int RUNE_COUNT = 12;
     @SideOnly(Side.CLIENT)
     public static HashMap<String, IIcon[]> RUNE_ICONS;
     @SideOnly(Side.CLIENT)
@@ -78,8 +78,9 @@ public class RitualRegistry {
     @SideOnly(Side.CLIENT)
     @ApiStatus.Internal
     public static IIcon registerRuneIcons(IIconRegister reg) {
-        IIcon[] baseIcons = new IIcon[RitualRegistry.RUNE_COUNT];
-        IIcon[] baseIconsSmall = new IIcon[RitualRegistry.RUNE_COUNT];
+        int baseCount = CHALK_TYPES.get(DEFAULT_CHALK_TYPE_NAME).runeCount;
+        IIcon[] baseIcons = new IIcon[baseCount];
+        IIcon[] baseIconsSmall = new IIcon[baseCount];
         for (int i = 0; i < baseIcons.length; i++) {
             baseIcons[i] = reg
                 .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/large/rune_" + i);
@@ -89,35 +90,42 @@ public class RitualRegistry {
         RitualRegistry.RUNE_ICONS.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIcons);
         RitualRegistry.RUNE_ICONS_SMALL.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIconsSmall);
 
-        for (String type : RitualRegistry.CHALK_TYPES.keySet()) {
-            if (type.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
+        for (Map.Entry<String, ChalkType> enty : RitualRegistry.CHALK_TYPES.entrySet()) {
 
-            IIcon[] icons = RitualRegistry.RUNE_ICONS.get(type);
+            String name = enty.getKey();
+            if (name.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
+            ChalkType type = enty.getValue();
+
+            IIcon[] icons = RitualRegistry.RUNE_ICONS.get(name);
             if (icons == null) {
-                icons = new IIcon[RitualRegistry.RUNE_COUNT];
+                icons = new IIcon[type.runeCount];
             }
-            IIcon[] iconsSmall = RitualRegistry.RUNE_ICONS_SMALL.get(type);
+            IIcon[] iconsSmall = RitualRegistry.RUNE_ICONS_SMALL.get(name);
             if (iconsSmall == null) {
-                iconsSmall = new IIcon[RitualRegistry.RUNE_COUNT];
+                iconsSmall = new IIcon[type.runeCount];
             }
+
             for (int i = 0; i < icons.length; i++) {
                 ResourceLocation iconLocation = new ResourceLocation(
-                    Whichery.MODID + ":textures/blocks/runes/" + type + "/large/rune_" + i + ".png");
+                    type.domain + ":textures/blocks/runes/" + name + "/large/rune_" + i + ".png");
                 if (WhicheryUtils.resourceExists(iconLocation)) {
-                    icons[i] = reg.registerIcon(Whichery.MODID + ":runes/" + type + "/large/rune_" + i);
+                    icons[i] = reg.registerIcon(type.domain + ":runes/" + name + "/large/rune_" + i);
                 } else {
                     icons[i] = baseIcons[i];
                 }
+
                 ResourceLocation iconLocationSmall = new ResourceLocation(
-                    Whichery.MODID + ":textures/blocks/runes/" + type + "/small/rune_" + i + ".png");
+                    type.domain + ":textures/blocks/runes/" + name + "/small/rune_" + i + ".png");
                 if (WhicheryUtils.resourceExists(iconLocationSmall)) {
-                    iconsSmall[i] = reg.registerIcon(Whichery.MODID + ":runes/" + type + "/small/rune_" + i);
+                    iconsSmall[i] = reg.registerIcon(type.domain + ":runes/" + name + "/small/rune_" + i);
                 } else {
                     iconsSmall[i] = baseIconsSmall[i];
                 }
             }
-            RitualRegistry.RUNE_ICONS.put(type, icons);
-            RitualRegistry.RUNE_ICONS_SMALL.put(type, iconsSmall);
+
+            RitualRegistry.RUNE_ICONS.put(name, icons);
+            RitualRegistry.RUNE_ICONS_SMALL.put(name, iconsSmall);
+
         }
         return baseIcons[0];
     }

@@ -49,7 +49,7 @@ public class RitualRecipeLoader {
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
 
         RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, new ISecondaryMatcher[]{
-                new ChalkItemSecondaryMatcher(new ItemStack(Items.stick)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond))},
+                new ChalkItemSecondaryMatcher(new ItemStack(Items.stick), new ItemStack(Items.gold_ingot)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond), new ItemStack(Items.emerald), true)},
             new String[]{
                 "g       g",
                 "   ccc   ",

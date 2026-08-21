@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.ModBlocks;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualLeaderBlock;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalk;
@@ -75,7 +76,7 @@ public class BlockChalkRune extends RitualLeaderBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        for (Map.Entry<String, Integer> type : RitualRegistry.CHALK_TYPES.entrySet()) {
+        for (Map.Entry<String, ChalkType> type : RitualRegistry.CHALK_TYPES.entrySet()) {
             ItemStack result = new ItemStack(ModBlocks.CHALK_RUNE_BLOCK.get());
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("type", type.getKey());

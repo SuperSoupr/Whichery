@@ -12,11 +12,23 @@ import com.supersouper.whichery.utils.WhicheryUtils;
 
 public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
 
-    private final ItemStack stack;
+    public final ItemStack stack;
+    public final ItemStack resultStack;
+    public final boolean onlyPlaceOnComplete;
     public final boolean matchNBT;
 
     public ChalkItemSecondaryMatcher(ItemStack stack) {
+        this(stack, null, false);
+    }
+
+    public ChalkItemSecondaryMatcher(ItemStack stack, ItemStack result) {
+        this(stack, result, false);
+    }
+
+    public ChalkItemSecondaryMatcher(ItemStack stack, ItemStack result, boolean onlyPlaceOnComplete) {
         this.stack = stack.copy();
+        this.resultStack = result != null ? result.copy() : null;
+        this.onlyPlaceOnComplete = onlyPlaceOnComplete;
         this.matchNBT = stack.hasTagCompound();
     }
 
@@ -27,15 +39,12 @@ public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
                 continue;
             }
 
-            if (WhicheryUtils.matchIngredient(stack, cte.getStackInSlot(0), matchNBT)) {
+            if (WhicheryUtils.matchIngredient(stack, cte.getStackInSlot(1), matchNBT)
+                && cte.getStackInSlot(0) == null) {
                 return true;
             }
         }
         return false;
-    }
-
-    public ItemStack getStack() {
-        return stack;
     }
 
     @Override
