@@ -3,6 +3,7 @@ package com.supersouper.whichery.api.rituals;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,10 +12,10 @@ import net.minecraft.world.IBlockAccess;
 
 public class RitualUtils {
 
-    public static Ritual findRitualAt(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer,
-        ArrayList<TileEntity> tes) {
+    public static Ritual findRitualAt(EntityPlayer player, IBlockAccess world, int x, int y, int z,
+        byte[] rotationBuffer, ArrayList<TileEntity> tes) {
         for (Ritual ritual : RitualRegistry.rituals()) {
-            if (ritual.recipe.match(world, x, y, z, rotationBuffer, tes)) {
+            if (ritual.recipe.match(player, world, x, y, z, rotationBuffer, tes)) {
                 return ritual;
             }
         }

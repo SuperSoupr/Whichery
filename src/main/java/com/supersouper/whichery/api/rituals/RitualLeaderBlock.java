@@ -29,7 +29,7 @@ public abstract class RitualLeaderBlock extends Block implements ITileEntityProv
 
             byte[] rotationBuffer = new byte[] { 0 };
             ArrayList<TileEntity> tes = new ArrayList<>();
-            Ritual ritual = RitualUtils.findRitualAt(world, x, y, z, rotationBuffer, tes);
+            Ritual ritual = RitualUtils.findRitualAt(player, world, x, y, z, rotationBuffer, tes);
             if (ritual != null) {
                 return rlte.startRitual(ritual, rotationBuffer[0], tes, player);
             }

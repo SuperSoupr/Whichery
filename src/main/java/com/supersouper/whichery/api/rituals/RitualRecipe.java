@@ -2,6 +2,7 @@ package com.supersouper.whichery.api.rituals;
 
 import java.util.ArrayList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -57,10 +58,19 @@ public class RitualRecipe {
         }
     }
 
-    public boolean match(IBlockAccess world, int x, int y, int z, byte[] rotationBuffer, ArrayList<TileEntity> tes) {
+    public boolean match(EntityPlayer player, IBlockAccess world, int x, int y, int z, byte[] rotationBuffer,
+        ArrayList<TileEntity> tes) {
         byte[] coords = new byte[3];
         int[] pos2d = new int[2];
         rotations: for (byte i = 0; i < 4; i++) {
+
+            for (ISecondaryMatcher secondaryMatcher : secondaryMatchers) {
+                if (secondaryMatcher.shouldRunBeforeWorldMatch()
+                    && !secondaryMatcher.match(player, world, x, y, z, tes)) {
+                    return false;
+                }
+            }
+
             tes.clear();
             for (int j = 0; j < matchers.length; j++) {
                 IBlockMatcher matcher = matchers[j];
@@ -81,11 +91,14 @@ public class RitualRecipe {
                     }
                 }
             }
+
             for (ISecondaryMatcher secondaryMatcher : secondaryMatchers) {
-                if (!secondaryMatcher.match(world, x, y, z, tes)) {
+                if (!secondaryMatcher.shouldRunBeforeWorldMatch()
+                    && !secondaryMatcher.match(player, world, x, y, z, tes)) {
                     return false;
                 }
             }
+
             rotationBuffer[0] = i;
             return true;
         }

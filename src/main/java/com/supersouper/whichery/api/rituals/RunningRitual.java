@@ -15,6 +15,7 @@ public class RunningRitual {
 
     private static final int TAG_COMPOUND = 10;
 
+    public final UUID uuid;
     public final TileEntity leader;
     private Ritual ritual;
     private EntityPlayer starter;
@@ -24,12 +25,12 @@ public class RunningRitual {
     private Long startedAt = null;
     private int timePassedInPreviousSave = 0;
     private byte rotation;
-    private boolean[] seenStages = new boolean[0];
+    private boolean[] seenStages;
     private ArrayList<TileEntity> tes;
 
     public RunningRitual(TileEntity leader, Ritual ritual, EntityPlayer starter, byte rotation,
         ArrayList<TileEntity> tes) {
-        this(leader);
+        this(UUID.randomUUID(), leader);
         this.ritual = ritual;
         this.starter = starter;
         this.starterUUID = starter.getUniqueID();
@@ -39,7 +40,8 @@ public class RunningRitual {
         constructEffectsAndAnimations();
     }
 
-    public RunningRitual(TileEntity leader) {
+    public RunningRitual(UUID uuid, TileEntity leader) {
+        this.uuid = uuid;
         this.leader = leader;
     }
 
@@ -67,7 +69,7 @@ public class RunningRitual {
         }
     }
 
-    // Warning, this will return (max stages + 1) when the ritual is supposed to be over.
+    // Warning, this will return ritual.stages.length when the ritual is supposed to be over.
     private int getStage() {
         int timePassed = getTimePassed();
         int curStageStart = 0;
@@ -157,7 +159,8 @@ public class RunningRitual {
     public ArrayList<TileEntity> getCapturedTileEntities() {
         if (tes == null) {
             tes = new ArrayList<>();
-            ritual.recipe.match(leader.getWorldObj(), leader.xCoord, leader.yCoord, leader.zCoord, new byte[1], tes);
+            ritual.recipe
+                .match(null, leader.getWorldObj(), leader.xCoord, leader.yCoord, leader.zCoord, new byte[1], tes);
         }
         return tes;
     }
@@ -175,6 +178,7 @@ public class RunningRitual {
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        tag.setString("uuid", uuid.toString());
         tag.setString("ritual", ritual.name);
         tag.setString("starterUUID", starterUUID.toString());
         tag.setInteger("timePassedInPreviousSave", getTimePassed());
@@ -218,7 +222,7 @@ public class RunningRitual {
         rotation = tag.getByte("rotation");
 
         boolean[] newSeenStages = ArrayUtils.byteArrayToBooleanArray(tag.getByteArray("seenStages"));
-        if (leader.hasWorldObj() && leader.getWorldObj().isRemote) {
+        if (leader.hasWorldObj() && leader.getWorldObj().isRemote && seenStages != null) {
             for (int i = 0; i < seenStages.length; i++) {
                 seenStages[i] = seenStages[i] || newSeenStages[i];
             }

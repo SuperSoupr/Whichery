@@ -20,6 +20,7 @@ import com.supersouper.whichery.common.rituals.effects.TestRitualEffect;
 import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalkSmall;
 import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
+import com.supersouper.whichery.common.rituals.matching.TestSecondaryMatcher;
 
 @ApiStatus.Internal
 public class RitualRecipeLoader {
@@ -49,7 +50,7 @@ public class RitualRecipeLoader {
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
 
         RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, new ISecondaryMatcher[]{
-                new ChalkItemSecondaryMatcher(new ItemStack(Items.stick), new ItemStack(Items.gold_ingot)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond), new ItemStack(Items.emerald), true)},
+                new TestSecondaryMatcher(), new ChalkItemSecondaryMatcher(new ItemStack(Items.stick), new ItemStack(Items.gold_ingot)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond), new ItemStack(Items.emerald), true)},
             new String[]{
                 "g       g",
                 "   ccc   ",

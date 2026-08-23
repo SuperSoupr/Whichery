@@ -2,6 +2,7 @@ package com.supersouper.whichery.common.rituals.matching;
 
 import java.util.ArrayList;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -33,7 +34,7 @@ public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
     }
 
     @Override
-    public boolean match(IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
+    public boolean match(EntityPlayer player, IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes) {
         for (TileEntity te : tes) {
             if (!(te instanceof ChalkRuneTileEntity cte)) {
                 continue;
