@@ -1,5 +1,6 @@
 package com.supersouper.whichery;
 
+import com.supersouper.whichery.api.ingredientfamilies.FamilyRegistry;
 import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.client.render.ChalkRuneISBRH;

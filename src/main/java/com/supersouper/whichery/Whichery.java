@@ -19,7 +19,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 public class Whichery {
 
     public static final String MODID = "whichery";
-    public static final Logger LOG = LogManager.getLogger(MODID);
     public static final String MODNAME = "Whichery";
     public static final Logger LOG = LogManager.getLogger(MODID);
 
