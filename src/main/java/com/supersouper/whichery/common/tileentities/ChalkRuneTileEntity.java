@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import com.supersouper.whichery.ModItems;
 import com.supersouper.whichery.api.rituals.RitualLeaderTileEntity;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
@@ -19,6 +20,7 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     private String type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
     private int rune = 0;
     private int rotation = 0;
+    public boolean hasStorageUpgrade = false;
     @SideOnly(Side.CLIENT)
     private PlacedEntityItem placedEntityItem;
     // 0 is result stack, 1 is input stack
@@ -33,26 +35,32 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
     }
 
     public void setType(String type) {
+        markDirty();
         this.type = type;
     }
 
     public String getType() {
+        markDirty();
         return type;
     }
 
     public void setRotation(int rotation) {
+        markDirty();
         this.rotation = rotation;
     }
 
     public int getRotation() {
+        markDirty();
         return rotation;
     }
 
     public void setRune(int rune) {
+        markDirty();
         this.rune = rune;
     }
 
     public int getRune() {
+        markDirty();
         return rune;
     }
 
@@ -60,9 +68,36 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
         if (stacks[1] == null) {
             ItemStack held = player.getHeldItem();
             if (held != null) {
+                if (held.getItem() == ModItems.CHALK_STORAGE_UPGRADE.get() && !hasStorageUpgrade) {
+                    hasStorageUpgrade = true;
+                    markDirty();
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    held.stackSize--;
+                    if (held.stackSize == 0) {
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                    }
+                    return true;
+                }
                 setInventorySlotContents(1, held);
                 player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
                 return true;
+            } else {
+                if (hasStorageUpgrade && player.isSneaking()) {
+                    if (!player.worldObj.isRemote) {
+                        EntityItem entityItem = new EntityItem(
+                            worldObj,
+                            xCoord + 0.5,
+                            yCoord + 0.5,
+                            zCoord + 0.5,
+                            ModItems.CHALK_STORAGE_UPGRADE.newItemStack());
+                        worldObj.spawnEntityInWorld(entityItem);
+                        entityItem.delayBeforeCanPickup = 5;
+                    }
+                    hasStorageUpgrade = false;
+                    markDirty();
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    return true;
+                }
             }
         } else {
             dropHeldItem();
@@ -116,32 +151,43 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
                 worldObj.spawnEntityInWorld(entityItem);
                 entityItem.delayBeforeCanPickup = 5;
             }
+            if (hasStorageUpgrade) {
+                EntityItem entityItem = new EntityItem(
+                    worldObj,
+                    xCoord + 0.5,
+                    yCoord + 0.5,
+                    zCoord + 0.5,
+                    ModItems.CHALK_STORAGE_UPGRADE.newItemStack());
+                worldObj.spawnEntityInWorld(entityItem);
+                entityItem.delayBeforeCanPickup = 5;
+            }
         }
         super.invalidate();
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        type = compound.getString("type");
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        type = tag.getString("type");
         if (!RitualRegistry.chalkExists(type)) {
             type = RitualRegistry.DEFAULT_CHALK_TYPE_NAME;
         }
-        if (compound.hasKey("stack0")) {
-            stacks[0] = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack0"));
+        if (tag.hasKey("stack0")) {
+            stacks[0] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("stack0"));
         } else {
             stacks[0] = null;
         }
-        if (compound.hasKey("stack1")) {
-            stacks[1] = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stack1"));
+        if (tag.hasKey("stack1")) {
+            stacks[1] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("stack1"));
         } else {
             stacks[1] = null;
         }
-        rune = compound.getByte("rune");
-        rotation = compound.getByte("rotation");
+        rune = tag.getByte("rune");
+        rotation = tag.getByte("rotation");
         if (worldObj != null && worldObj.isRemote) {
             updateDisplayItem();
         }
+        hasStorageUpgrade = tag.getBoolean("hasStorageUpgrade");
     }
 
     @Override
@@ -156,6 +202,7 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
         }
         tag.setByte("rune", (byte) rune);
         tag.setByte("rotation", (byte) rotation);
+        tag.setBoolean("hasStorageUpgrade", hasStorageUpgrade);
     }
 
     @Override

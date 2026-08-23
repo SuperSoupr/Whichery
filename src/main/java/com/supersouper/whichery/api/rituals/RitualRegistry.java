@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.supersouper.whichery.Whichery;
+import com.supersouper.whichery.client.render.ChalkRuneISBRH;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -78,6 +79,8 @@ public class RitualRegistry {
     @SideOnly(Side.CLIENT)
     @ApiStatus.Internal
     public static IIcon registerRuneIcons(IIconRegister reg) {
+        ChalkRuneISBRH.storageIcon = reg.registerIcon(Whichery.MODID + ":chalk");;
+
         int baseCount = CHALK_TYPES.get(DEFAULT_CHALK_TYPE_NAME).runeCount;
         IIcon[] baseIcons = new IIcon[baseCount];
         IIcon[] baseIconsSmall = new IIcon[baseCount];

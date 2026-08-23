@@ -3,12 +3,15 @@ package com.supersouper.whichery.api.rituals;
 import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
+import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
+import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -120,6 +123,28 @@ public class RitualRecipe {
             if (matcher != null) {
                 RitualUtils.unpackCoords(matcherPositions[i], coords);
                 matcher.place(world, x + coords[0] - centerX, y + coords[1] - centerY, z + coords[2] - centerZ);
+            }
+        }
+
+        ArrayList<TileEntity> tes = new ArrayList<>();
+        match(null, world, x, y, z, new byte[1], tes);
+
+        int tmp = ChalkItemSecondaryMatcher.class.hashCode();
+        if (!secondaryMatchersByClass.containsKey(tmp)) {
+            return;
+        }
+        ArrayList<ISecondaryMatcher> matchers = secondaryMatchersByClass.get(tmp);
+        int i = 0;
+        for (TileEntity te : tes) {
+            if (te.getClass() == ChalkRuneTileEntity.class) {
+                ItemStack stack = ((ChalkItemSecondaryMatcher) matchers.get(i)).stack.copy();
+                stack.stackSize = stack.getItem()
+                    .getItemStackLimit(stack);
+                ((ChalkRuneTileEntity) te).setInventorySlotContents(1, stack);
+                i++;
+                if (i == matchers.size()) {
+                    break;
+                }
             }
         }
     }

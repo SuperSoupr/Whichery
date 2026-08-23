@@ -2,6 +2,7 @@ package com.supersouper.whichery.api.rituals;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +10,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import com.supersouper.whichery.api.rituals.impl.RitualEvents;
 import com.supersouper.whichery.utils.ArrayUtils;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class RunningRitual {
 
@@ -54,6 +58,11 @@ public class RunningRitual {
         animations = new RitualAnimation[ritual.animationClasses.length];
         for (int i = 0; i < animations.length; i++) {
             animations[i] = instantiate(ritual.animationClasses[i]);
+        }
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide()
+            .isClient()) {
+            RitualEvents.animations.addAll(Arrays.asList(animations));
         }
     }
 
@@ -137,6 +146,13 @@ public class RunningRitual {
         }
         for (RitualAnimation animation : animations) {
             animation.end(stage);
+        }
+        if (FMLCommonHandler.instance()
+            .getEffectiveSide()
+            .isClient()) {
+            for (RitualAnimation animation : animations) {
+                RitualEvents.animations.remove(animation);
+            }
         }
     }
 

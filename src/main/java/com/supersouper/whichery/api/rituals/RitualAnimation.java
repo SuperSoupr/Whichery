@@ -2,26 +2,31 @@ package com.supersouper.whichery.api.rituals;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 public abstract class RitualAnimation {
 
-    protected final RunningRitual currentRitual;
-    protected final TileEntity leader;
+    public final RunningRitual currentRitual;
+    public final TileEntity leader;
 
     public RitualAnimation(TileEntity leader, RunningRitual currentRitual) {
         this.currentRitual = currentRitual;
         this.leader = leader;
     }
 
-    public abstract void onTick();
+    public void render(RenderWorldLastEvent event) {}
 
-    public abstract void transitionToStage(int stage);
+    public void onTick() {}
 
-    public abstract void complete(int stage);
+    public void transitionToStage(int stage) {}
 
-    public abstract void end(int stage);
+    public void complete(int stage) {}
 
-    public abstract NBTTagCompound writeToNBT(NBTTagCompound tag);
+    public void end(int stage) {}
 
-    public abstract void readFromNBT(NBTTagCompound tag);
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        return tag;
+    }
+
+    public void readFromNBT(NBTTagCompound tag) {}
 }

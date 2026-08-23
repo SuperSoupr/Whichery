@@ -22,6 +22,8 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
     public static final ChalkRuneISBRH INSTANCE = new ChalkRuneISBRH();
 
+    public static IIcon storageIcon;
+
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 
@@ -33,6 +35,10 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         if (!(world.getTileEntity(x, y, z) instanceof ChalkRuneTileEntity cte)) return false;
 
         render(cte.getType(), cte.getRune(), cte.getRotation(), x, y, z, false);
+        if (cte.hasStorageUpgrade) {
+            drawStorage(storageIcon, x, y, z);
+        }
+
         return true;
     }
 
@@ -164,6 +170,67 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         float rx = nx * cos - nz * sin;
         float rz = nx * sin + nz * cos;
         t.setNormal(rx, ny, rz);
+    }
+
+    private static void drawStorage(IIcon icon, int x, int y, int z) {
+        Tessellator t = Tessellator.instance;
+        double uMin = icon.getMinU();
+        double uMax = icon.getMaxU();
+        double vMin = icon.getMinV();
+        double vMax = icon.getMaxV();
+
+        double minX = x + (6.999 / 16.0D);
+        double maxX = x + (9.001 / 16.0D);
+        double minY = y - 0.001;
+        double maxY = y + (2.001D / 16.0D);
+        double minZ = z + (6.999 / 16.0D);
+        double maxZ = z + (9.001 / 16.0D);
+
+        float r = 1f;
+        float g = 1f;
+        float b = 1f;
+
+        // Y- (Bottom) - Darkest shading (0.5)
+        t.setColorOpaque_F(r * 0.5F, g * 0.5F, b * 0.5F);
+        t.addVertexWithUV(minX, minY, maxZ, uMin, vMax);
+        t.addVertexWithUV(minX, minY, minZ, uMin, vMin);
+        t.addVertexWithUV(maxX, minY, minZ, uMax, vMin);
+        t.addVertexWithUV(maxX, minY, maxZ, uMax, vMax);
+
+        // Y+ (Top) - Full brightness (1.0)
+        t.setColorOpaque_F(r * 1.0F, g * 1.0F, b * 1.0F);
+        t.addVertexWithUV(maxX, maxY, maxZ, uMax, vMax);
+        t.addVertexWithUV(maxX, maxY, minZ, uMax, vMin);
+        t.addVertexWithUV(minX, maxY, minZ, uMin, vMin);
+        t.addVertexWithUV(minX, maxY, maxZ, uMin, vMax);
+
+        // Z- (North) - Moderate shading (0.8)
+        t.setColorOpaque_F(r * 0.8F, g * 0.8F, b * 0.8F);
+        t.addVertexWithUV(minX, maxY, minZ, uMax, vMin);
+        t.addVertexWithUV(maxX, maxY, minZ, uMin, vMin);
+        t.addVertexWithUV(maxX, minY, minZ, uMin, vMax);
+        t.addVertexWithUV(minX, minY, minZ, uMax, vMax);
+
+        // Z+ (South) - Moderate shading (0.8)
+        t.setColorOpaque_F(r * 0.8F, g * 0.8F, b * 0.8F);
+        t.addVertexWithUV(minX, maxY, maxZ, uMin, vMin);
+        t.addVertexWithUV(minX, minY, maxZ, uMin, vMax);
+        t.addVertexWithUV(maxX, minY, maxZ, uMax, vMax);
+        t.addVertexWithUV(maxX, maxY, maxZ, uMax, vMin);
+
+        // X- (West) - Heavy shading (0.6)
+        t.setColorOpaque_F(r * 0.6F, g * 0.6F, b * 0.6F);
+        t.addVertexWithUV(minX, maxY, maxZ, uMax, vMin);
+        t.addVertexWithUV(minX, maxY, minZ, uMin, vMin);
+        t.addVertexWithUV(minX, minY, minZ, uMin, vMax);
+        t.addVertexWithUV(minX, minY, maxZ, uMax, vMax);
+
+        // X+ (East) - Heavy shading (0.6)
+        t.setColorOpaque_F(r * 0.6F, g * 0.6F, b * 0.6F);
+        t.addVertexWithUV(maxX, minY, maxZ, uMin, vMax);
+        t.addVertexWithUV(maxX, minY, minZ, uMax, vMax);
+        t.addVertexWithUV(maxX, maxY, minZ, uMax, vMin);
+        t.addVertexWithUV(maxX, maxY, maxZ, uMin, vMin);
     }
 
     @Override

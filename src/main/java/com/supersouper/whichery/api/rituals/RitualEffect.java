@@ -13,15 +13,17 @@ public abstract class RitualEffect {
         this.leader = leader;
     }
 
-    public abstract void onTick();
+    public void onTick() {}
 
-    public abstract void transitionToStage(int stage);
+    public void transitionToStage(int stage) {}
 
-    public abstract void complete(int stage);
+    public void complete(int stage) {}
 
-    public abstract void end(int stage);
+    public void end(int stage) {}
 
-    public abstract NBTTagCompound writeToNBT(NBTTagCompound tag);
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        return tag;
+    }
 
-    public abstract void readFromNBT(NBTTagCompound tag);
+    public void readFromNBT(NBTTagCompound tag) {}
 }

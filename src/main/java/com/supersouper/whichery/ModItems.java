@@ -17,6 +17,7 @@ public enum ModItems {
     // make sure to leave a trailing comma
     CHALK(true, new ItemChalk(), "chalk"),
     CHALK_SMALL(true, new ItemChalkSmall(), "chalk_small"),
+    CHALK_STORAGE_UPGRADE(true, new Item().setUnlocalizedName("chalk_rune_storage_upgrade"), "chalk_rune_storage_upgrade"),
     WITCHES_THIMBLE_SEED(true, new ItemSeedWitchesThimble("witches_thimble"), "seed_witches_thimble"),
     WITCH_PETAL(true, new Item().setTextureName("whichery:witch_petal").setUnlocalizedName("witch_petal"), "witch_petal"),
     RAW_CHICKEN_THAT_MAKES_YOU_BECOME_A_VAMPIRE(true, new ItemRawChickenThatMakesYouBecomeAVampire().setUnlocalizedName("raw_chicken_that_makes_you_become_a_vampire").setTextureName("chicken_raw"), "raw_chicken_that_makes_you_become_a_vampire"),

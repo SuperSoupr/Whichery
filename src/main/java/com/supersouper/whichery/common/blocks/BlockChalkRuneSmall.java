@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.common.items.ItemChalkSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
-import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
@@ -34,17 +33,6 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
         super(Material.ground);
         setBlockName("chalk_rune_small");
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
-        float subY, float subZ) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        if (te instanceof ChalkRuneTileEntity cte) {
-            if (cte.onRightClicked(player)) return true;
-        }
-
-        return super.onBlockActivated(world, x, y, z, player, side, subX, subY, subZ);
     }
 
     @Override

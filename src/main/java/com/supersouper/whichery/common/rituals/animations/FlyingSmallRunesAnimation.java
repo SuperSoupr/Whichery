@@ -5,16 +5,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
 
-import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
 import com.supersouper.whichery.api.rituals.RitualAnimation;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RunningRitual;
@@ -23,15 +19,9 @@ import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class FlyingSmallRunesAnimation extends RitualAnimation {
 
-    @SideOnly(Side.CLIENT)
-    public static ArrayList<FlyingSmallRunesAnimation> animations;
-    private ArrayList<Rune> runes = new ArrayList<>();
+    private final ArrayList<Rune> runes = new ArrayList<>();
 
     private static class Rune {
 
@@ -70,7 +60,6 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
     @Override
     public void transitionToStage(int stage) {
         if (leader.getWorldObj().isRemote && stage == 0) {
-            animations.add(this);
             for (TileEntity te : currentRitual.getCapturedTileEntities()) {
                 if (te.getClass() != ChalkRuneSmallTileEntity.class) continue;
                 ChalkRuneSmallTileEntity cte = (ChalkRuneSmallTileEntity) te;
@@ -98,14 +87,8 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
     }
 
     @Override
-    public void complete(int stage) {
-
-    }
-
-    @Override
     public void end(int stage) {
         if (leader.getWorldObj().isRemote) {
-            animations.remove(this);
             for (TileEntity te : currentRitual.getCapturedTileEntities()) {
                 if (te.getClass() != ChalkRuneSmallTileEntity.class) continue;
                 ChalkRuneSmallTileEntity cte = (ChalkRuneSmallTileEntity) te;
@@ -116,16 +99,10 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
         }
     }
 
+    @Override
     public void render(RenderWorldLastEvent event) {
         Tessellator t = Tessellator.instance;
-        Minecraft mc = Minecraft.getMinecraft();
-        EntityLivingBase viewEntity = mc.renderViewEntity != null ? mc.renderViewEntity : mc.thePlayer;
-        double playerX = viewEntity.prevPosX + (viewEntity.posX - viewEntity.prevPosX) * event.partialTicks;
-        double playerY = viewEntity.prevPosY + (viewEntity.posY - viewEntity.prevPosY) * event.partialTicks;
-        double playerZ = viewEntity.prevPosZ + (viewEntity.posZ - viewEntity.prevPosZ) * event.partialTicks;
-        GL11.glPushMatrix();
-        GL11.glTranslated(-playerX, -playerY, -playerZ);
-        GL11.glTranslatef(leader.xCoord + 0.5f, leader.yCoord, leader.zCoord + 0.5f);
+        GL11.glTranslatef(0.5f, 0, 0.5f);
         for (Rune rune : runes) {
             GL11.glPushMatrix();
             rune.x = WhicheryUtils.lerpD(rune.x, rune.wantedX, 0.02d);
@@ -162,7 +139,7 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
 
             GL11.glPopMatrix();
         }
-        GL11.glPopMatrix();
+        GL11.glTranslatef(-0.5f, 0, -0.5f);
     }
 
     private double radius;
@@ -267,32 +244,6 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
         currentRotation = (currentRotation + deltaAngleRadians) % (2 * Math.PI);
         for (int i = 0; i < runes.size(); i++) {
             applyPosition(i, baseAngle[i] + currentRotation);
-        }
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        return tag;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    @EventBusSubscriber(side = Side.CLIENT)
-    public static class Events {
-
-        static {
-            animations = new ArrayList<>();
-        }
-
-        @SubscribeEvent
-        public static void onRenderWorldLast(RenderWorldLastEvent event) {
-            for (FlyingSmallRunesAnimation animation : animations) {
-                animation.render(event);
-            }
         }
     }
 }

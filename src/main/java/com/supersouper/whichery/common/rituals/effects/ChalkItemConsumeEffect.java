@@ -74,7 +74,7 @@ public class ChalkItemConsumeEffect extends RitualEffect {
     }
 
     private void placeResult(ChalkRuneTileEntity cte, ChalkItemSecondaryMatcher matcher) {
-        if (cte.getStackInSlot(0) == null) {
+        if (cte.hasStorageUpgrade && cte.getStackInSlot(0) == null) {
             cte.setInventorySlotContents(0, matcher.resultStack);
         } else if (cte.getStackInSlot(1) == null) {
             cte.setInventorySlotContents(1, matcher.resultStack);

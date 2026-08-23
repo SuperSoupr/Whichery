@@ -112,8 +112,6 @@ public abstract class RitualLeaderTileEntity extends TileEntity implements IRitu
                 }
             }
             beginTicking();
-        } else {
-            currentRitual = null;
         }
     }
 
