@@ -2,7 +2,6 @@ package com.supersouper.whichery.common.rituals.matching;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -16,16 +15,17 @@ import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
 public class BlockMatcherChalkSmall implements IBlockMatcher {
 
+    private static final int[] minusOnes = new int[] { -1, -1, -1, -1 };
     private final String[] types;
+    private final int[] runes;
 
-    public BlockMatcherChalkSmall(String... types) {
-        if (types.length != 4) {
-            this.types = Arrays.copyOf(types, 4);
-        } else {
-            this.types = types;
-        }
+    private BlockMatcherChalkSmall(String[] types, int[] runes) {
+        this.types = types;
+        this.runes = runes;
     }
 
     @Override
@@ -35,10 +35,10 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
 
         boolean match = true;
         String[] tmp = Arrays.copyOf(cte.getTypes(), types.length);
-        required: for (String type : types) {
-            if (type == null) continue;
+        required: for (int i = 0; i < types.length; i++) {
+            if (types[i] == null) continue;
             for (int j = 0; j < tmp.length; j++) {
-                if (tmp[j] != null && tmp[j].equals(type)) {
+                if (tmp[j] != null && tmp[j].equals(types[i]) && cte.getRune(j) == runes[i]) {
                     tmp[j] = null;
                     continue required;
                 }
@@ -81,17 +81,79 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
         ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             String[] tmp = Arrays.copyOf(types, types.length);
-            Collections.shuffle(Arrays.asList(tmp));
+            int[] tmp2 = Arrays.copyOf(runes, runes.length);
+            shuffleRunesAndTypes(tmp2, tmp);
+
             for (int i = 0; i < tmp.length; i++) {
                 te.setType(i, tmp[i]);
-                if (tmp[i] != null) {
-                    te.setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(tmp[i]).runeCount));
+
+                if (tmp2[i] == -1) {
+                    if (tmp[i] != null) {
+                        te.setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(tmp[i]).runeCount));
+                    }
                 } else {
-                    te.setRune(i, 0);
+                    te.setRune(i, tmp2[i]);
                 }
-                te.setRotation(i, WhicheryUtils.rand.nextInt(4));
-                te.markDirty();
+
+                te.setRotation(i, WhicheryUtils.rand.nextInt(8));
+            }
+            te.markDirty();
+        }
+    }
+
+    public static void shuffleRunesAndTypes(int[] arr1, String[] arr2) {
+        for (int i = 0; i < arr1.length; i++) {
+            int to = WhicheryUtils.rand.nextInt(arr1.length);
+
+            int tmp = arr1[i];
+            arr1[i] = arr1[to];
+            arr1[to] = tmp;
+
+            String tmp2 = arr2[i];
+            arr2[i] = arr2[to];
+            arr2[to] = tmp2;
+        }
+    }
+
+    private static final Int2ObjectOpenHashMap<BlockMatcherChalkSmall> cache = new Int2ObjectOpenHashMap<>();
+
+    public static BlockMatcherChalkSmall of(Object... objects) {
+        if (objects.length > 8) {
+            throw new IllegalArgumentException(
+                "Too many objects passed to BlockMatcherChalkSmall.of call (" + objects.length + ")");
+        }
+        int typeCount = 0;
+        int runesCount = 0;
+        String[] types = new String[4];
+        int[] runes = new int[4];
+        Arrays.fill(runes, -1);
+        for (Object o : objects) {
+            if (o instanceof String) {
+                types[typeCount] = (String) o;
+                typeCount++;
+            } else if (o instanceof Integer) {
+                runes[runesCount] = (int) o;
+                runesCount++;
+            } else {
+                throw new IllegalArgumentException(
+                    "Class '" + o.getClass() + "' is not allowed in BlockMatcherChalkSmall.of");
             }
         }
+        return of(types, runes);
+    }
+
+    public static BlockMatcherChalkSmall of(String[] types, int[] runes) {
+        if (types.length != 4) {
+            types = Arrays.copyOf(types, 4);
+        }
+
+        int inHash = Arrays.hashCode(types) + Arrays.hashCode(runes);
+
+        BlockMatcherChalkSmall matcher = cache.get(inHash);
+        if (matcher == null) {
+            matcher = new BlockMatcherChalkSmall(types, runes);
+            cache.put(inHash, matcher);
+        }
+        return matcher;
     }
 }

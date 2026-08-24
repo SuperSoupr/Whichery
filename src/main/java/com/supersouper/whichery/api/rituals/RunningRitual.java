@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-import com.supersouper.whichery.api.rituals.impl.RitualEvents;
+import com.supersouper.whichery.common.event.RitualEvents;
 import com.supersouper.whichery.utils.ArrayUtils;
 
 import cpw.mods.fml.common.FMLCommonHandler;

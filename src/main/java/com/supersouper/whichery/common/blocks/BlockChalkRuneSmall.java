@@ -1,5 +1,7 @@
 package com.supersouper.whichery.common.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -9,6 +11,7 @@ import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -120,6 +123,22 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {}
+
+    @Override
+    protected void dropBlockAsItem(World worldIn, int x, int y, int z, ItemStack itemIn) {}
+
+    @Override
+    public void dropBlockAsItemWithChance(World worldIn, int x, int y, int z, int meta, float chance, int fortune) {}
+
+    @Override
+    public int quantityDropped(Random random) {
+        return 0;
+    }
+
+    @Override
+    public Item getItemDropped(int meta, Random random, int fortune) {
+        return null;
+    }
 
     public void setBlockIcon(IIcon icon) {
         this.blockIcon = icon;

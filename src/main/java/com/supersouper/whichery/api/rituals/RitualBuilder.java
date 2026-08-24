@@ -34,7 +34,8 @@ public class RitualBuilder {
                     throw new IllegalArgumentException("Character '" + c + "' must be followed by an IBlockMatcher");
                 }
             } else {
-                throw new IllegalArgumentException("Class '" + o[i].getClass() + "' is not allowed in ritual builder");
+                throw new IllegalArgumentException(
+                    "Class '" + o[i].getClass() + "' is not allowed there in ritual builder");
             }
         }
         int maxY = levels.size();
@@ -66,11 +67,6 @@ public class RitualBuilder {
             matcherPositions[i] = keys.getInt(i);
             matchers[i] = vals.get(i);
         }
-
-        // IBlockMatcher centerMatcher = matcherPositions.get(RitualUtils.packCoords(centerX, centerY, centerZ));
-        // if (centerMatcher == null) {
-        // throw new IllegalArgumentException("Center matcher cannot be null");
-        // }
 
         IBlockMatcher[] matchersRaw = definitions.values()
             .toArray(new IBlockMatcher[0]);

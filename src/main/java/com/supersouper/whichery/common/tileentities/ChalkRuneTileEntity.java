@@ -11,6 +11,7 @@ import com.supersouper.whichery.ModItems;
 import com.supersouper.whichery.api.rituals.RitualLeaderTileEntity;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -212,6 +213,21 @@ public class ChalkRuneTileEntity extends RitualLeaderTileEntity implements IInve
         }
         super.markDirty();
     }
+
+    @SideOnly(Side.CLIENT)
+    public boolean cycling;
+
+    @SideOnly(Side.CLIENT)
+    public void tryCycleRune() {
+        if (!cycling) return;
+
+        setRune(WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
+        setRotation(WhicheryUtils.rand.nextInt(8));
+
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    // IInventory
 
     @Override
     public int getSizeInventory() {

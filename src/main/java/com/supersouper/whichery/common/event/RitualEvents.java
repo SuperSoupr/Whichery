@@ -1,4 +1,4 @@
-package com.supersouper.whichery.api.rituals.impl;
+package com.supersouper.whichery.common.event;
 
 import java.util.ArrayList;
 

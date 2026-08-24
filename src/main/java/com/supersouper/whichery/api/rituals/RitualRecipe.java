@@ -128,7 +128,6 @@ public class RitualRecipe {
 
         ArrayList<TileEntity> tes = new ArrayList<>();
         match(null, world, x, y, z, new byte[1], tes);
-
         int tmp = ChalkItemSecondaryMatcher.class.hashCode();
         if (!secondaryMatchersByClass.containsKey(tmp)) {
             return;

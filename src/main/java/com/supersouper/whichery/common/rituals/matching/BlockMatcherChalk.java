@@ -1,6 +1,7 @@
 package com.supersouper.whichery.common.rituals.matching;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,11 @@ import com.supersouper.whichery.utils.WhicheryUtils;
 public class BlockMatcherChalk implements IBlockMatcher {
 
     private final String type;
+    private final int rune;
 
-    public BlockMatcherChalk(String type) {
+    private BlockMatcherChalk(String type, int rune) {
         this.type = type;
+        this.rune = rune;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class BlockMatcherChalk implements IBlockMatcher {
         if (!(te instanceof ChalkRuneTileEntity cte)) return false;
 
         boolean match = cte.getType()
-            .equals(type);
+            .equals(type) && (rune == -1 || cte.getRune() == rune);
         if (match) {
             tes.add(te);
         }
@@ -55,8 +58,13 @@ public class BlockMatcherChalk implements IBlockMatcher {
         ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
         if (te != null) {
             te.setType(type);
-            te.setRune(WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
-            te.setRotation(WhicheryUtils.rand.nextInt(4));
+            te.setRotation(WhicheryUtils.rand.nextInt(8));
+            if (rune == -1) {
+                te.setRune(WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
+                te.cycling = true;
+            } else {
+                te.setRune(rune);
+            }
             te.markDirty();
         }
     }
@@ -74,5 +82,26 @@ public class BlockMatcherChalk implements IBlockMatcher {
         }
         return stack.getItem()
             .hashCode() + type.hashCode();
+    }
+
+    private static final HashMap<String, BlockMatcherChalk[]> cache = new HashMap<>();
+
+    public static BlockMatcherChalk of(String type) {
+        return of(type, -1);
+    }
+
+    public static BlockMatcherChalk of(String type, int rune) {
+        BlockMatcherChalk[] arr = cache.get(type);
+        BlockMatcherChalk matcher;
+        if (arr == null) {
+            arr = new BlockMatcherChalk[RitualRegistry.CHALK_TYPES.get(type).runeCount + 1];
+            cache.put(type, arr);
+        }
+        matcher = arr[rune + 1];
+        if (matcher == null) {
+            matcher = new BlockMatcherChalk(type, rune);
+            arr[rune + 1] = matcher;
+        }
+        return matcher;
     }
 }

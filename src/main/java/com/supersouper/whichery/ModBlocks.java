@@ -16,8 +16,8 @@ public enum ModBlocks {
     // spotless:off
 
     // make sure to leave a trailing comma
-    CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalkRune.class, "chalk_rune"),
-    CHALK_RUNE_BLOCK_SMALL(true, new BlockChalkRuneSmall(), BlockChalkRuneSmall.ItemBlockChalkRuneSmall.class, "chalk_block_small"),
+    CHALK_RUNE_BLOCK(true, new BlockChalkRune(), BlockChalkRune.ItemBlockChalkRune.class, "chalk_rune", false),
+    CHALK_RUNE_BLOCK_SMALL(true, new BlockChalkRuneSmall(), BlockChalkRuneSmall.ItemBlockChalkRuneSmall.class, "chalk_block_small", false),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
 
     ; // leave trailing semicolon
@@ -28,7 +28,9 @@ public enum ModBlocks {
     public static void init() {
         for (ModBlocks block : VALUES) {
             if (block.isEnabled()) {
-                block.theBlock.setCreativeTab(Whichery.whicheryTab);
+                if (block.showInCreativeTab) {
+                    block.theBlock.setCreativeTab(Whichery.whicheryTab);
+                }
                 if (block.getItemBlock() != null || !block.getHasItemBlock()) {
                     GameRegistry.registerBlock(block.get(), block.getItemBlock(), block.name);
                     // This part is used if the getItemBlock() is not ItemBlock.class, so we register a custom ItemBlock
@@ -56,18 +58,24 @@ public enum ModBlocks {
      */
     private boolean hasItemBlock;
     private final String name;
+    private final boolean showInCreativeTab;
 
     ModBlocks(Boolean enabled, Block block, String name) {
-        this(enabled, block, null, name);
+        this(enabled, block, null, name, false);
         hasItemBlock = true;
     }
 
     ModBlocks(Boolean enabled, Block block, Class<? extends ItemBlock> iblock, String name) {
+        this(enabled, block, iblock, name, true);
+    }
+
+    ModBlocks(Boolean enabled, Block block, Class<? extends ItemBlock> iblock, String name, boolean showInCreativeTab) {
         isEnabled = enabled;
         theBlock = block;
         itemBlock = iblock;
         hasItemBlock = iblock != null;
         this.name = name;
+        this.showInCreativeTab = showInCreativeTab;
     }
 
     /**

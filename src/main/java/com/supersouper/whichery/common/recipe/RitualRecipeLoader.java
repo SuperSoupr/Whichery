@@ -44,7 +44,7 @@ public class RitualRecipeLoader {
                 "  ccc  ",
             },
             'c',
-            new BlockMatcherChalk("spiritual"),
+            BlockMatcherChalk.of("spiritual"),
             'o',
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
@@ -53,13 +53,13 @@ public class RitualRecipeLoader {
                 new TestSecondaryMatcher(), new ChalkItemSecondaryMatcher(new ItemStack(Items.stick), new ItemStack(Items.gold_ingot)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond), new ItemStack(Items.emerald), true)},
             new String[]{
                 "g       g",
-                "   ccc   ",
-                "  c   c  ",
-                " c s s c ",
-                " c  c  c ",
-                " c s s c ",
-                "  c   c  ",
-                "   ccc   ",
+                "   123   ",
+                "  0   4  ",
+                " 4 s s 5 ",
+                " 3  5  6 ",
+                " 2 s s 7 ",
+                "  1   8  ",
+                "   BA9   ",
                 "g       g",
             },
             new String[]{
@@ -73,10 +73,32 @@ public class RitualRecipeLoader {
                 "         ",
                 "g       g",
             },
-            'c',
-            new BlockMatcherChalk("spiritual"),
+            '0',
+            BlockMatcherChalk.of("spiritual", 0),
+            '1',
+            BlockMatcherChalk.of("spiritual", 1),
+            '2',
+            BlockMatcherChalk.of("spiritual", 2),
+            '3',
+            BlockMatcherChalk.of("spiritual", 3),
+            '4',
+            BlockMatcherChalk.of("spiritual", 4),
+            '5',
+            BlockMatcherChalk.of("spiritual", 5),
+            '6',
+            BlockMatcherChalk.of("spiritual", 6),
+            '7',
+            BlockMatcherChalk.of("spiritual", 7),
+            '8',
+            BlockMatcherChalk.of("spiritual", 8),
+            '9',
+            BlockMatcherChalk.of("spiritual", 9),
+            'A',
+            BlockMatcherChalk.of("spiritual", 10),
+            'B',
+            BlockMatcherChalk.of("spiritual", 11),
             's',
-            new BlockMatcherChalkSmall("spiritual"),
+            BlockMatcherChalkSmall.of("spiritual", 0, "bloody", 0),
             'g',
             new BlockMatcherBasic(Blocks.glowstone)
         ), new Class[] {ChalkItemConsumeEffect.class, TestRitualEffect.class}, new Class[] {FlyingSmallRunesAnimation.class}, new int[]{10, 10, 10, 10, 10, 10, 10, 10}));
@@ -95,7 +117,7 @@ public class RitualRecipeLoader {
                 "   ccc   ",
             },
             'c',
-            new BlockMatcherChalk("spiritual")
+            BlockMatcherChalk.of("spiritual")
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
         // spotless:on
     }

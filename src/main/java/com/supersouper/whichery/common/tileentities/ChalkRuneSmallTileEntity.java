@@ -1,8 +1,5 @@
 package com.supersouper.whichery.common.tileentities;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -11,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalkSmall;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
@@ -111,17 +109,11 @@ public class ChalkRuneSmallTileEntity extends TileEntity {
     }
 
     @SideOnly(Side.CLIENT)
-    private long lastUpdate;
-
-    @SideOnly(Side.CLIENT)
     public void tryCycleRune() {
-        if (System.currentTimeMillis() - this.lastUpdate < 1000) return;
-        this.lastUpdate = System.currentTimeMillis();
-
-        Collections.shuffle(Arrays.asList(types));
+        BlockMatcherChalkSmall.shuffleRunesAndTypes(runes, types);
         for (int i = 0; i < types.length; i++) {
-            setRune(i, WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(types[i]).runeCount));
-            setRotation(i, WhicheryUtils.rand.nextInt(4));
+            if (types[i] == null) continue;
+            setRotation(i, WhicheryUtils.rand.nextInt(8));
         }
         worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
