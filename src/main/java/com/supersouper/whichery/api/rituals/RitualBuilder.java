@@ -78,6 +78,7 @@ public class RitualBuilder {
             secondaryMatchers != null ? secondaryMatchers : new ISecondaryMatcher[0],
             centerX,
             centerY,
-            centerZ);
+            centerZ,
+            new int[] { maxX, maxY, maxZ });
     }
 }

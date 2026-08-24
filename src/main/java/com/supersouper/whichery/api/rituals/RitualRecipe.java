@@ -24,13 +24,14 @@ public class RitualRecipe {
     public final ISecondaryMatcher[] secondaryMatchers;
     public final Int2ObjectOpenHashMap<ArrayList<ISecondaryMatcher>> secondaryMatchersByClass = new Int2ObjectOpenHashMap<>();
     public final byte centerX, centerZ, centerY;
+    public final int[] size;
 
     /**
      * IBlockMatcher 3d array formatted as: [y][z][x]
      * This is because most rituals are expected to only require one y level.
      */
     public RitualRecipe(int[] matcherPositions, IBlockMatcher[] matchers, IBlockMatcher[] matchersRaw,
-        ISecondaryMatcher[] secondaryMatchers, byte centerX, byte centerY, byte centerZ) {
+        ISecondaryMatcher[] secondaryMatchers, byte centerX, byte centerY, byte centerZ, int[] size) {
         IBlockMatcher centerMatcherTmp = null;
         this.matcherPositions = matcherPositions;
         this.matchers = matchers;
@@ -39,6 +40,7 @@ public class RitualRecipe {
         this.centerX = centerX;
         this.centerY = centerY;
         this.centerZ = centerZ;
+        this.size = size;
 
         for (ISecondaryMatcher secondaryMatcher : secondaryMatchers) {
             secondaryMatchersByClass.computeIfAbsent(

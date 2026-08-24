@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -16,7 +18,11 @@ import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
+import com.supersouper.whichery.utils.DrawUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMatcherChalk implements IBlockMatcher {
 
@@ -67,6 +73,27 @@ public class BlockMatcherChalk implements IBlockMatcher {
             }
             te.markDirty();
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static int cycleRune = 0;
+    @SideOnly(Side.CLIENT)
+    private static long lastCycle;
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void drawIcon(Tessellator t, int x, int y, int w, int h) {
+        if (System.currentTimeMillis() - lastCycle >= 1000) {
+            lastCycle = System.currentTimeMillis();
+            cycleRune = WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount);
+        }
+        IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune == -1 ? cycleRune : rune];
+        int color = RitualRegistry.CHALK_TYPES.get(type).drawColor;
+        int r = (color >> 16) & 255;
+        int g = (color >> 8) & 255;
+        int b = color & 255;
+        t.setColorOpaque(r, g, b);
+        DrawUtils.drawRect(t, x, y, 0, w, h, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
     }
 
     public static int chalkItemStackToHashCode(ItemStack stack) {

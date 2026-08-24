@@ -3,6 +3,7 @@ package com.supersouper.whichery.common.rituals.matching;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -15,6 +16,8 @@ import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public class BlockMatcherChalkSmall implements IBlockMatcher {
@@ -99,6 +102,12 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
             }
             te.markDirty();
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void drawIcon(Tessellator t, int x, int y, int w, int h) {
+
     }
 
     public static void shuffleRunesAndTypes(int[] arr1, String[] arr2) {

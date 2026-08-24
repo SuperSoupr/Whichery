@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.items.ItemChalkSmall;
 import com.supersouper.whichery.common.items.ItemRawChickenThatMakesYouBecomeAVampire;
+import com.supersouper.whichery.common.items.ItemRitualPreview;
 import com.supersouper.whichery.common.items.seeds.ItemSeedWitchesThimble;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -17,6 +18,7 @@ public enum ModItems {
     // make sure to leave a trailing comma
     CHALK(true, new ItemChalk(), "chalk"),
     CHALK_SMALL(true, new ItemChalkSmall(), "chalk_small"),
+    RITUAL_PREVIEW(true, new ItemRitualPreview(), "ritual_preview"),
     CHALK_STORAGE_UPGRADE(true, new Item().setUnlocalizedName("chalk_rune_storage_upgrade"), "chalk_rune_storage_upgrade"),
     WITCHES_THIMBLE_SEED(true, new ItemSeedWitchesThimble("witches_thimble"), "seed_witches_thimble"),
     WITCH_PETAL(true, new Item().setTextureName("whichery:witch_petal").setUnlocalizedName("witch_petal"), "witch_petal"),

@@ -25,8 +25,10 @@ public class CommonProxy {
         FamilyRegistry.initFamilies();
 
         RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, RitualRegistry.DEFAULT_CHALK_TYPE_NAME));
-        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "spiritual"));
-        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "bloody"));
+        // RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "spiritual"));
+        // RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "bloody"));
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "spiritual", 12, 0x7070FF));
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "bloody", 12, 0xFF7070));
         if (ModItems.CHALK.isEnabled()) {
             chalkRuneRenderID = RenderingRegistry.getNextAvailableRenderId();
             RenderingRegistry.registerBlockHandler(ChalkRuneISBRH.INSTANCE);
