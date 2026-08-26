@@ -12,6 +12,7 @@ import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
 import com.supersouper.whichery.common.rituals.matching.ChalkItemSecondaryMatcher;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
+import com.supersouper.whichery.utils.WhicheryUtils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -87,7 +88,7 @@ public class RitualRecipe {
                     pos2d[1] = coords[2];
 
                     for (int j2 = 0; j2 < i; j2++) {
-                        rotate(pos2d, centerX, centerZ);
+                        WhicheryUtils.rotate(pos2d, centerX, centerZ);
                     }
 
                     if (!matcher
@@ -109,13 +110,6 @@ public class RitualRecipe {
         }
 
         return false;
-    }
-
-    private static void rotate(int[] point, int pivotX, int pivotZ) {
-        int dx = point[0] - pivotX;
-        int dz = point[1] - pivotZ;
-        point[0] = pivotX - dz;
-        point[1] = pivotZ + dx;
     }
 
     public void construct(World world, int x, int y, int z) {

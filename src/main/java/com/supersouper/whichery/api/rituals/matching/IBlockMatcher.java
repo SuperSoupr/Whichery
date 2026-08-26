@@ -22,6 +22,6 @@ public interface IBlockMatcher {
     void place(World world, int x, int y, int z);
 
     @SideOnly(Side.CLIENT)
-    void drawIcon(Tessellator t, int x, int y, int w, int h);
+    void drawIcon(Tessellator t, TileEntity te, int x, int y, int z, int w, int h, double alpha);
 
 }

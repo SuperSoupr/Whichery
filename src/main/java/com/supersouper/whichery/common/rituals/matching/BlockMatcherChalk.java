@@ -76,24 +76,25 @@ public class BlockMatcherChalk implements IBlockMatcher {
     }
 
     @SideOnly(Side.CLIENT)
-    private static int cycleRune = 0;
+    private static int cycleRune;
     @SideOnly(Side.CLIENT)
     private static long lastCycle;
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void drawIcon(Tessellator t, int x, int y, int w, int h) {
+    public void drawIcon(Tessellator t, TileEntity te, int x, int y, int z, int w, int h, double alpha) {
         if (System.currentTimeMillis() - lastCycle >= 1000) {
             lastCycle = System.currentTimeMillis();
             cycleRune = WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount);
         }
         IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune == -1 ? cycleRune : rune];
+        // RitualPreviewRenderer.setUniformsFromIcon(icon);
         int color = RitualRegistry.CHALK_TYPES.get(type).drawColor;
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
-        t.setColorOpaque(r, g, b);
-        DrawUtils.drawRect(t, x, y, 0, w, h, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
+        t.setColorRGBA(r, g, b, (int) (alpha * 255));
+        DrawUtils.drawRect(t, x, y, z, w, h, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
     }
 
     public static int chalkItemStackToHashCode(ItemStack stack) {

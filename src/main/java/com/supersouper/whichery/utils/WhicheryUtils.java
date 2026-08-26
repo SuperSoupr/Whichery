@@ -57,4 +57,17 @@ public class WhicheryUtils {
         return cur + (target - cur) * speed;
     }
 
+    public static void rotate(int[] point, int pivotX, int pivotZ) {
+        int dx = point[0] - pivotX;
+        int dz = point[1] - pivotZ;
+        point[0] = pivotX - dz;
+        point[1] = pivotZ + dx;
+    }
+
+    public static void rotated(double[] point, double pivotX, double pivotZ) {
+        double dx = point[0] - pivotX;
+        double dz = point[1] - pivotZ;
+        point[0] = pivotX - dz;
+        point[1] = pivotZ + dx;
+    }
 }

@@ -62,8 +62,9 @@ public class BlockMatcherBasic implements IBlockMatcher {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void drawIcon(Tessellator t, int x, int y, int w, int h) {
+    public void drawIcon(Tessellator t, TileEntity te, int x, int y, int z, int w, int h, double alpha) {
         IIcon icon = block.getIcon(1, meta);
-        DrawUtils.drawRect(t, x, y, 0, w, h, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
+        // RitualPreviewRenderer.setUniformsFromIcon(icon);
+        DrawUtils.drawRect(t, x, y, z, w, h, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
     }
 }

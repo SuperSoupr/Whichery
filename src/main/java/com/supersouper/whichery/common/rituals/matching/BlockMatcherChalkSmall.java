@@ -6,6 +6,7 @@ import java.util.Arrays;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -13,7 +14,9 @@ import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.ModItems;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
+import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
+import com.supersouper.whichery.utils.DrawUtils;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -41,7 +44,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
         required: for (int i = 0; i < types.length; i++) {
             if (types[i] == null) continue;
             for (int j = 0; j < tmp.length; j++) {
-                if (tmp[j] != null && tmp[j].equals(types[i]) && cte.getRune(j) == runes[i]) {
+                if (tmp[j] != null && tmp[j].equals(types[i]) && (runes[i] == -1 || cte.getRune(j) == runes[i])) {
                     tmp[j] = null;
                     continue required;
                 }
@@ -105,13 +108,79 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
     }
 
     @SideOnly(Side.CLIENT)
-    @Override
-    public void drawIcon(Tessellator t, int x, int y, int w, int h) {
+    private int[] cycleRunes;
+    private int[] cycleRunesRandom;
+    private String[] cycleTypes;
+    @SideOnly(Side.CLIENT)
+    private long lastCycle;
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void drawIcon(Tessellator t, TileEntity te, int x, int y, int z, int w, int h, double alpha) {
+        if (cycleRunes == null) {
+            cycleRunes = Arrays.copyOf(runes, runes.length);
+            cycleTypes = Arrays.copyOf(types, types.length);
+            cycleRunesRandom = new int[4];
+        }
+        if (System.currentTimeMillis() - lastCycle >= 1000) {
+            shuffleRunesAndTypes(cycleRunes, cycleTypes);
+            for (int i = 0; i < cycleTypes.length; i++) {
+                if (cycleTypes[i] == null) continue;
+                int a = WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(cycleTypes[i]).runeCount);
+                cycleRunesRandom[i] = a;
+            }
+            lastCycle = System.currentTimeMillis();
+        }
+
+        String[] tmp2;
+        if (te != null && te.getClass() == ChalkRuneSmallTileEntity.class) {
+            ChalkRuneSmallTileEntity cte = (ChalkRuneSmallTileEntity) te;
+            String[] tmp = Arrays.copyOf(cte.getTypes(), types.length);
+            tmp2 = Arrays.copyOf(cycleTypes, types.length);
+            required: for (int i = 0; i < tmp2.length; i++) {
+                if (tmp2[i] == null) continue;
+                for (int j = 0; j < tmp.length; j++) {
+                    if (tmp[j] != null && tmp[j].equals(tmp2[i])
+                        && (cycleRunes[i] == -1 || cte.getRune(j) == cycleRunes[i])) {
+                        tmp[j] = null;
+                        tmp2[i] = null;
+                        continue required;
+                    }
+                }
+            }
+        } else {
+            tmp2 = cycleTypes;
+        }
+
+        for (int i = 0; i < tmp2.length; i++) {
+            String cycleType = tmp2[i];
+            if (cycleType == null) continue;
+            int cycleRuneC = cycleRunes[i];
+
+            IIcon icon = RitualRegistry.RUNE_ICONS_SMALL.get(cycleType)[cycleRuneC == -1 ? cycleRunesRandom[i]
+                : cycleRuneC];
+            // RitualPreviewRenderer.setUniformsFromIcon(icon);
+            int color = RitualRegistry.CHALK_TYPES.get(cycleType).drawColor;
+            int r = (color >> 16) & 255;
+            int g = (color >> 8) & 255;
+            int b = color & 255;
+            t.setColorRGBA(r, g, b, (int) (alpha * 255));
+            DrawUtils.drawRect(
+                t,
+                x + w * BlockChalkRuneSmall.positions[i][0],
+                y + h * BlockChalkRuneSmall.positions[i][1],
+                z,
+                w / 2,
+                h / 2,
+                icon.getMinU(),
+                icon.getMinV(),
+                icon.getMaxU(),
+                icon.getMaxV());
+        }
     }
 
     public static void shuffleRunesAndTypes(int[] arr1, String[] arr2) {
-        for (int i = 0; i < arr1.length; i++) {
+        for (int i = 0; i < 4; i++) {
             int to = WhicheryUtils.rand.nextInt(arr1.length);
 
             int tmp = arr1[i];

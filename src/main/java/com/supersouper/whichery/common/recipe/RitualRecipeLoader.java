@@ -49,21 +49,32 @@ public class RitualRecipeLoader {
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
 
-        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, new ISecondaryMatcher[]{
+        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 1, (byte) 4, new ISecondaryMatcher[]{
                 new TestSecondaryMatcher(), new ChalkItemSecondaryMatcher(new ItemStack(Items.stick), new ItemStack(Items.gold_ingot)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond), new ItemStack(Items.emerald), true)},
+            new String[]{
+                "         ",
+                "         ",
+                "   mmm   ",
+                "  m   m  ",
+                "  m   m  ",
+                "  m   m  ",
+                "   mmm   ",
+                "         ",
+                "         ",
+            },
             new String[]{
                 "g       g",
                 "   012   ",
                 "  3   3  ",
-                " 2 s s 4 ",
+                " 2 S s 4 ",
                 " 1  4  5 ",
-                " 0 s s 6 ",
+                " 0 s S 6 ",
                 "  B   7  ",
                 "   A98   ",
                 "g       g",
             },
             new String[]{
-                "g       g",
+                "b       g",
                 "         ",
                 "         ",
                 "         ",
@@ -71,8 +82,10 @@ public class RitualRecipeLoader {
                 "         ",
                 "         ",
                 "         ",
-                "g       g",
+                "g       b",
             },
+            'm',
+            new BlockMatcherBasic(Blocks.stone),
             '0',
             BlockMatcherChalk.of("spiritual", 0),
             '1',
@@ -97,10 +110,14 @@ public class RitualRecipeLoader {
             BlockMatcherChalk.of("spiritual", 10),
             'B',
             BlockMatcherChalk.of("spiritual", 11),
-            's',
+            'S',
             BlockMatcherChalkSmall.of("spiritual", 0, "bloody", 0),
+            's',
+            BlockMatcherChalkSmall.of("spiritual", "bloody"),
             'g',
-            new BlockMatcherBasic(Blocks.glowstone)
+            new BlockMatcherBasic(Blocks.glowstone),
+            'b',
+            new BlockMatcherBasic(Blocks.obsidian)
         ), new Class[] {ChalkItemConsumeEffect.class, TestRitualEffect.class}, new Class[] {FlyingSmallRunesAnimation.class}, new int[]{10, 10, 10, 10, 10, 10, 10, 10}));
 
 

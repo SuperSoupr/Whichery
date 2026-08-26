@@ -1,19 +1,25 @@
 package com.supersouper.whichery.utils;
 
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
 
 public class DrawUtils {
 
-    public static void drawRect(Tessellator t, int x, int y, double z, int width, int height, double minU, double minV,
-        double maxU, double maxV) {
+    public static void drawRect(Tessellator t, double x, double y, double z, int width, int height, double minU,
+        double minV, double maxU, double maxV) {
         t.addVertexWithUV(x, y + height, z, minU, maxV);
         t.addVertexWithUV(x + width, y + height, z, maxU, maxV);
         t.addVertexWithUV(x + width, y, z, maxU, minV);
         t.addVertexWithUV(x, y, z, minU, minV);
     }
 
-    public static void drawTiledRectH(Tessellator t, int x, int y, double z, int totalWidth, int height, double minU,
-        double minV, double maxU, double maxV, int tileWidthPixels) {
+    public static void drawRectFromIcon(Tessellator t, double x, double y, double z, int width, int height,
+        IIcon icon) {
+        drawRect(t, x, y, z, width, height, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV());
+    }
+
+    public static void drawTiledRectH(Tessellator t, double x, double y, double z, int totalWidth, int height,
+        double minU, double minV, double maxU, double maxV, int tileWidthPixels) {
         double uPerPixel = (maxU - minU) / tileWidthPixels;
 
         for (int drawn = 0; drawn < totalWidth; drawn += tileWidthPixels) {
@@ -27,8 +33,8 @@ public class DrawUtils {
         }
     }
 
-    public static void drawTiledRectV(Tessellator t, int x, int y, double z, int width, int totalHeight, double minU,
-        double minV, double maxU, double maxV, int tileHeightPixels) {
+    public static void drawTiledRectV(Tessellator t, double x, double y, double z, int width, int totalHeight,
+        double minU, double minV, double maxU, double maxV, int tileHeightPixels) {
         double vPerPixel = (maxV - minV) / tileHeightPixels;
 
         for (int drawn = 0; drawn < totalHeight; drawn += tileHeightPixels) {
@@ -41,7 +47,7 @@ public class DrawUtils {
         }
     }
 
-    public static void drawTiledRect(Tessellator t, int x, int y, double z, int totalWidth, int totalHeight,
+    public static void drawTiledRect(Tessellator t, double x, double y, double z, int totalWidth, int totalHeight,
         double minU, double minV, double maxU, double maxV, int tileWidthPixels, int tileHeightPixels) {
         double uPerPixel = (maxU - minU) / tileWidthPixels;
         double vPerPixel = (maxV - minV) / tileHeightPixels;

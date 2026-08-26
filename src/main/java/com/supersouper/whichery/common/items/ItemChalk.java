@@ -16,7 +16,6 @@ import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
-import com.supersouper.whichery.utils.WhicheryUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -89,10 +88,14 @@ public class ItemChalk extends Item {
                 stack.getTagCompound()
                     .getByte("nextRune"));
             if (!world.isRemote) {
+                // stack.getTagCompound()
+                // .setByte(
+                // "nextRune",
+                // (byte) WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
+                int newr = te.getRune();
+                newr = newr < 11 ? newr + 1 : 0;
                 stack.getTagCompound()
-                    .setByte(
-                        "nextRune",
-                        (byte) WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount));
+                    .setByte("nextRune", (byte) newr);
             }
             te.markDirty();
         }
