@@ -75,11 +75,13 @@ public class RitualRegistry {
     public static HashMap<String, IIcon[]> RUNE_ICONS;
     @SideOnly(Side.CLIENT)
     public static HashMap<String, IIcon[]> RUNE_ICONS_SMALL;
+    @SideOnly(Side.CLIENT)
+    public static HashMap<String, IIcon[]> CHALK_STICK_ICONS;
 
     @SideOnly(Side.CLIENT)
     @ApiStatus.Internal
     public static IIcon registerRuneIcons(IIconRegister reg) {
-        ChalkRuneISBRH.storageIcon = reg.registerIcon(Whichery.MODID + ":chalk");;
+        ChalkRuneISBRH.storageIcon = reg.registerIcon(Whichery.MODID + ":chalk");
 
         int baseCount = CHALK_TYPES.get(DEFAULT_CHALK_TYPE_NAME).runeCount;
         IIcon[] baseIcons = new IIcon[baseCount];
@@ -93,11 +95,11 @@ public class RitualRegistry {
         RitualRegistry.RUNE_ICONS.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIcons);
         RitualRegistry.RUNE_ICONS_SMALL.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIconsSmall);
 
-        for (Map.Entry<String, ChalkType> enty : RitualRegistry.CHALK_TYPES.entrySet()) {
+        for (Map.Entry<String, ChalkType> entry : RitualRegistry.CHALK_TYPES.entrySet()) {
 
-            String name = enty.getKey();
+            String name = entry.getKey();
             if (name.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
-            ChalkType type = enty.getValue();
+            ChalkType type = entry.getValue();
 
             IIcon[] icons = RitualRegistry.RUNE_ICONS.get(name);
             if (icons == null) {
@@ -130,6 +132,39 @@ public class RitualRegistry {
             RitualRegistry.RUNE_ICONS_SMALL.put(name, iconsSmall);
 
         }
+        return baseIcons[0];
+    }
+
+    @SideOnly(Side.CLIENT)
+    @ApiStatus.Internal
+    public static IIcon registerChalkStickIcons(IIconRegister reg) {
+
+        IIcon[] baseIcons = new IIcon[6];
+        for (int i = 0; i < 6; i++) {
+            baseIcons[i] = reg
+                .registerIcon(Whichery.MODID + ":chalk_stick/" + DEFAULT_CHALK_TYPE_NAME + "/chalk_stick_" + i);
+        }
+        CHALK_STICK_ICONS.put(DEFAULT_CHALK_TYPE_NAME, baseIcons);
+
+        for (Map.Entry<String, ChalkType> entry : RitualRegistry.CHALK_TYPES.entrySet()) {
+
+            String name = entry.getKey();
+            if (name.equals(DEFAULT_CHALK_TYPE_NAME)) continue;
+            ChalkType type = entry.getValue();
+
+            IIcon[] icons = new IIcon[6];
+            for (int i = 0; i < 6; i++) {
+                ResourceLocation iconLocation = new ResourceLocation(
+                    type.domain + ":textures/items/chalk_stick/" + name + "/chalk_stick_" + i + ".png");
+                if (WhicheryUtils.resourceExists(iconLocation)) {
+                    icons[i] = reg.registerIcon(type.domain + ":chalk_stick/" + name + "/chalk_stick_" + i);
+                } else {
+                    icons[i] = baseIcons[i];
+                }
+            }
+            CHALK_STICK_ICONS.put(name, icons);
+        }
+
         return baseIcons[0];
     }
 }

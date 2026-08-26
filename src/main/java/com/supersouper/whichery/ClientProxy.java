@@ -12,6 +12,7 @@ import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.client.gui.BloodMeterRenderer;
 import com.supersouper.whichery.client.render.ChalkRuneISBRH;
 import com.supersouper.whichery.client.render.ChalkRuneSmallISBRH;
+import com.supersouper.whichery.client.render.ChalkStickItemRender;
 import com.supersouper.whichery.common.entity.PlacedEntityItem;
 import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 
@@ -26,27 +27,24 @@ public class ClientProxy extends CommonProxy {
         super.preInit(event);
         RitualRegistry.RUNE_ICONS = new HashMap<>();
         RitualRegistry.RUNE_ICONS_SMALL = new HashMap<>();
+        RitualRegistry.CHALK_STICK_ICONS = new HashMap<>();
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
         MinecraftForge.EVENT_BUS.register(new BloodMeterRenderer(Minecraft.getMinecraft()));
-        if (ModItems.CHALK.isEnabled()) {
-            // ChalkRuneTESR renderer = new ChalkRuneTESR();
-            // ClientRegistry.bindTileEntitySpecialRenderer(ModTileEntities.CHALK_RUNE.getTileEntityClass(), renderer);
+        if (ModItems.CHALK_STICK.isEnabled()) {
             MinecraftForgeClient.registerItemRenderer(ModBlocks.CHALK_RUNE_BLOCK.getItem(), ChalkRuneISBRH.INSTANCE);
-
-            // ChalkRuneSmallTESR renderer2 = new ChalkRuneSmallTESR();
-            // ClientRegistry
-            // .bindTileEntitySpecialRenderer(ModTileEntities.CHALK_SMALL_RUNE.getTileEntityClass(), renderer2);
             MinecraftForgeClient
                 .registerItemRenderer(ModBlocks.CHALK_RUNE_BLOCK_SMALL.getItem(), ChalkRuneSmallISBRH.INSTANCE);
+            MinecraftForgeClient.registerItemRenderer(ModItems.CHALK_STICK.get(), new ChalkStickItemRender());
 
             RitualRegistry
                 .registerItemHasher(ModBlocks.CHALK_RUNE_BLOCK.getItem(), BlockMatcherChalk::chalkItemStackToHashCode);
-            RitualRegistry.registerItemHasher(ModItems.CHALK.get(), BlockMatcherChalk::chalkItemStackToHashCode);
-            RitualRegistry.registerItemHasher(ModItems.CHALK_SMALL.get(), BlockMatcherChalk::chalkItemStackToHashCode);
+            RitualRegistry.registerItemHasher(ModItems.CHALK_STICK.get(), BlockMatcherChalk::chalkItemStackToHashCode);
+            RitualRegistry
+                .registerItemHasher(ModItems.CHALK_STICK_SMALL.get(), BlockMatcherChalk::chalkItemStackToHashCode);
 
             RenderingRegistry.registerEntityRenderingHandler(
                 PlacedEntityItem.class,

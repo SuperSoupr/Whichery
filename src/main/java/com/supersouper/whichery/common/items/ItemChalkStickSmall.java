@@ -24,11 +24,11 @@ import com.supersouper.whichery.utils.NBTUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemChalkSmall extends Item {
+public class ItemChalkStickSmall extends Item {
 
     // TODO merge with regular chalk?
-    public ItemChalkSmall() {
-        setUnlocalizedName("chalk_small");
+    public ItemChalkStickSmall() {
+        setUnlocalizedName("chalk_stick_small");
         setMaxDamage(256);
     }
 
@@ -91,7 +91,7 @@ public class ItemChalkSmall extends Item {
         int pos = BlockChalkRuneSmall.clickPosToOrdinal(clickX, clickZ);
         if (te instanceof ChalkRuneSmallTileEntity cste) {
             if (cste.getType(pos) != null) return false;
-            String type = ItemChalk.getChalkType(stack);
+            String type = ItemChalkStick.getChalkType(stack);
             int rotation = (int) ((((player.rotationYaw % 360) + 22.5f) / 45f + 8f) % 8f);
             cste.setType(pos, type);
             cste.setRotation(pos, rotation);

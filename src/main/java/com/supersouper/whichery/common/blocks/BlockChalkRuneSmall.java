@@ -21,7 +21,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import com.supersouper.whichery.CommonProxy;
-import com.supersouper.whichery.common.items.ItemChalkSmall;
+import com.supersouper.whichery.common.items.ItemChalkStickSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
@@ -182,11 +182,11 @@ public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
             if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
                 ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
                 if (te != null) {
-                    te.setTypes(ItemChalkSmall.getChalkTypes(stack));
-                    te.setRunes(ItemChalkSmall.getChalkRunes(stack));
+                    te.setTypes(ItemChalkStickSmall.getChalkTypes(stack));
+                    te.setRunes(ItemChalkStickSmall.getChalkRunes(stack));
                     if (stack.getTagCompound()
                         .hasKey("rotations")) {
-                        te.setRotations(ItemChalkSmall.getChalkRotations(stack));
+                        te.setRotations(ItemChalkStickSmall.getChalkRotations(stack));
                     }
                     te.markDirty();
                 }

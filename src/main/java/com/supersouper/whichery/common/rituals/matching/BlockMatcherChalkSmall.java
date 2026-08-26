@@ -60,7 +60,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
 
     @Override
     public ItemStack getItemStack() {
-        return new ItemStack(ModItems.CHALK_SMALL.get());
+        return new ItemStack(ModItems.CHALK_STICK_SMALL.get());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
                 allTypes.add(type);
             }
         }
-        int itemHash = ModItems.CHALK_SMALL.get()
+        int itemHash = ModItems.CHALK_STICK_SMALL.get()
             .hashCode();
         int[] itemStackHashCodes = new int[allTypes.size()];
         for (int i = 0; i < allTypes.size(); i++) {

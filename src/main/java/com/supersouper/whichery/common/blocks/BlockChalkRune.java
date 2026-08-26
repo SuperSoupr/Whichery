@@ -22,7 +22,7 @@ import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualLeaderBlock;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
-import com.supersouper.whichery.common.items.ItemChalk;
+import com.supersouper.whichery.common.items.ItemChalkStick;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 
 import cpw.mods.fml.relauncher.Side;
@@ -46,6 +46,10 @@ public class BlockChalkRune extends RitualLeaderBlock {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float subX,
         float subY, float subZ) {
+        if (player.getHeldItem() != null && player.getHeldItem()
+            .getItem() instanceof ItemChalkStick) {
+            return false;
+        }
         TileEntity te = world.getTileEntity(x, y, z);
         if (te instanceof ChalkRuneTileEntity cte) {
             if (cte.onRightClicked(player)) return true;
@@ -149,9 +153,9 @@ public class BlockChalkRune extends RitualLeaderBlock {
             if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
                 ChalkRuneTileEntity te = (ChalkRuneTileEntity) world.getTileEntity(x, y, z);
                 if (te != null) {
-                    te.setType(ItemChalk.getChalkType(stack));
-                    te.setRune(ItemChalk.getChalkRune(stack));
-                    te.setRotation(ItemChalk.getChalkRotation(stack));
+                    te.setType(ItemChalkStick.getChalkType(stack));
+                    te.setRune(ItemChalkStick.getChalkRune(stack));
+                    te.setRotation(ItemChalkStick.getChalkRotation(stack));
                     te.markDirty();
                 }
                 return true;

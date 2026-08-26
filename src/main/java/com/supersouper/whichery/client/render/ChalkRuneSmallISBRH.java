@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
-import com.supersouper.whichery.common.items.ItemChalkSmall;
+import com.supersouper.whichery.common.items.ItemChalkStickSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
@@ -139,11 +139,11 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
             types = cycleTypes;
             runes = cycleRunes;
         } else {
-            types = ItemChalkSmall.getChalkTypes(stack);
-            runes = ItemChalkSmall.getChalkRunes(stack);
+            types = ItemChalkStickSmall.getChalkTypes(stack);
+            runes = ItemChalkStickSmall.getChalkRunes(stack);
             if (stack.getTagCompound()
                 .hasKey("rotations")) {
-                rotations = ItemChalkSmall.getChalkRotations(stack);
+                rotations = ItemChalkStickSmall.getChalkRotations(stack);
             }
         }
 

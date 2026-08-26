@@ -60,7 +60,7 @@ public class Whichery {
                 .getItem();
         }
 
-        public static final ItemStack ICON_ITEM = new ItemStack(ModItems.CHALK.get());
+        public static final ItemStack ICON_ITEM = new ItemStack(ModItems.CHALK_STICK.get());
 
         @Override
         public ItemStack getIconItemStack() {

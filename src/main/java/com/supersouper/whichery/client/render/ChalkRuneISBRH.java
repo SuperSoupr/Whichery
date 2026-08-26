@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.supersouper.whichery.CommonProxy;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
-import com.supersouper.whichery.common.items.ItemChalk;
+import com.supersouper.whichery.common.items.ItemChalkStick;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
@@ -251,7 +251,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
     @Override
     public void renderItem(ItemRenderType itemRenderType, ItemStack stack, Object... data) {
-        String type = ItemChalk.getChalkType(stack);
+        String type = ItemChalkStick.getChalkType(stack);
         type = type == null ? RitualRegistry.DEFAULT_CHALK_TYPE_NAME : type;
         if (System.currentTimeMillis() - lastCycle >= 1000) {
             lastCycle = System.currentTimeMillis();
@@ -268,8 +268,8 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         t.startDrawingQuads();
         render(
             type,
-            stackHasRune ? ItemChalk.getChalkRune(stack) : cycleRune,
-            ItemChalk.getChalkRotation(stack),
+            stackHasRune ? ItemChalkStick.getChalkRune(stack) : cycleRune,
+            ItemChalkStick.getChalkRotation(stack),
             0,
             0,
             0,

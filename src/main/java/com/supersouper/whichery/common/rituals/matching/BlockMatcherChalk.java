@@ -49,12 +49,12 @@ public class BlockMatcherChalk implements IBlockMatcher {
 
     @Override
     public ItemStack getItemStack() {
-        return RitualUtils.createChalkItem(ModItems.CHALK.get(), type);
+        return RitualUtils.createChalkItem(ModItems.CHALK_STICK.get(), type);
     }
 
     @Override
     public int[] itemStackHashCodes() {
-        return new int[] { ModItems.CHALK.get()
+        return new int[] { ModItems.CHALK_STICK.get()
             .hashCode() + type.hashCode() };
     }
 
