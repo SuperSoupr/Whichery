@@ -20,6 +20,7 @@ public class CommonProxy {
         PacketHandler.init();
         ModTileEntities.init();
         ModKeybindings.init();
+        ModEntities.init();
         FamilyRegistry.initIngredients();
     }
 

@@ -20,6 +20,9 @@ public class Whichery {
     public static final String MODID = "whichery";
     public static final Logger LOG = LogManager.getLogger(MODID);
 
+    @Mod.Instance(MODID)
+    public static Whichery INSTANCE;
+
     @SidedProxy(
         clientSide = "com.supersouper.whichery.ClientProxy",
         serverSide = "com.supersouper.whichery.CommonProxy")
