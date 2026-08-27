@@ -10,14 +10,16 @@ import org.apache.logging.log4j.Logger;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = Whichery.MODID, version = Tags.VERSION, name = "Whichery", acceptedMinecraftVersions = "[1.7.10]")
+@Mod(modid = Whichery.MODID, version = Tags.VERSION, name = Whichery.MODNAME, acceptedMinecraftVersions = "[1.7.10]")
 public class Whichery {
 
     public static final String MODID = "whichery";
+    public static final String MODNAME = "Whichery";
     public static final Logger LOG = LogManager.getLogger(MODID);
 
     @SidedProxy(
@@ -41,6 +43,11 @@ public class Whichery {
     }
 
     @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        proxy.loadComplete(event);
+    }
+
+    @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
     }
@@ -53,7 +60,7 @@ public class Whichery {
                 .getItem();
         }
 
-        public static final ItemStack ICON_ITEM = new ItemStack(ModItems.CHALK.get());
+        public static final ItemStack ICON_ITEM = new ItemStack(ModItems.CHALK_STICK.get());
 
         @Override
         public ItemStack getIconItemStack() {

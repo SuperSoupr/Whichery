@@ -1,29 +1,60 @@
 package com.supersouper.whichery;
 
 import com.supersouper.whichery.api.ingredientfamilies.FamilyRegistry;
+import com.supersouper.whichery.api.rituals.ChalkType;
+import com.supersouper.whichery.api.rituals.RitualRegistry;
+import com.supersouper.whichery.client.render.ChalkRuneISBRH;
+import com.supersouper.whichery.client.render.ChalkRuneSmallISBRH;
 import com.supersouper.whichery.common.network.PacketHandler;
+import com.supersouper.whichery.common.recipe.RitualRecipeLoader;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class CommonProxy {
 
+    public static int chalkRuneRenderID;
+    public static int chalkRuneSmallRenderID;
+
     public void preInit(FMLPreInitializationEvent event) {
-        ModItems.init();
-        ModBlocks.init();
+
         FamilyRegistry.initFamilies();
+
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, RitualRegistry.DEFAULT_CHALK_TYPE_NAME));
+        // RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "spiritual"));
+        // RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "bloody"));
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "spiritual", 12, 0x7070FF));
+        RitualRegistry.registerChalkType(new ChalkType(Whichery.MODID, "bloody", 12, 0xFF7070));
+        if (ModItems.CHALK_STICK.isEnabled()) {
+            chalkRuneRenderID = RenderingRegistry.getNextAvailableRenderId();
+            RenderingRegistry.registerBlockHandler(ChalkRuneISBRH.INSTANCE);
+
+            chalkRuneSmallRenderID = RenderingRegistry.getNextAvailableRenderId();
+            RenderingRegistry.registerBlockHandler(ChalkRuneSmallISBRH.INSTANCE);
+        }
     }
 
     public void init(FMLInitializationEvent event) {
+        ModItems.init();
+        ModBlocks.init();
         PacketHandler.init();
         ModTileEntities.init();
         ModKeybindings.init();
         FamilyRegistry.initIngredients();
+        RitualRecipeLoader.loadRecipes();
     }
 
-    public void postInit(FMLPostInitializationEvent event) {}
+    public void postInit(FMLPostInitializationEvent event) {
+        RitualRegistry.finalizeChalkTypes();
+    }
+
+    public void loadComplete(FMLLoadCompleteEvent event) {
+
+    }
 
     public void serverStarting(FMLServerStartingEvent event) {}
 }

@@ -1,0 +1,217 @@
+package com.supersouper.whichery.common.blocks;
+
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
+import com.supersouper.whichery.CommonProxy;
+import com.supersouper.whichery.common.items.ItemChalkStickSmall;
+import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
+import com.supersouper.whichery.utils.ArrayUtils;
+import com.supersouper.whichery.utils.NBTUtils;
+import com.supersouper.whichery.utils.WhicheryUtils;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class BlockChalkRuneSmall extends Block implements ITileEntityProvider {
+
+    public BlockChalkRuneSmall() {
+        super(Material.ground);
+        setBlockName("chalk_rune_small");
+        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new ChalkRuneSmallTileEntity(world);
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public int getRenderType() {
+        return CommonProxy.chalkRuneSmallRenderID;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (!(te instanceof ChalkRuneSmallTileEntity cste)) return super.removedByPlayer(world, player, x, y, z);
+
+        MovingObjectPosition hit;
+        if (world.isRemote) {
+            hit = Minecraft.getMinecraft().objectMouseOver;
+        } else {
+            hit = WhicheryUtils.rayTraceLook((EntityPlayerMP) player);
+        }
+
+        int pos = clickPosToOrdinal((float) (hit.hitVec.xCoord - x), (float) (hit.hitVec.zCoord - z));
+        if (cste.getType(pos) != null) {
+            cste.setType(pos, null);
+            if (world.isRemote) {
+                world.markBlockForUpdate(x, y, z);
+            }
+            cste.markDirty();
+            for (int i = 0; i < 4; i++) {
+                if (cste.getType(i) != null) {
+                    return false;
+                }
+            }
+        }
+        return super.removedByPlayer(world, player, x, y, z);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean addDestroyEffects(World world, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+        TileEntity te = world.getTileEntity(x, y, z);
+        if (!(te instanceof ChalkRuneSmallTileEntity cste)) return true;
+        MovingObjectPosition hit = Minecraft.getMinecraft().objectMouseOver;
+        int pos = clickPosToOrdinal((float) (hit.hitVec.xCoord - x), (float) (hit.hitVec.zCoord - z));
+
+        byte count = 3;
+
+        for (int i1 = 0; i1 < count; ++i1) {
+            for (int j1 = 0; j1 < count; ++j1) {
+                for (int k1 = 0; k1 < count; ++k1) {
+                    double d0 = (double) x + (((double) i1) / (double) count / 2) + positions[pos][0];
+                    double d1 = (double) y + (((double) i1) / (double) count / 2);
+                    double d2 = (double) z + (((double) i1) / (double) count / 2) + positions[pos][1];
+                    effectRenderer.addEffect(
+                        (new EntityDiggingFX(
+                            world,
+                            d0,
+                            d1 - 0.3,
+                            d2,
+                            d0 - (double) (x + positions[pos][0]) - 0.25D,
+                            d1 - (double) y - 0.25D,
+                            d2 - (double) (z + positions[pos][1]) - 0.25D,
+                            this,
+                            meta)).applyColourMultiplier(x, y, z));
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister reg) {}
+
+    @Override
+    protected void dropBlockAsItem(World worldIn, int x, int y, int z, ItemStack itemIn) {}
+
+    @Override
+    public void dropBlockAsItemWithChance(World worldIn, int x, int y, int z, int meta, float chance, int fortune) {}
+
+    @Override
+    public int quantityDropped(Random random) {
+        return 0;
+    }
+
+    @Override
+    public Item getItemDropped(int meta, Random random, int fortune) {
+        return null;
+    }
+
+    public void setBlockIcon(IIcon icon) {
+        this.blockIcon = icon;
+    }
+
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+        return getPickBlock(target, world, x, y, z, player.isSneaking());
+    }
+
+    @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+        return getPickBlock(target, world, x, y, z, false);
+    }
+
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z,
+        boolean copyRotations) {
+        ItemStack result = super.getPickBlock(target, world, x, y, z);
+        ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
+        if (te != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setTag("types", NBTUtils.StringArrayToNBTTagList(te.getTypes()));
+            tag.setByteArray("runes", ArrayUtils.intArrayToByteArray(te.getRunes()));
+            if (copyRotations) {
+                tag.setByteArray("rotations", ArrayUtils.intArrayToByteArray(te.getRotations()));
+            }
+            result.setTagCompound(tag);
+        }
+        return result;
+    }
+
+    public static class ItemBlockChalkRuneSmall extends ItemBlock {
+
+        public ItemBlockChalkRuneSmall(Block block) {
+            super(block);
+        }
+
+        @Override
+        public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ, int metadata) {
+            if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)) {
+                ChalkRuneSmallTileEntity te = (ChalkRuneSmallTileEntity) world.getTileEntity(x, y, z);
+                if (te != null) {
+                    te.setTypes(ItemChalkStickSmall.getChalkTypes(stack));
+                    te.setRunes(ItemChalkStickSmall.getChalkRunes(stack));
+                    if (stack.getTagCompound()
+                        .hasKey("rotations")) {
+                        te.setRotations(ItemChalkStickSmall.getChalkRotations(stack));
+                    }
+                    te.markDirty();
+                }
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static final float[][] positions = new float[][] { new float[] { 0, 0 }, new float[] { 0, 0.5f },
+        new float[] { 0.5f, 0 }, new float[] { 0.5f, 0.5f } };
+
+    public static int clickPosToOrdinal(float clickX, float clickZ) {
+        if (clickX <= 0.5f) {
+            if (clickZ <= 0.5f) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            if (clickZ <= 0.5f) {
+                return 2;
+            } else {
+                return 3;
+            }
+        }
+    }
+}
