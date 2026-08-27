@@ -262,6 +262,7 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
         boolean stackHasRune = stack.hasTagCompound() && stack.getTagCompound()
             .hasKey("rune");
 
+        GL11.glEnable(GL11.GL_BLEND);
         GL11.glPushMatrix();
         GL11.glRotatef(-90, 1, 0, 0);
         GL11.glTranslatef(-0.5f, 0, -0.5f);

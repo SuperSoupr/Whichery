@@ -14,9 +14,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.ChalkType;
+import com.supersouper.whichery.api.rituals.RitualPreview;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
+import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalkSmall;
 import com.supersouper.whichery.common.tileentities.ChalkRuneSmallTileEntity;
 import com.supersouper.whichery.utils.ArrayUtils;
 import com.supersouper.whichery.utils.NBTUtils;
@@ -78,10 +80,12 @@ public class ItemChalkStickSmall extends Item {
         float clickX, float clickY, float clickZ) {
         if (side != ForgeDirection.UP.ordinal()) return false;
 
+        int workingY = y;
         TileEntity te;
         if (world.getBlock(x, y, z) != ModBlocks.CHALK_RUNE_BLOCK_SMALL.get()) {
             world.setBlock(x, y + 1, z, ModBlocks.CHALK_RUNE_BLOCK_SMALL.get(), 0, 3);
             te = world.getTileEntity(x, y + 1, z);
+            workingY = y + 1;
         } else {
             te = world.getTileEntity(x, y, z);
         }
@@ -92,13 +96,32 @@ public class ItemChalkStickSmall extends Item {
         if (te instanceof ChalkRuneSmallTileEntity cste) {
             if (cste.getType(pos) != null) return false;
             String type = ItemChalkStick.getChalkType(stack);
+            ChalkType chalkType = RitualRegistry.CHALK_TYPES.get(type);
             int rotation = (int) ((((player.rotationYaw % 360) + 22.5f) / 45f + 8f) % 8f);
+            int rune = RitualPreview.getRuneFromPreview(
+                world,
+                player,
+                x,
+                workingY,
+                z,
+                matcher -> matcher.getClass() == BlockMatcherChalkSmall.class,
+                matcher -> {
+                    BlockMatcherChalkSmall matcherSmall = ((BlockMatcherChalkSmall) matcher);
+                    String[] typesLeft = matcherSmall.getRunesLeft(cste.getTypes(), cste.getRunes());
+                    for (int i = 0; i < typesLeft.length; i++) {
+                        if (typesLeft[i] == null) continue;
+                        if (!typesLeft[i].equals(type)) continue;
+                        return matcherSmall.runes[i];
+                    }
+                    return -1;
+                });
+            if (rune == -1) {
+                rune = stack.getTagCompound()
+                    .getByte("nextRune");
+            }
             cste.setType(pos, type);
             cste.setRotation(pos, rotation);
-            cste.setRune(
-                pos,
-                stack.getTagCompound()
-                    .getByte("nextRune"));
+            cste.setRune(pos, rune);
             if (world.isRemote) {
                 world.markBlockForUpdate(x, y, z);
             } else {

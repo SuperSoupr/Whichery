@@ -15,8 +15,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.api.rituals.ChalkType;
+import com.supersouper.whichery.api.rituals.RitualPreview;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
+import com.supersouper.whichery.common.rituals.matching.BlockMatcherChalk;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 
 import cpw.mods.fml.relauncher.Side;
@@ -109,9 +111,19 @@ public class ItemChalkStick extends Item {
             int rotation = (int) ((((player.rotationYaw % 360) + 22.5f) / 45f + 8f) % 8f);
             te.setType(type);
             te.setRotation(rotation);
-            te.setRune(
-                stack.getTagCompound()
-                    .getByte("nextRune"));
+            int rune = RitualPreview.getRuneFromPreview(
+                world,
+                player,
+                x,
+                workingY,
+                z,
+                matcher -> matcher.getClass() == BlockMatcherChalk.class,
+                matcher -> ((BlockMatcherChalk) matcher).rune);
+            if (rune == -1) {
+                rune = stack.getTagCompound()
+                    .getByte("nextRune");
+            }
+            te.setRune(rune);
             if (!world.isRemote) {
                 // stack.getTagCompound()
                 // .setByte(

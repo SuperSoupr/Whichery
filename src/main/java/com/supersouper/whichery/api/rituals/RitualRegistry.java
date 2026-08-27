@@ -167,4 +167,7 @@ public class RitualRegistry {
 
         return baseIcons[0];
     }
+
+    // Previews
+
 }

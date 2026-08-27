@@ -43,6 +43,7 @@ public class ChalkStickItemRender implements IItemRenderer {
         int b = color & 255;
 
         GL11.glColor3f(r / 255f, g / 255f, b / 255f);
+        GL11.glEnable(GL11.GL_BLEND);
         ItemRenderUtil.renderItem(type, icon);
     }
 }

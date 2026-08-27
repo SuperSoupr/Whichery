@@ -2,6 +2,7 @@ package com.supersouper.whichery.common.rituals.matching;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -26,8 +27,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 public class BlockMatcherChalkSmall implements IBlockMatcher {
 
     private static final int[] minusOnes = new int[] { -1, -1, -1, -1 };
-    private final String[] types;
-    private final int[] runes;
+    public final String[] types;
+    public final int[] runes;
 
     private BlockMatcherChalkSmall(String[] types, int[] runes) {
         this.types = types;
@@ -39,19 +40,8 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
         TileEntity te = world.getTileEntity(x, y, z);
         if (!(te instanceof ChalkRuneSmallTileEntity cte)) return false;
 
-        boolean match = true;
-        String[] tmp = Arrays.copyOf(cte.getTypes(), types.length);
-        required: for (int i = 0; i < types.length; i++) {
-            if (types[i] == null) continue;
-            for (int j = 0; j < tmp.length; j++) {
-                if (tmp[j] != null && tmp[j].equals(types[i]) && (runes[i] == -1 || cte.getRune(j) == runes[i])) {
-                    tmp[j] = null;
-                    continue required;
-                }
-            }
-            match = false;
-            break;
-        }
+        boolean match = Arrays.stream(getRunesLeft(cte.getTypes(), cte.getRunes()))
+            .allMatch(Objects::isNull);
         if (match) {
             tes.add(te);
         }
@@ -107,6 +97,34 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
         }
     }
 
+    public String[] getRunesLeft(String[] currentTypes, int[] currentRunes) {
+        return getRunesLeft(currentTypes, types, currentRunes, runes);
+    }
+
+    public static String[] getRunesLeft(String[] currentTypes, String[] requiredTypes, int[] currentRunes,
+        int[] requiredRunes) {
+        String[] tmp = Arrays.copyOf(currentTypes, currentTypes.length);
+        String[] tmp2 = Arrays.copyOf(requiredTypes, requiredTypes.length);
+        int[] tmp3 = Arrays.copyOf(requiredRunes, requiredRunes.length);
+        for (int i = 0; i < tmp2.length; i++) {
+            if (requiredTypes[i] == null) {
+                tmp3[i] = -1;
+            }
+        }
+        required: for (int i = 0; i < tmp2.length; i++) {
+            if (tmp2[i] == null) continue;
+            for (int j = 0; j < tmp.length; j++) {
+                if (tmp[j] != null && tmp[j].equals(tmp2[i]) && (tmp3[i] == -1 || currentRunes[j] == tmp3[i])) {
+                    tmp[j] = null;
+                    tmp2[i] = null;
+                    continue required;
+                }
+            }
+        }
+
+        return tmp2;
+    }
+
     @SideOnly(Side.CLIENT)
     private int[] cycleRunes;
     private int[] cycleRunesRandom;
@@ -135,19 +153,7 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
         String[] tmp2;
         if (te != null && te.getClass() == ChalkRuneSmallTileEntity.class) {
             ChalkRuneSmallTileEntity cte = (ChalkRuneSmallTileEntity) te;
-            String[] tmp = Arrays.copyOf(cte.getTypes(), types.length);
-            tmp2 = Arrays.copyOf(cycleTypes, types.length);
-            required: for (int i = 0; i < tmp2.length; i++) {
-                if (tmp2[i] == null) continue;
-                for (int j = 0; j < tmp.length; j++) {
-                    if (tmp[j] != null && tmp[j].equals(tmp2[i])
-                        && (cycleRunes[i] == -1 || cte.getRune(j) == cycleRunes[i])) {
-                        tmp[j] = null;
-                        tmp2[i] = null;
-                        continue required;
-                    }
-                }
-            }
+            tmp2 = getRunesLeft(cte.getTypes(), cycleTypes, cte.getRunes(), cycleRunes);
         } else {
             tmp2 = cycleTypes;
         }

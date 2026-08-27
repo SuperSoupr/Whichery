@@ -26,8 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMatcherChalk implements IBlockMatcher {
 
-    private final String type;
-    private final int rune;
+    public final String type;
+    public final int rune;
 
     private BlockMatcherChalk(String type, int rune) {
         this.type = type;

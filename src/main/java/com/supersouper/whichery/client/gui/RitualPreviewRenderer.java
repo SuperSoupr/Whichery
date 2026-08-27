@@ -7,17 +7,14 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.event.MouseEvent;
 
 import org.lwjgl.opengl.GL11;
 
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
-import com.supersouper.whichery.Whichery;
-import com.supersouper.whichery.api.rituals.Ritual;
+import com.supersouper.whichery.api.rituals.RitualPreview;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.items.ItemRitualPreview;
@@ -36,25 +33,7 @@ public class RitualPreviewRenderer {
         "whichery",
         "textures/gui/ritual_preview.png");
 
-    private static final ArrayList<Preview> previews = new ArrayList<>();
     private static boolean large = false;
-
-    private static final int[] rotationCorrections = new int[] { 2, 1, 0, 3 };
-    private static final int[] rotationCorrections2 = new int[] { 0, 3, 2, 1 };
-
-    public static void addPreview(Ritual ritual, IBlockAccess world, int worldX, int worldY, int worldZ, int rotation) {
-        previews.clear();
-
-        previews.add(new Preview(ritual, 10, 10, world, worldX, worldY, worldZ, rotationCorrections[rotation]));
-    }
-
-    public static void clearPreviews() {
-        previews.clear();
-    }
-
-    public static void removePreview(Ritual ritual) {
-        previews.removeIf(preview -> preview.ritual.equals(ritual));
-    }
 
     private static void draw() {
         Tessellator t = Tessellator.instance;
@@ -65,12 +44,12 @@ public class RitualPreviewRenderer {
 
         GL11.glEnable(GL11.GL_BLEND);
 
-        ArrayList<Preview> toRemove = new ArrayList<>();
+        ArrayList<RitualPreview> toRemove = new ArrayList<>();
         byte[] pos = new byte[3];
         int[] pos2d = new int[2];
         double[] pos2dd = new double[2];
         ArrayList<TileEntity> dummy = new ArrayList<>();
-        for (Preview preview : previews) {
+        for (RitualPreview preview : RitualPreview.PREVIEWS_CLIENT) {
             int margin = 2;
             int rawWidth = preview.ritual.recipe.size[0] * 8 + preview.ritual.recipe.size[1] - 1;
             int rawHeight = preview.ritual.recipe.size[2] * 8 + preview.ritual.recipe.size[1] - 1;
@@ -116,7 +95,7 @@ public class RitualPreviewRenderer {
 
                 pos2d[0] = pos[0];
                 pos2d[1] = pos[2];
-                for (int j = 0; j < rotationCorrections2[preview.rotation]; j++) {
+                for (int j = 0; j < RitualPreview.rotationCorrections2[preview.rotation]; j++) {
                     WhicheryUtils.rotate(pos2d, preview.ritual.recipe.centerX, preview.ritual.recipe.centerZ);
                 }
                 if (!matcher.match(
@@ -150,11 +129,11 @@ public class RitualPreviewRenderer {
             // GL11.glScalef(1f / scale, 1f / scale, 1f / scale);
             GL11.glPopMatrix();
         }
-        previews.removeAll(toRemove);
+        RitualPreview.PREVIEWS_CLIENT.removeAll(toRemove);
     }
 
-    private static void drawTargetMarker(Tessellator t, Preview preview, double[] pos2dd, int w, int h, double rawWidth,
-        double rawHeight, int margin) {
+    private static void drawTargetMarker(Tessellator t, RitualPreview preview, double[] pos2dd, int w, int h,
+        double rawWidth, double rawHeight, int margin) {
         MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
         if (mop == null || mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return;
 
@@ -183,8 +162,8 @@ public class RitualPreviewRenderer {
         t.draw();
     }
 
-    private static void drawPlayerMarker(Tessellator t, Preview preview, double playerMarkerX, double playerMarkerY,
-        float rotationYaw) {
+    private static void drawPlayerMarker(Tessellator t, RitualPreview preview, double playerMarkerX,
+        double playerMarkerY, float rotationYaw) {
         GL11.glPushMatrix();
         GL11.glTranslated(playerMarkerX, playerMarkerY, 0);
         GL11.glRotatef(rotationYaw + 90 * preview.rotation + 180, 0, 0, 1);
@@ -240,26 +219,6 @@ public class RitualPreviewRenderer {
 
         GL11.glPopMatrix();
 
-    }
-
-    private static class Preview {
-
-        public final Ritual ritual;
-        public final int x, y;
-        public final IBlockAccess world;
-        public final int worldX, worldY, worldZ;
-        public final int rotation;
-
-        Preview(Ritual ritual, int x, int y, IBlockAccess world, int worldX, int worldY, int worldZ, int rotation) {
-            this.ritual = ritual;
-            this.x = x;
-            this.y = y;
-            this.world = world;
-            this.worldX = worldX;
-            this.worldY = worldY - ritual.recipe.centerY;
-            this.worldZ = worldZ;
-            this.rotation = rotation;
-        }
     }
 
     @SideOnly(Side.CLIENT)
