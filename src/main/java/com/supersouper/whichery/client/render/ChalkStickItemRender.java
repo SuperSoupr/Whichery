@@ -33,11 +33,13 @@ public class ChalkStickItemRender implements IItemRenderer {
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         if (!(stack.getItem() instanceof ItemChalkStick chalkstick)) return;
-        IIcon icon = chalkstick.getIcon(stack, 0);
+        int iconIndex = chalkstick.getIconIndexFromDamage(stack);
+        IIcon icon = chalkstick.getIconFromIndex(stack, iconIndex);
 
         ItemRenderUtil.applyStandardItemTransform(type);
 
-        int color = RitualRegistry.CHALK_TYPES.get(ItemChalkStick.getChalkType(stack)).drawColor;
+        int color = RitualRegistry.CHALK_TYPES.get(ItemChalkStick.getChalkType(stack))
+            .getRGB(2, iconIndex);
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;

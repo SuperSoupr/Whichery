@@ -30,7 +30,7 @@ public class RitualGuiHandler extends GuiMultiblockHandler {
     @Override
     protected @NotNull String getMultiblockName() {
         if (renderingController instanceof Ritual ritual) {
-            return "whichery.ritual." + ritual.name + ".name";
+            return ritual.getDisplayName();
         }
         return super.getMultiblockName();
     }

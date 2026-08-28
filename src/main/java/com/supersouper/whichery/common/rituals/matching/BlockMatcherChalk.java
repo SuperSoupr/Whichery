@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.ModItems;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RitualUtils;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
@@ -83,13 +84,13 @@ public class BlockMatcherChalk implements IBlockMatcher {
     @SideOnly(Side.CLIENT)
     @Override
     public void drawIcon(Tessellator t, TileEntity te, int x, int y, int z, int w, int h, double alpha) {
+        ChalkType chalkType = RitualRegistry.CHALK_TYPES.get(type);
         if (System.currentTimeMillis() - lastCycle >= 1000) {
             lastCycle = System.currentTimeMillis();
-            cycleRune = WhicheryUtils.rand.nextInt(RitualRegistry.CHALK_TYPES.get(type).runeCount);
+            cycleRune = WhicheryUtils.rand.nextInt(chalkType.runeCount);
         }
-        IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune == -1 ? cycleRune : rune];
-        // RitualPreviewRenderer.setUniformsFromIcon(icon);
-        int color = RitualRegistry.CHALK_TYPES.get(type).drawColor;
+        IIcon icon = chalkType.icons[rune == -1 ? cycleRune : rune];
+        int color = chalkType.getRGB(0, rune == -1 ? cycleRune : rune);
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;

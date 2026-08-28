@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 
 import com.supersouper.whichery.ModBlocks;
 import com.supersouper.whichery.ModItems;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.matching.IBlockMatcher;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
@@ -163,10 +164,9 @@ public class BlockMatcherChalkSmall implements IBlockMatcher {
             if (cycleType == null) continue;
             int cycleRuneC = cycleRunes[i];
 
-            IIcon icon = RitualRegistry.RUNE_ICONS_SMALL.get(cycleType)[cycleRuneC == -1 ? cycleRunesRandom[i]
-                : cycleRuneC];
-            // RitualPreviewRenderer.setUniformsFromIcon(icon);
-            int color = RitualRegistry.CHALK_TYPES.get(cycleType).drawColor;
+            ChalkType type = RitualRegistry.CHALK_TYPES.get(cycleType);
+            IIcon icon = type.iconsSmall[cycleRuneC == -1 ? cycleRunesRandom[i] : cycleRuneC];
+            int color = type.getRGB(1, cycleRuneC == -1 ? cycleRunesRandom[i] : cycleRuneC);
             int r = (color >> 16) & 255;
             int g = (color >> 8) & 255;
             int b = color & 255;

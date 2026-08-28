@@ -11,6 +11,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import com.supersouper.whichery.CommonProxy;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.items.ItemChalkStick;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
@@ -56,12 +57,13 @@ public class ChalkRuneISBRH implements ISimpleBlockRenderingHandler, IItemRender
 
         Tessellator t = Tessellator.instance;
 
-        int color = RitualRegistry.CHALK_TYPES.get(type).drawColor;
+        ChalkType chalkType = RitualRegistry.CHALK_TYPES.get(type);
+        int color = chalkType.getRGB(0, rune);
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
 
-        IIcon icon = RitualRegistry.RUNE_ICONS.get(type)[rune];
+        IIcon icon = chalkType.icons[rune];
         t.addTranslation(x, y, z);
         renderIconIn2D(t, icon, 16, 1f / 16f, 1, 45 * rotation, r, g, b, false, noBakedLight);
         t.addTranslation(-x, -y, -z);

@@ -11,6 +11,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualAnimation;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.api.rituals.RunningRitual;
@@ -116,24 +117,15 @@ public class FlyingSmallRunesAnimation extends RitualAnimation {
             rune.rr[1] = WhicheryUtils.lerpF(rune.rr[1], 90, 0.02f);
             GL11.glRotatef(rune.rr[1], 1.0F, 0.0F, 0.0F);
             t.startDrawingQuads();
-            int color = RitualRegistry.CHALK_TYPES.get(rune.type).drawColor;
+            ChalkType type = RitualRegistry.CHALK_TYPES.get(rune.type);
+            int color = type.getRGB(1, rune.rune);
             int r = (color >> 16) & 255;
             int g = (color >> 8) & 255;
             int b = color & 255;
             t.setTranslation(-0.5, 0, -0.5);
             rune.rr[2] = WhicheryUtils.lerpF(rune.rr[2], 180, 0.02f);
-            ChalkRuneISBRH.renderIconIn2D(
-                t,
-                RitualRegistry.RUNE_ICONS_SMALL.get(rune.type)[rune.rune],
-                8,
-                1f / 16f,
-                0.5f,
-                rune.rr[2],
-                r,
-                g,
-                b,
-                true,
-                false);
+            ChalkRuneISBRH
+                .renderIconIn2D(t, type.iconsSmall[rune.rune], 8, 1f / 16f, 0.5f, rune.rr[2], r, g, b, true, false);
             t.setTranslation(0, 0, 0);
             t.draw();
 

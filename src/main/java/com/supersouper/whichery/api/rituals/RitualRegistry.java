@@ -1,6 +1,7 @@
 package com.supersouper.whichery.api.rituals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -71,43 +72,46 @@ public class RitualRegistry {
     }
 
     // Rune textures
-    @SideOnly(Side.CLIENT)
-    public static HashMap<String, IIcon[]> RUNE_ICONS;
-    @SideOnly(Side.CLIENT)
-    public static HashMap<String, IIcon[]> RUNE_ICONS_SMALL;
-    @SideOnly(Side.CLIENT)
-    public static HashMap<String, IIcon[]> CHALK_STICK_ICONS;
+    public static final int CHALK_STICK_ICON_COUNT = 6;
 
     @SideOnly(Side.CLIENT)
     @ApiStatus.Internal
     public static IIcon registerRuneIcons(IIconRegister reg) {
         ChalkRuneISBRH.storageIcon = reg.registerIcon(Whichery.MODID + ":chalk");
 
-        int baseCount = CHALK_TYPES.get(DEFAULT_CHALK_TYPE_NAME).runeCount;
+        ChalkType type = CHALK_TYPES.get(DEFAULT_CHALK_TYPE_NAME);
+        int baseCount = type.runeCount;
         IIcon[] baseIcons = new IIcon[baseCount];
         IIcon[] baseIconsSmall = new IIcon[baseCount];
         for (int i = 0; i < baseIcons.length; i++) {
-            baseIcons[i] = reg
-                .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/large/rune_" + i);
+            baseIcons[i] = reg.registerIcon(Whichery.MODID + ":runes/" + DEFAULT_CHALK_TYPE_NAME + "/large/rune_" + i);
             baseIconsSmall[i] = reg
-                .registerIcon(Whichery.MODID + ":runes/" + RitualRegistry.DEFAULT_CHALK_TYPE_NAME + "/small/rune_" + i);
+                .registerIcon(Whichery.MODID + ":runes/" + DEFAULT_CHALK_TYPE_NAME + "/small/rune_" + i);
         }
-        RitualRegistry.RUNE_ICONS.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIcons);
-        RitualRegistry.RUNE_ICONS_SMALL.put(RitualRegistry.DEFAULT_CHALK_TYPE_NAME, baseIconsSmall);
+        boolean[] baseUniques = new boolean[baseCount];
+        Arrays.fill(baseUniques, true);
+        type.icons = baseIcons;
+        type.uniques = baseUniques;
+        type.iconsSmall = baseIconsSmall;
+        type.uniquesSmall = baseUniques;
 
-        for (Map.Entry<String, ChalkType> entry : RitualRegistry.CHALK_TYPES.entrySet()) {
+        for (Map.Entry<String, ChalkType> entry : CHALK_TYPES.entrySet()) {
 
             String name = entry.getKey();
-            if (name.equals(RitualRegistry.DEFAULT_CHALK_TYPE_NAME)) continue;
-            ChalkType type = entry.getValue();
+            if (name.equals(DEFAULT_CHALK_TYPE_NAME)) continue;
+            type = entry.getValue();
 
-            IIcon[] icons = RitualRegistry.RUNE_ICONS.get(name);
+            IIcon[] icons = type.icons;
+            boolean[] uniques = type.uniques;
             if (icons == null) {
                 icons = new IIcon[type.runeCount];
+                uniques = new boolean[type.runeCount];
             }
-            IIcon[] iconsSmall = RitualRegistry.RUNE_ICONS_SMALL.get(name);
+            IIcon[] iconsSmall = type.iconsSmall;
+            boolean[] iconsSmallUniques = type.uniquesSmall;
             if (iconsSmall == null) {
                 iconsSmall = new IIcon[type.runeCount];
+                iconsSmallUniques = new boolean[type.runeCount];
             }
 
             for (int i = 0; i < icons.length; i++) {
@@ -115,6 +119,7 @@ public class RitualRegistry {
                     type.domain + ":textures/blocks/runes/" + name + "/large/rune_" + i + ".png");
                 if (WhicheryUtils.resourceExists(iconLocation)) {
                     icons[i] = reg.registerIcon(type.domain + ":runes/" + name + "/large/rune_" + i);
+                    uniques[i] = true;
                 } else {
                     icons[i] = baseIcons[i];
                 }
@@ -123,13 +128,16 @@ public class RitualRegistry {
                     type.domain + ":textures/blocks/runes/" + name + "/small/rune_" + i + ".png");
                 if (WhicheryUtils.resourceExists(iconLocationSmall)) {
                     iconsSmall[i] = reg.registerIcon(type.domain + ":runes/" + name + "/small/rune_" + i);
+                    iconsSmallUniques[i] = true;
                 } else {
                     iconsSmall[i] = baseIconsSmall[i];
                 }
             }
 
-            RitualRegistry.RUNE_ICONS.put(name, icons);
-            RitualRegistry.RUNE_ICONS_SMALL.put(name, iconsSmall);
+            type.icons = icons;
+            type.uniques = uniques;
+            type.iconsSmall = iconsSmall;
+            type.uniquesSmall = iconsSmallUniques;
 
         }
         return baseIcons[0];
@@ -139,35 +147,39 @@ public class RitualRegistry {
     @ApiStatus.Internal
     public static IIcon registerChalkStickIcons(IIconRegister reg) {
 
-        IIcon[] baseIcons = new IIcon[6];
-        for (int i = 0; i < 6; i++) {
+        ChalkType type = CHALK_TYPES.get(DEFAULT_CHALK_TYPE_NAME);
+        IIcon[] baseIcons = new IIcon[CHALK_STICK_ICON_COUNT];
+        for (int i = 0; i < CHALK_STICK_ICON_COUNT; i++) {
             baseIcons[i] = reg
                 .registerIcon(Whichery.MODID + ":chalk_stick/" + DEFAULT_CHALK_TYPE_NAME + "/chalk_stick_" + i);
         }
-        CHALK_STICK_ICONS.put(DEFAULT_CHALK_TYPE_NAME, baseIcons);
+        boolean[] baseUniques = new boolean[CHALK_STICK_ICON_COUNT];
+        Arrays.fill(baseUniques, true);
+        type.iconsStick = baseIcons;
+        type.uniquesStick = baseUniques;
 
-        for (Map.Entry<String, ChalkType> entry : RitualRegistry.CHALK_TYPES.entrySet()) {
+        for (Map.Entry<String, ChalkType> entry : CHALK_TYPES.entrySet()) {
 
             String name = entry.getKey();
             if (name.equals(DEFAULT_CHALK_TYPE_NAME)) continue;
-            ChalkType type = entry.getValue();
+            type = entry.getValue();
 
-            IIcon[] icons = new IIcon[6];
-            for (int i = 0; i < 6; i++) {
+            IIcon[] icons = new IIcon[CHALK_STICK_ICON_COUNT];
+            boolean[] uniques = new boolean[CHALK_STICK_ICON_COUNT];
+            for (int i = 0; i < CHALK_STICK_ICON_COUNT; i++) {
                 ResourceLocation iconLocation = new ResourceLocation(
                     type.domain + ":textures/items/chalk_stick/" + name + "/chalk_stick_" + i + ".png");
                 if (WhicheryUtils.resourceExists(iconLocation)) {
                     icons[i] = reg.registerIcon(type.domain + ":chalk_stick/" + name + "/chalk_stick_" + i);
+                    uniques[i] = true;
                 } else {
                     icons[i] = baseIcons[i];
                 }
             }
-            CHALK_STICK_ICONS.put(name, icons);
+            type.iconsStick = icons;
+            type.uniquesStick = uniques;
         }
 
         return baseIcons[0];
     }
-
-    // Previews
-
 }

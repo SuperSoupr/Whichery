@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
@@ -51,6 +52,10 @@ public class Ritual implements IConstructable {
                     + stages.length
                     + " stages.");
         }
+
+        for (ISecondaryMatcher matcher : recipe.secondaryMatchers) {
+            matcher.onRitualConstructed(this);
+        }
     }
 
     public Ritual(String name, RitualRecipe recipe, Class<? extends RitualEffect> effectClass,
@@ -66,6 +71,14 @@ public class Ritual implements IConstructable {
     @SafeVarargs
     public static Class<? extends RitualAnimation>[] animations(Class<? extends RitualAnimation>... classes) {
         return classes;
+    }
+
+    public String getDisplayName() {
+        return getDisplayName(name);
+    }
+
+    public static String getDisplayName(String ritualName) {
+        return StatCollector.translateToLocal("whichery.ritual." + ritualName + ".name");
     }
 
     @Optional.Method(modid = "structurelib")

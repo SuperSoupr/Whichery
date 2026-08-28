@@ -32,7 +32,7 @@ public class RitualRecipeLoader {
         Arrays.fill(stages, 10);
 
         // spotless:off
-        RitualRegistry.registerRitual(new Ritual("banana1", RitualBuilder.buildRecipe((byte) 3, (byte) 0, (byte) 3, new ISecondaryMatcher[]{
+        RitualRegistry.registerRitual(new Ritual("test_ritual_1", RitualBuilder.buildRecipe((byte) 3, (byte) 0, (byte) 3, new ISecondaryMatcher[]{
         new ChalkItemSecondaryMatcher(new ItemStack(Items.stick))},
             new String[]{
                 "  ccc  ",
@@ -49,7 +49,7 @@ public class RitualRecipeLoader {
             new BlockMatcherBasic(Blocks.obsidian)
         ), TestRitualEffect.class, TestRitualAnimation.class, stages));
 
-        RitualRegistry.registerRitual(new Ritual("banana2", RitualBuilder.buildRecipe((byte) 4, (byte) 1, (byte) 4, new ISecondaryMatcher[]{
+        RitualRegistry.registerRitual(new Ritual("test_ritual_2", RitualBuilder.buildRecipe((byte) 4, (byte) 1, (byte) 4, new ISecondaryMatcher[]{
                 new TestSecondaryMatcher(), new ChalkItemSecondaryMatcher(new ItemStack(Items.stick), new ItemStack(Items.gold_ingot)), new ChalkItemSecondaryMatcher(new ItemStack(Items.diamond), new ItemStack(Items.emerald), true)},
             new String[]{
                 "         ",
@@ -121,20 +121,32 @@ public class RitualRecipeLoader {
         ), new Class[] {ChalkItemConsumeEffect.class, TestRitualEffect.class}, new Class[] {FlyingSmallRunesAnimation.class}, new int[]{10, 10, 10, 10, 10, 10, 10, 10}));
 
 
-        RitualRegistry.registerRitual(new Ritual("banana3", RitualBuilder.buildRecipe((byte) 4, (byte) 0, (byte) 4, null,
+        RitualRegistry.registerRitual(new Ritual("test_ritual_3", RitualBuilder.buildRecipe((byte) 9, (byte) 0, (byte) 9, null,
             new String[]{
-                "   ccc   ",
-                "  c   c  ",
-                " c     c ",
-                "c       c",
-                "c   c   c",
-                "c       c",
-                " c     c ",
-                "  c   c  ",
-                "   ccc   ",
+                "bbbbbbbbbbbbbbbbbbb",
+                "b                 b",
+                "b                 b",
+                "b                 b",
+                "b                 b",
+                "b       ccc       b",
+                "b      c   c      b",
+                "b     c     c     b",
+                "b    c       c    b",
+                "b    c   c   c    b",
+                "b    c       c    b",
+                "b     c     c     b",
+                "b      c   c      b",
+                "b       ccc       b",
+                "b                 b",
+                "b                 b",
+                "b                 b",
+                "b                 b",
+                "bbbbbbbbbbbbbbbbbbb",
             },
             'c',
-            BlockMatcherChalk.of("spiritual")
+            BlockMatcherChalk.of("spiritual"),
+            'b',
+            new BlockMatcherBasic(Blocks.glowstone)
         ), TestRitualEffect.class, TestRitualAnimation.class, new int[]{10, 10}));
         // spotless:on
     }

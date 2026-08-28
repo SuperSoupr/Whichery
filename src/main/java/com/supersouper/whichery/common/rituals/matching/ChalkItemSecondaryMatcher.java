@@ -7,7 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
+import com.supersouper.whichery.Whichery;
+import com.supersouper.whichery.api.rituals.Ritual;
 import com.supersouper.whichery.api.rituals.matching.ISecondaryMatcher;
+import com.supersouper.whichery.common.rituals.effects.ChalkItemConsumeEffect;
 import com.supersouper.whichery.common.tileentities.ChalkRuneTileEntity;
 import com.supersouper.whichery.utils.WhicheryUtils;
 
@@ -31,6 +34,26 @@ public class ChalkItemSecondaryMatcher implements ISecondaryMatcher {
         this.resultStack = result != null ? result.copy() : null;
         this.onlyPlaceOnComplete = onlyPlaceOnComplete;
         this.matchNBT = stack.hasTagCompound();
+    }
+
+    @Override
+    public void onRitualConstructed(Ritual ritual) {
+        boolean has = false;
+        for (Class<?> clazz : ritual.effectClasses) {
+            if (clazz == ChalkItemConsumeEffect.class) {
+                has = true;
+                break;
+            }
+        }
+        if (!has) {
+            if (resultStack == null) {
+                Whichery.LOG.warn("Ritual '{}' has an item matcher but no ChalkItemConsumeEffect effect", ritual.name);
+            } else {
+                throw new IllegalArgumentException(
+                    "Ritual '" + ritual.name
+                        + "' has an item matcher with a result item but no ChalkItemConsumeEffect effect");
+            }
+        }
     }
 
     @Override

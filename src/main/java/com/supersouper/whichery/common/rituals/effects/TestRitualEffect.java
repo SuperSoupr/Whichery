@@ -1,7 +1,6 @@
 package com.supersouper.whichery.common.rituals.effects;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 
@@ -15,11 +14,6 @@ public class TestRitualEffect extends RitualEffect {
     }
 
     @Override
-    public void onTick() {
-
-    }
-
-    @Override
     public void transitionToStage(int stage) {
         EntityPlayer player = currentRitual.getStarter();
         if (player != null) {
@@ -27,25 +21,5 @@ public class TestRitualEffect extends RitualEffect {
                 new ChatComponentText(
                     "transitioned to stage " + stage + " (" + (player.worldObj.isRemote ? "client" : "server") + ")"));
         }
-    }
-
-    @Override
-    public void complete(int stage) {
-
-    }
-
-    @Override
-    public void end(int stage) {
-
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        return tag;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-
     }
 }

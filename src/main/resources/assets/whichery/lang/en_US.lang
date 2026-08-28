@@ -22,6 +22,7 @@ item.chalk_stick.bloody.name=Chalk (Bloody)
 item.chalk_stick_small.basic.name=Small Chalk
 item.chalk_stick_small.spiritual.name=Small Chalk (Spiritual)
 item.chalk_stick_small.bloody.name=Small Chalk (Bloody)
+item.ritual_preview.name=Ritual Preview
 
 #### Tooltip
 tooltip.family.families=Ingredient Families:
@@ -34,3 +35,10 @@ tooltip.family.death=§8Death§r %s
 tooltip.family.spirit=§bSpirit§r %s
 tooltip.family.hell=§6Hell§r %s
 tooltip.family.potency=(Potency: %s)
+
+whichery.desc.item.ritual_preview.0=Ritual: %s
+
+#### Ritual Names
+whichery.ritual.test_ritual_1.name=Test Ritual 1
+whichery.ritual.test_ritual_2.name=Test Ritual 2
+whichery.ritual.test_ritual_3.name=Test Ritual 3

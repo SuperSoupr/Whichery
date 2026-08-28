@@ -1,7 +1,5 @@
 package com.supersouper.whichery;
 
-import java.util.HashMap;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
@@ -25,9 +23,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        RitualRegistry.RUNE_ICONS = new HashMap<>();
-        RitualRegistry.RUNE_ICONS_SMALL = new HashMap<>();
-        RitualRegistry.CHALK_STICK_ICONS = new HashMap<>();
     }
 
     @Override

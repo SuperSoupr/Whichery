@@ -9,7 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
+import com.supersouper.whichery.api.rituals.Ritual;
+
 public interface ISecondaryMatcher {
+
+    default void onRitualConstructed(Ritual ritual) {};
 
     boolean match(@Nullable EntityPlayer player, IBlockAccess world, int x, int y, int z, ArrayList<TileEntity> tes);
 

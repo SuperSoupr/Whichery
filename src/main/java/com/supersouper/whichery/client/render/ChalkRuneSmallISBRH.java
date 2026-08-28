@@ -13,6 +13,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import com.supersouper.whichery.CommonProxy;
+import com.supersouper.whichery.api.rituals.ChalkType;
 import com.supersouper.whichery.api.rituals.RitualRegistry;
 import com.supersouper.whichery.common.blocks.BlockChalkRuneSmall;
 import com.supersouper.whichery.common.items.ItemChalkStickSmall;
@@ -35,12 +36,13 @@ public class ChalkRuneSmallISBRH implements ISimpleBlockRenderingHandler, IItemR
         for (int i = 0; i < types.length; i++) {
             if (hides[i]) continue;
             if (types[i] == null) continue;
-            int color = RitualRegistry.CHALK_TYPES.get(types[i]).drawColor;
+            ChalkType type = RitualRegistry.CHALK_TYPES.get(types[i]);
+            int color = type.getRGB(1, i);
             int r = (color >> 16) & 255;
             int g = (color >> 8) & 255;
             int b = color & 255;
 
-            IIcon icon = RitualRegistry.RUNE_ICONS_SMALL.get(types[i])[runes[i]];
+            IIcon icon = type.iconsSmall[runes[i]];
             t.addTranslation(
                 BlockChalkRuneSmall.positions[i][0] - 0.25f,
                 0,

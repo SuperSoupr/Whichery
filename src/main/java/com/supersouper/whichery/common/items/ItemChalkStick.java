@@ -56,8 +56,19 @@ public class ItemChalkStick extends Item {
 
     @Override
     public IIcon getIcon(ItemStack stack, int pass) {
-        return RitualRegistry.CHALK_STICK_ICONS.get(getChalkType(stack))[5
-            - Math.min(5, (stack.getMaxDamage() - stack.getItemDamage()) * 6 / stack.getMaxDamage())];
+        return getIconFromIndex(stack, getIconIndexFromDamage(stack));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromIndex(ItemStack stack, int index) {
+        return RitualRegistry.CHALK_TYPES.get(getChalkType(stack)).iconsStick[index];
+    }
+
+    public int getIconIndexFromDamage(ItemStack stack) {
+        return (RitualRegistry.CHALK_STICK_ICON_COUNT - 1) - Math.min(
+            RitualRegistry.CHALK_STICK_ICON_COUNT - 1,
+            (stack.getMaxDamage() - stack.getItemDamage()) * RitualRegistry.CHALK_STICK_ICON_COUNT
+                / stack.getMaxDamage());
     }
 
     @Override
