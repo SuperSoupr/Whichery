@@ -5,7 +5,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.supersouper.whichery.client.gui.BloodMeterRenderer;
 import com.supersouper.whichery.client.render.ChalkTESR;
+import com.supersouper.whichery.client.render.block.RenderWaterleafStem;
 import com.supersouper.whichery.client.render.entity.RenderMandrakeRoot;
+import com.supersouper.whichery.common.blocks.crops.BlockCropWaterleafStem;
 import com.supersouper.whichery.common.entity.EntityMandrakeRoot;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -28,5 +30,9 @@ public class ClientProxy extends CommonProxy {
             ClientRegistry.bindTileEntitySpecialRenderer(ModTileEntities.CHALK.getTileEntityClass(), new ChalkTESR());
         }
         RenderingRegistry.registerEntityRenderingHandler(EntityMandrakeRoot.class, new RenderMandrakeRoot());
+        // Waterleaf rendering
+        int waterleafId = RenderingRegistry.getNextAvailableRenderId();
+        BlockCropWaterleafStem.renderID = waterleafId;
+        RenderingRegistry.registerBlockHandler(new RenderWaterleafStem(waterleafId));
     }
 }

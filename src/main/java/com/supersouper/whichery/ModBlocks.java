@@ -6,7 +6,10 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import com.supersouper.whichery.common.blocks.BlockChalk;
+import com.supersouper.whichery.common.blocks.crops.BlockCropGreenteeth;
 import com.supersouper.whichery.common.blocks.crops.BlockCropMandrake;
+import com.supersouper.whichery.common.blocks.crops.BlockCropWaterleaf;
+import com.supersouper.whichery.common.blocks.crops.BlockCropWaterleafStem;
 import com.supersouper.whichery.common.blocks.crops.BlockCropWitchesThimble;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -19,6 +22,9 @@ public enum ModBlocks {
     CHALK_BLOCK(true, new BlockChalk(), "chalk_block"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
     MANDRAKE(true, new BlockCropMandrake("mandrake", 3), "crop_mandrake"),
+    WATERLEAF(true, new BlockCropWaterleaf("waterleaf", 4), null, "crop_waterleaf"),
+    WATERLEAF_STEM(true, new BlockCropWaterleafStem(), null, "crop_waterleaf_stem"),
+    GREENTEETH(true, new BlockCropGreenteeth(), null, "crop_greenteeth"),
 
     ; // leave trailing semicolon
     // spotless:on

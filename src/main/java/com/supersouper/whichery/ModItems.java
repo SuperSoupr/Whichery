@@ -4,8 +4,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.supersouper.whichery.common.items.ItemChalk;
+import com.supersouper.whichery.common.items.ItemGreenteeth;
 import com.supersouper.whichery.common.items.ItemRawChickenThatMakesYouBecomeAVampire;
 import com.supersouper.whichery.common.items.seeds.ItemSeedMandrake;
+import com.supersouper.whichery.common.items.seeds.ItemSeedWaterleaf;
 import com.supersouper.whichery.common.items.seeds.ItemSeedWitchesThimble;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -17,6 +19,8 @@ public enum ModItems {
     // make sure to leave a trailing comma
     CHALK(true, new ItemChalk(), "chalk"),
     WITCHES_THIMBLE_SEED(true, new ItemSeedWitchesThimble(), "seed_witches_thimble"),
+    WATERLEAF_SEED(true, new ItemSeedWaterleaf(), "seed_waterleaf"),
+    GREENTEETH(true, new ItemGreenteeth(), "greenteeth"),
     WITCH_PETAL(true, new Item().setTextureName("whichery:witch_petal").setUnlocalizedName("witch_petal"), "witch_petal"),
     MANDRAKE_SEED(true, new ItemSeedMandrake(), "seed_mandrake"),
     MANDRAKE_ROOT(true, new Item().setTextureName("whichery:mandrake_root").setUnlocalizedName("mandrake_root"), "mandrake_root"),

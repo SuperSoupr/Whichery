@@ -8,9 +8,14 @@ whichery.key.vampire_bite=Vampire - Bite
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble
 tile.crop_mandrake.name=Mandrake
+tile.crop_waterleaf.name=Waterleaf
+tile.crop_waterleaf_stem.name=Waterleaf Stem
+tile.crop_greenteeth.name=Greenteeth
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds
+item.seed_waterleaf.name=Waterleaf
+item.greenteeth.name=Greenteeth
 item.witch_petal.name=Witchpetal
 item.seed_mandrake.name=Mandrake Seeds
 item.mandrake_root.name=Mandrake Root
@@ -27,6 +32,7 @@ tooltip.family.death=§8Death§r %s
 tooltip.family.spirit=§bSpirit§r %s
 tooltip.family.hell=§6Hell§r %s
 tooltip.family.potency=(Potency: %s)
+tooltip.greenteeth.plant=§7Uses %s greenteeth to plant
 
 ### Entities
 entity.whichery.MandrakeRoot.name=Mandrake Root
