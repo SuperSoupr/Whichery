@@ -8,9 +8,12 @@ whichery.key.vampire_bite=Vampire - Bite
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble
 tile.crop_mandrake.name=Mandrake
+tile.crop_waterleaf.name=Waterleaf
+tile.crop_waterleaf_stem.name=Waterleaf Stem
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds
+item.seed_waterleaf.name=Waterleaf
 item.witch_petal.name=Witchpetal
 item.seed_mandrake.name=Mandrake Seeds
 item.mandrake_root.name=Mandrake Root
