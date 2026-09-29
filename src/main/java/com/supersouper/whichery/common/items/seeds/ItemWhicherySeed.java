@@ -29,7 +29,7 @@ public abstract class ItemWhicherySeed extends Item implements IPlantable {
         if (!((BlockWhicheryCrop) getCropBlock()).canPlaceBlockOn(block)) {
             return false;
         }
-        if (world.isAirBlock(x, y + 1, z)) {
+        if (world.isAirBlock(x, y + 1, z) && canPlantAt(world, x, y + 1, z)) {
             world.setBlock(x, y + 1, z, getCropBlock(), 0, 2);
             if (!player.capabilities.isCreativeMode) {
                 stack.stackSize--;
@@ -40,6 +40,14 @@ public abstract class ItemWhicherySeed extends Item implements IPlantable {
     }
 
     protected abstract Block getCropBlock();
+
+    /**
+     * Extra conditions for planting, on top of the soil and air checks.
+     * x, y, z is the position the crop would be planted at.
+     */
+    protected boolean canPlantAt(net.minecraft.world.World world, int x, int y, int z) {
+        return true;
+    }
 
     @Override
     public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
