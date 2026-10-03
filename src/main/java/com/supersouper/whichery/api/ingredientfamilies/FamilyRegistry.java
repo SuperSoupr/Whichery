@@ -108,5 +108,23 @@ public final class FamilyRegistry {
             new IngredientFamily.FamilyStack(SPIRIT, 2),
             new IngredientFamily.FamilyStack(HELL, 2));
         registerIngredient(ModItems.WITCH_PETAL.newItemStack(), new IngredientFamily.FamilyStack(DEATH, 2));
+        registerIngredient(
+            ModItems.DEVILS_TRUMPET_FLOWER.newItemStack(),
+            new IngredientFamily.FamilyStack(HELL, 1),
+            new IngredientFamily.FamilyStack(AIR, 1));
+        registerIngredient(ModItems.MULLEIN_WICK.newItemStack(), new IngredientFamily.FamilyStack(FIRE, 2));
+        registerIngredient(
+            ModItems.HENBANE_FLOWER.newItemStack(),
+            new IngredientFamily.FamilyStack(DEATH, 1),
+            new IngredientFamily.FamilyStack(SPIRIT, 1));
+        registerIngredient(
+            ModItems.ST_JOHNS_WORT_FLOWER.newItemStack(),
+            new IngredientFamily.FamilyStack(FIRE, 1),
+            new IngredientFamily.FamilyStack(LIFE, 1));
+        registerIngredient(
+            ModItems.LUNARIA_SEED_POD.newItemStack(),
+            new IngredientFamily.FamilyStack(EARTH, 1),
+            new IngredientFamily.FamilyStack(SPIRIT, 1));
+        registerIngredient(ModItems.LUNARIA_BLOOM.newItemStack(), new IngredientFamily.FamilyStack(SPIRIT, 2));
     }
 }

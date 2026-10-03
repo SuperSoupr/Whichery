@@ -8,12 +8,27 @@ whichery.key.vampire_bite=Vampire - Bite
 #### Blocks
 tile.crop_witches_thimble.name=Witches' Thimble
 tile.crop_mandrake.name=Mandrake
+tile.crop_devils_trumpet.name=Devil's Trumpet
+tile.crop_henbane.name=Henbane
+tile.crop_mullein.name=Mullein
+tile.crop_lunaria.name=Lunaria
+tile.crop_st_johns_wort.name=St. John's Wort
 
 #### Items
 item.seed_witches_thimble.name=Witches' Thimble Seeds
 item.witch_petal.name=Witchpetal
 item.seed_mandrake.name=Mandrake Seeds
 item.mandrake_root.name=Mandrake Root
+item.seed_devils_trumpet.name=Devil's Trumpet Seeds
+item.devils_trumpet.name=Devil's Trumpet
+item.seed_henbane.name=Henbane Seeds
+item.henbane.name=Henbane
+item.seed_mullein.name=Mullein Seeds
+item.mullein_wick.name=Mullein Wick
+item.lunaria_seed_pod.name=Lunaria Seed Pod
+item.lunaria_bloom.name=Lunaria Bloom
+item.seed_st_johns_wort.name=St. John's Wort Seeds
+item.st_johns_wort.name=St. John's Wort
 item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
 
 #### Tooltip
@@ -27,6 +42,17 @@ tooltip.family.death=§8Death§r %s
 tooltip.family.spirit=§bSpirit§r %s
 tooltip.family.hell=§6Hell§r %s
 tooltip.family.potency=(Potency: %s)
+tooltip.seed_devils_trumpet.1=§7Hangs from above near hell's passage;
+tooltip.seed_devils_trumpet.2=§7blooms at night.
+tooltip.seed_henbane.1=§7A 'cure' for the sleepless or weary;
+tooltip.seed_henbane.2=§7blooms only in the hour before dawn.
+tooltip.seed_mullein.1=§7Harvest normally for seeds,
+tooltip.seed_mullein.2=§7or burn to the wick with flint.
+tooltip.seed_lunaria.1=§7Bears seed pods under a full moon,
+tooltip.seed_lunaria.2=§7and flowers under a new one;
+tooltip.seed_lunaria.3=§7blooms at night.
+tooltip.seed_st_johns_wort.1=§7Drinks in the sun and creeps into nearby soil,
+tooltip.seed_st_johns_wort.2=§7never returning seeds.
 
 ### Entities
 entity.whichery.MandrakeRoot.name=Mandrake Root

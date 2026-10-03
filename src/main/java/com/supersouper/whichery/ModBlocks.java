@@ -6,7 +6,12 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import com.supersouper.whichery.common.blocks.BlockChalk;
+import com.supersouper.whichery.common.blocks.crops.BlockCropDevilsTrumpet;
+import com.supersouper.whichery.common.blocks.crops.BlockCropHenbane;
+import com.supersouper.whichery.common.blocks.crops.BlockCropLunaria;
 import com.supersouper.whichery.common.blocks.crops.BlockCropMandrake;
+import com.supersouper.whichery.common.blocks.crops.BlockCropMullein;
+import com.supersouper.whichery.common.blocks.crops.BlockCropStJohnsWort;
 import com.supersouper.whichery.common.blocks.crops.BlockCropWitchesThimble;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -19,6 +24,11 @@ public enum ModBlocks {
     CHALK_BLOCK(true, new BlockChalk(), "chalk_block"),
     WITCHES_THIMBLE(true, new BlockCropWitchesThimble("witches_thimble", 4), "crop_witches_thimble"),
     MANDRAKE(true, new BlockCropMandrake("mandrake", 3), "crop_mandrake"),
+    DEVILS_TRUMPET(true, new BlockCropDevilsTrumpet(), null, "crop_devils_trumpet"),
+    HENBANE(true, new BlockCropHenbane("henbane", 4), null, "crop_henbane"),
+    MULLEIN(true, new BlockCropMullein("mullein", 4), null, "crop_mullein"),
+    LUNARIA(true, new BlockCropLunaria("lunaria", 4), null, "crop_lunaria"),
+    ST_JOHNS_WORT(true, new BlockCropStJohnsWort("st_johns_wort", 4), null, "crop_st_johns_wort"),
 
     ; // leave trailing semicolon
     // spotless:on
