@@ -5,8 +5,12 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.supersouper.whichery.client.gui.BloodMeterRenderer;
 import com.supersouper.whichery.client.render.ChalkTESR;
+import com.supersouper.whichery.client.render.entity.RenderDemonicShadow;
 import com.supersouper.whichery.client.render.entity.RenderMandrakeRoot;
+import com.supersouper.whichery.client.render.entity.RenderPossessedChicken;
 import com.supersouper.whichery.common.entity.EntityMandrakeRoot;
+import com.supersouper.whichery.common.entity.demon.EntityDemonicShadow;
+import com.supersouper.whichery.common.entity.demon.EntityPossessedChicken;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -27,6 +31,9 @@ public class ClientProxy extends CommonProxy {
         if (ModTileEntities.CHALK.isEnabled()) {
             ClientRegistry.bindTileEntitySpecialRenderer(ModTileEntities.CHALK.getTileEntityClass(), new ChalkTESR());
         }
+
         RenderingRegistry.registerEntityRenderingHandler(EntityMandrakeRoot.class, new RenderMandrakeRoot());
+        RenderingRegistry.registerEntityRenderingHandler(EntityPossessedChicken.class, new RenderPossessedChicken());
+        RenderingRegistry.registerEntityRenderingHandler(EntityDemonicShadow.class, new RenderDemonicShadow());
     }
 }

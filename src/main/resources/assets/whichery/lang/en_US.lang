@@ -15,6 +15,7 @@ item.witch_petal.name=Witchpetal
 item.seed_mandrake.name=Mandrake Seeds
 item.mandrake_root.name=Mandrake Root
 item.raw_chicken_that_makes_you_become_a_vampire.name=Raw Chicken that Makes you Become a Vampire
+item.apple_that_makes_you_see_demons.name=Apple that makes you see Demons
 
 #### Tooltip
 tooltip.family.families=Ingredient Families:
@@ -28,5 +29,9 @@ tooltip.family.spirit=§bSpirit§r %s
 tooltip.family.hell=§6Hell§r %s
 tooltip.family.potency=(Potency: %s)
 
+tooltip.item.apple_that_makes_you_see_demons=Debug item. Eat to be toggle the ability to see the true nature of demons.
+
 ### Entities
 entity.whichery.MandrakeRoot.name=Mandrake Root
+entity.whichery.PossessedChicken.name=Possessed Chicken
+entity.whichery.DemonicShadow.name=Demonic Shadow

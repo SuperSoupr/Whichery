@@ -3,6 +3,7 @@ package com.supersouper.whichery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import com.supersouper.whichery.common.items.ItemAppleThatMakesYouSeeDemons;
 import com.supersouper.whichery.common.items.ItemChalk;
 import com.supersouper.whichery.common.items.ItemRawChickenThatMakesYouBecomeAVampire;
 import com.supersouper.whichery.common.items.seeds.ItemSeedMandrake;
@@ -21,6 +22,7 @@ public enum ModItems {
     MANDRAKE_SEED(true, new ItemSeedMandrake(), "seed_mandrake"),
     MANDRAKE_ROOT(true, new Item().setTextureName("whichery:mandrake_root").setUnlocalizedName("mandrake_root"), "mandrake_root"),
     RAW_CHICKEN_THAT_MAKES_YOU_BECOME_A_VAMPIRE(true, new ItemRawChickenThatMakesYouBecomeAVampire().setUnlocalizedName("raw_chicken_that_makes_you_become_a_vampire").setTextureName("chicken_raw"), "raw_chicken_that_makes_you_become_a_vampire"),
+    APPLE_THAT_MAKES_YOU_SEE_DEMONS(true, new ItemAppleThatMakesYouSeeDemons().setUnlocalizedName("apple_that_makes_you_see_demons").setTextureName("apple_golden"), "apple_that_makes_you_see_demons"),
     ; // leave trailing semicolon
     // spotless:on
 
